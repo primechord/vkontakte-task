@@ -1,0 +1,51 @@
+<resources>
+    <string name="app_name">Future money</string>
+
+    <string name="title_section_totals">Итоги</string>
+    <string name="title_section_accounts">Счета</string>
+    <string name="title_section_incomes">Доходы</string>
+    <string name="title_section_outcomes">Расходы</string>
+    <string name="title_section_about">О приложении</string>
+    <string-array name="views_array">
+        <item>Итоги</item>
+        <item>Счета</item>
+        <item>Доходы</item>
+        <item>Расходы</item>
+        <item>О приложении</item>
+    </string-array>
+    <string name="navigation_drawer_open">Открыть меню</string>
+    <string name="navigation_drawer_close">Закрыть меню</string>
+    <string name="add_income_item">Добавить</string>
+    <string name="delete_income_item">Удалить</string>
+    <string name="add_income_item_confirm">Готово</string>
+    <string name="action_example">Действие</string>
+
+    <string name="action_settings">Настройки</string>
+
+    <string name="budget_item_name">Название</string>
+    <string name="budget_item_type">Тип</string>
+    <string-array name="budget_item_types">
+        <item>Одноразовый</item>
+        <item>Постоянный</item>
+    </string-array>
+    <string name="budget_item_amount">Сумма</string>
+    <string name="budget_item_single_date">Дата</string>
+    <string name="budget_item_begin_date">Дата начала</string>
+    <string name="budget_item_end_date">Дата окончания</string>
+    <string name="budget_item_period">Период</string>
+    <string-array name="budget_item_period_items">
+        <item>День</item>
+        <item>Неделя</item>
+        <item>Месяц</item>
+        <item>Год</item>
+    </string-array>
+    <string name="total_begin_type">Тип начальной даты</string>
+    <string-array name="total_begin_types">
+        <item>За все время</item>
+        <item>С заданной даты</item>
+    </string-array>
+    <string name="btn_calc_totals_name">Рассчитать</string>
+    <string name="msg_budget_item_empty_name">Имя не задано!</string>
+    <string name="msg_budget_item_empty_amount">Сумма не задана!</string>
+    <string name="msg_budget_item_success">Выполнено успешно</string>
+</resources>
