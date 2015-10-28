@@ -50,7 +50,7 @@ public class AccountsFragment extends Fragment {
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);//switch on menu for fragment
         View rootView;
-        rootView = inflater.inflate(R.layout.fragment_budget_items, container, false);
+        rootView = inflater.inflate(R.layout.fragment_budget_items_list, container, false);
         ListView lvAccounts = (ListView) rootView.findViewById(R.id.lv_budget_items);
         dao = new AccountsDAO(activity.getBaseContext());
         dao.openReadable();

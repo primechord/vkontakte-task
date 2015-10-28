@@ -52,7 +52,7 @@ public class IncomesFragment extends Fragment {
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);//switch on menu for fragment
         View rootView;
-        rootView = inflater.inflate(R.layout.fragment_budget_items, container, false);
+        rootView = inflater.inflate(R.layout.fragment_budget_items_list, container, false);
         ListView lvIncomes = (ListView) rootView.findViewById(R.id.lv_budget_items);
         dao = new IncomesDAO(activity.getBaseContext());
         dao.openReadable();

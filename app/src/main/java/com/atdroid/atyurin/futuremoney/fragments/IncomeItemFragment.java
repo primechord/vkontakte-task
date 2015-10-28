@@ -1,8 +1,6 @@
 package com.atdroid.atyurin.futuremoney.fragments;
 
-import android.app.DialogFragment;
-import android.app.ListFragment;
-import android.content.Context;
+import android.app.Fragment;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,12 +12,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,21 +27,32 @@ import com.atdroid.atyurin.futuremoney.serialization.Income;
 import com.atdroid.atyurin.futuremoney.utils.DateFormater;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by atdroid on 14.09.2015.
+ *
+ * elements description
+ * 0 - name (EditText)
+ * 1 - amount (EditText)
+ * 2 - type (LinearLayout{Text, Spinner})
+ * 3 - single date (Date Picker)
+ * 4 - begin date (Date Picker)
+ * 5 - end date (Date Picker)
+ * 6 - period (LinearLayout{Text, Spinner, EditText(optional - depende on spinner)})
+ *
  */
 
-public class IncomeItemFragment extends ListFragment implements AdapterView.OnItemClickListener {
+public class IncomeItemFragment extends Fragment {
     final static String INCOME_KEY = "key_income";
     final static String LOG_TAG = "IncomeItemFragment";
-    private IncomeItemListAdapter mAdapter;
     Income income;
     boolean isNewItem = true;
-
+    EditText etName, etAmount, etPeriodValue;
+    TextView tvNameTitle, tvAmountTitle, tvTypeTitle, tvSingleDateTitle, tvSingleDateValue, tvBeginDateTitle, tvBeginDateValue,tvEndDateTitle, tvEndDateValue, tvPeriodTitle;
+    Spinner spType, spPeriodType;
+    LinearLayout llName, llAmount, llSingleDate, llBeginDate, llEndDate, llPeriod;
+    ArrayAdapter<String> adapterType, adapterPeriodType;
     public static IncomeItemFragment newInstance() {
         Log.d("Incomer fragment", "newInstance");
 
@@ -72,16 +80,64 @@ public class IncomeItemFragment extends ListFragment implements AdapterView.OnIt
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);//switch off menu for fragment
 
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        View rootView =  inflater.inflate(R.layout.fragment_budget_item, container, false);
+        //name
+        tvNameTitle = (TextView) rootView.findViewById(R.id.tv_item_name_title);
+        etName = (EditText) rootView.findViewById(R.id.et_item_name_value);
+        if (income.getName().length() > 0){
+            etName.setText(income.getName());
+            tvNameTitle.setVisibility(View.VISIBLE);
+        }
+        etName.addTextChangedListener(nameTextWatcher);
+        //amount
+        tvAmountTitle = (TextView) rootView.findViewById(R.id.tv_item_amount_title);
+        etAmount = (EditText) rootView.findViewById(R.id.et_item_amount_value);
+        etAmount.setRawInputType(Configuration.KEYBOARD_QWERTY);
+        if (income.getValue() > 0){
+            etAmount.setText(Double.toString(income.getValue()));
+            tvAmountTitle.setVisibility(View.VISIBLE);
+    }
+        etAmount.addTextChangedListener(amountTextWatcher);
+        //type
+//        tvTypeTitle = (TextView) rootView.findViewById(R.id.tv_item_);
+        spType = (Spinner) rootView.findViewById(R.id.sp_item_type);
+        adapterType = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item,
+                getResources().getStringArray(R.array.budget_item_types));
+        adapterType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spType.setAdapter(adapterType);
+        spType.setSelection(income.getType());
+        adapterType.notifyDataSetChanged();
+        spType.setOnItemSelectedListener(typeSelectedListener);
+        //single date
+        llSingleDate = (LinearLayout) rootView.findViewById(R.id.ll_item_single_date);
+        llSingleDate.setOnClickListener(singleDateListener);
+        SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
+        tvSingleDateValue = (TextView) rootView.findViewById(R.id.tv_item_single_date_value);
+        tvSingleDateValue.setText(sdf.format(income.getSingle_date().getTime()));
+        //begin date
+        llBeginDate = (LinearLayout) rootView.findViewById(R.id.ll_item_begin_date);
+        llBeginDate.setOnClickListener(beginDateListener);
+        tvBeginDateValue = (TextView) rootView.findViewById(R.id.tv_item_begin_date_value);
+        tvBeginDateValue.setText(sdf.format(income.getBegin_date().getTime()));
+        //End date
+        llEndDate = (LinearLayout) rootView.findViewById(R.id.ll_item_end_date);
+        llEndDate.setOnClickListener(endDateListener);
+        tvEndDateValue = (TextView) rootView.findViewById(R.id.tv_item_end_date_value);
+        tvEndDateValue.setText(sdf.format(income.getEnd_date().getTime()));
+        //period
+        llPeriod = (LinearLayout) rootView.findViewById(R.id.ll_item_period);
+        spPeriodType = (Spinner) rootView.findViewById(R.id.sp_period_type_spinner);
+        adapterPeriodType = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item,
+                getResources().getStringArray(R.array.budget_item_period_items));
+        adapterPeriodType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spPeriodType.setAdapter(adapterPeriodType);
+        spPeriodType.setSelection(income.getPeriod_type());
+        spPeriodType.setOnItemSelectedListener(periodTypeSelectedListener);
 
-        mAdapter = new IncomeItemListAdapter();
-        mAdapter.addItem(IncomeItemListAdapter.ITEM_NAME);
-        mAdapter.addItem(IncomeItemListAdapter.ITEM_AMOUNT);
-        mAdapter.addItem(IncomeItemListAdapter.ITEM_TYPE);
-        mAdapter.addItem(IncomeItemListAdapter.ITEM_SINGLE_DATE);
-
-        setListAdapter(mAdapter);
-
+        etPeriodValue = (EditText) rootView.findViewById(R.id.et_period_value);
+        etPeriodValue.setRawInputType(Configuration.KEYBOARD_QWERTY);
+        etPeriodValue.setText(Integer.toString(income.getPeriod_value()));
+        etPeriodValue.addTextChangedListener(periodValueWatcher);
         return rootView;
 
     }
@@ -128,440 +184,153 @@ public class IncomeItemFragment extends ListFragment implements AdapterView.OnIt
 
         return super.onOptionsItemSelected(item);
     }
-/*
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-        int itemType = mAdapter.getItemViewType(position);
-        switch (itemType){
-            case AccountItemListAdapter.ITEM_SINGLE_DATE:
-                DialogFragment newFragment = new DatePickerFragment();
-                newFragment.show(getFragmentManager(), "datePicker");
-                break;
-        }
 
-    }*/
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        getListView().setOnItemClickListener(this);
-    }
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Log.d(LOG_TAG,"pos: " + position);
-        final int type;
-        type = mAdapter.getItemViewType(position);
-        Log.d(LOG_TAG,"type: " + type);
-        switch (type) {
-            case IncomeItemListAdapter.ITEM_NAME:
-                EditText editTextName = (EditText) view;
-                editTextName.requestFocus();
-                if(editTextName.requestFocus()) {
-                    getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-                }
-                break;
-            case IncomeItemListAdapter.ITEM_AMOUNT:
-                EditText editTextValue = (EditText) view;
-                editTextValue.requestFocus();
-                if(editTextValue.requestFocus()) {
-                    getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-                }
-                break;
-//            case IncomeItemListAdapter.ITEM_TYPE:
-//                convertView = getTypeView();
-//                holder.textView = (TextView) ((ViewGroup) convertView).getChildAt(0);
-//                holder.spinner = (Spinner) ((ViewGroup) convertView).getChildAt(1);
-//                break;
-            case IncomeItemListAdapter.ITEM_SINGLE_DATE:
-                final EditText etSingleDate = (EditText) ((ViewGroup) view).getChildAt(1);
-                DialogFragment datePicker = new DatePickerFragment() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                        SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.set(year, month, day);
-                        etSingleDate.setText(sdf.format(calendar.getTime()));
-                        income.setSingle_date(calendar);
-                    }
-                };
-
-                datePicker.show(getFragmentManager(), "datePicker");
-                break;
-//            case IncomeItemListAdapter.ITEM_BEGIN_DATE:
-//                convertView = getDateView(ITEM_BEGIN_DATE);
-//                holder.textView = (TextView) ((ViewGroup) convertView).getChildAt(0);
-//                holder.editText = (EditText) ((ViewGroup) convertView).getChildAt(1);
-//                break;
-//            case IncomeItemListAdapter.ITEM_END_DATE:
-//                convertView = getDateView(ITEM_END_DATE);
-//                holder.textView = (TextView) ((ViewGroup) convertView).getChildAt(0);
-//                holder.editText = (EditText) ((ViewGroup) convertView).getChildAt(1);
-//                break;
-//            case IncomeItemListAdapter.ITEM_PERIOD:
-//                convertView = getPeriodView();
-//                holder.textView = (TextView) ((ViewGroup) convertView).findViewById(R.id.period_title);
-//                holder.spinner = (Spinner) ((ViewGroup) convertView).findViewById(R.id.period_type_spinner);
-//                holder.editText = (EditText) ((ViewGroup) convertView).findViewById(R.id.period_value);
-//                break;
-        }
-    }
-
-    public class IncomeItemListAdapter extends BaseAdapter {
-        /**
-         * position description
-         * 0 - name (EditText)
-         * 1 - amount (EditText)
-         * 2 - type (LinearLayout{Text, Spinner})
-         * 3 - single date (Date Picker)
-         * 4 - begin date (Date Picker)
-         * 5 - end date (Date Picker)
-         * 6 - period (LinearLayout{Text, Spinner, EditText(optional - depende on spinner)})
-         * */
-
-        private static final int ITEM_NAME = 0;
-        private static final int ITEM_AMOUNT = 1;
-        private static final int ITEM_TYPE = 2;
-        private static final int ITEM_SINGLE_DATE = 3;
-        private static final int ITEM_BEGIN_DATE = 4;
-        private static final int ITEM_END_DATE = 5;
-        private static final int ITEM_PERIOD = 6;
-        private static final int ITEM_MAX_COUNT = ITEM_PERIOD + 1;
-        Context context = getActivity().getBaseContext();
-
-        private ArrayList<Integer> itemsTypes = new ArrayList<Integer>();
-        private LayoutInflater mInflater;
-
-        public IncomeItemListAdapter() {
-            mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        }
-
-        public void addItem(final int itemType) {
-            itemsTypes.add(itemType);
-            notifyDataSetChanged();
-        }
-
-        public void addUniqItem(final int itemType) {
-            boolean isExist = false;
-            for (int index = 0; index <  itemsTypes.size(); index++){
-                if (itemsTypes.get(index) == itemType){
-                    isExist = true;
-                }
-            }
-            if (!isExist) itemsTypes.add(itemType);
-            notifyDataSetChanged();
-        }
-
-        public void deleteItem(final int itemType){
-            for (int index = 0; index <  itemsTypes.size(); index++){
-                if (itemsTypes.get(index) == itemType){
-                    itemsTypes.remove(index);
-                }
-            }
-        }
-//        public void addSeparatorItem(final String item) {
-//            itemsTypes.add(item);
-//            notifyDataSetChanged();
-//        }
-
+    private TextWatcher nameTextWatcher = new TextWatcher() {
         @Override
-        public int getItemViewType(int position) {
-            return itemsTypes.get(position);
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            income.setName(charSequence.toString());
         }
 
         @Override
-        public int getViewTypeCount() {
-            return ITEM_MAX_COUNT;
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            if (editable.length() > 0){
+                tvNameTitle.setVisibility(View.VISIBLE);
+            }else{
+                tvNameTitle.setVisibility(View.GONE);
+            }
+        }
+    };
+
+    private TextWatcher amountTextWatcher = new TextWatcher() {
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         }
 
         @Override
-        public int getCount() {
-            return itemsTypes.size();
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            Log.d(LOG_TAG, editable.toString());
+            if (editable.length() > 0){
+                income.setValue(Double.valueOf(editable.toString()));
+            }
+            if (editable.length() > 0){
+                tvAmountTitle.setVisibility(View.VISIBLE);
+            }else{
+                tvAmountTitle.setVisibility(View.GONE);
+            }
+        }
+    };
+
+    private AdapterView.OnItemSelectedListener typeSelectedListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view,
+                                   int position, long id) {
+            Log.d("typeSelectedListener", "" + position);
+            if (position == Income.TYPE_PERIODICAL){
+                income.setType(Income.TYPE_PERIODICAL);//1
+                llSingleDate.setVisibility(View.GONE);
+                llBeginDate.setVisibility(View.VISIBLE);
+                llEndDate.setVisibility(View.VISIBLE);
+                llPeriod.setVisibility(View.VISIBLE);
+            }else {
+                income.setType(Income.TYPE_SINGLE);//0
+                llSingleDate.setVisibility(View.VISIBLE);
+                llBeginDate.setVisibility(View.GONE);
+                llEndDate.setVisibility(View.GONE);
+                llPeriod.setVisibility(View.GONE);
+            }
         }
 
         @Override
-        public Integer getItem(int position) {
-            return itemsTypes.get(position);
-        }
+        public void onNothingSelected(AdapterView<?> adapterView) {
 
+        }
+    };
+
+    private View.OnClickListener singleDateListener = new View.OnClickListener() {
         @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder = null;
-            int type = getItemViewType(position);
-            System.out.println("getView " + position + " " + convertView + " type = " + type);
-            if (convertView == null) {
-                holder = new ViewHolder();
-                switch (type) {
-                    case ITEM_NAME:
-                        convertView = getNameView();
-                        holder.editText = (EditText) convertView;
-                        break;
-                    case ITEM_AMOUNT:
-                        convertView = getAmountView();
-                        holder.editText = (EditText) convertView;
-                        break;
-                    case ITEM_TYPE:
-                        convertView = getTypeView();
-                        holder.textView = (TextView) ((ViewGroup) convertView).getChildAt(0);
-                        holder.spinner = (Spinner) ((ViewGroup) convertView).getChildAt(1);
-                        break;
-                    case ITEM_SINGLE_DATE:
-                        convertView = getDateView(ITEM_SINGLE_DATE);
-                        holder.textView = (TextView) ((ViewGroup) convertView).getChildAt(0);
-                        holder.editText = (EditText) ((ViewGroup) convertView).getChildAt(1);
-                        break;
-                    case ITEM_BEGIN_DATE:
-                        convertView = getDateView(ITEM_BEGIN_DATE);
-                        holder.textView = (TextView) ((ViewGroup) convertView).getChildAt(0);
-                        holder.editText = (EditText) ((ViewGroup) convertView).getChildAt(1);
-                        break;
-                    case ITEM_END_DATE:
-                        convertView = getDateView(ITEM_END_DATE);
-                        holder.textView = (TextView) ((ViewGroup) convertView).getChildAt(0);
-                        holder.editText = (EditText) ((ViewGroup) convertView).getChildAt(1);
-                        break;
-                    case ITEM_PERIOD:
-                        convertView = getPeriodView();
-                        holder.textView = (TextView) ((ViewGroup) convertView).findViewById(R.id.period_title);
-                        holder.spinner = (Spinner) ((ViewGroup) convertView).findViewById(R.id.period_type_spinner);
-                        holder.editText = (EditText) ((ViewGroup) convertView).findViewById(R.id.period_value);
-                        break;
-                }
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-
-            return convertView;
-        }
-
-        private View getNameView (){
-            EditText editText = (EditText) mInflater.inflate(R.layout.list_item_edit_text, null);
-            editText.setHint(R.string.budget_item_name);
-            if (income.getName().length() > 0){
-                editText.setText(income.getName());
-            }
-            editText.addTextChangedListener(nameTextWatcher);
-//            editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//                @Override
-//                public void onFocusChange(View v, boolean hasFocus) {
-//                    if (!hasFocus) {
-//                        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-//                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-//                    }
-//                }
-//            });
-            return editText;
-        }
-
-        private View getAmountView (){
-            EditText editText = (EditText) mInflater.inflate(R.layout.list_item_edit_text, null);
-            editText.setRawInputType(Configuration.KEYBOARD_QWERTY);
-            editText.setHint(R.string.budget_item_amount);
-            if (income.getValue() > 0){
-                editText.setText(Double.toString(income.getValue()));
-            }
-            editText.addTextChangedListener(amountTextWatcher);
-//            editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//                @Override
-//                public void onFocusChange(View v, boolean hasFocus) {
-//                    if (!hasFocus) {
-//                        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-//                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-//                    }
-//                }
-//            });
-            return editText;
-        }
-
-        private View getTypeView(){
-            View view = (View) mInflater.inflate(R.layout.list_item_spinner, null);
-            TextView textView = (TextView) ((ViewGroup) view).getChildAt(0);
-            textView.setText(R.string.budget_item_type);
-
-            Spinner spinner = (Spinner) ((ViewGroup) view).getChildAt(1);
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item,
-                    getResources().getStringArray(R.array.budget_item_types));
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(adapter);
-            spinner.setSelection(income.getType());
-            spinner.setOnItemSelectedListener(typeSelectedListener);
-            return view;
-        }
-
-        private View getDateView(final int type){
-            View view = (View) mInflater.inflate(R.layout.list_item_date_selector, null);
-            TextView textView = (TextView) ((ViewGroup) view).getChildAt(0);
-
-            SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
-            Calendar currentDateAndTime = Calendar.getInstance();
-            currentDateAndTime.setTime(new Date());
-            sdf.format(new Date());
-
-            EditText dateEditText = (EditText) ((ViewGroup) view).getChildAt(1);
-            dateEditText.setHint(sdf.format(currentDateAndTime.getTime()));
-
-            switch (type){
-                case ITEM_SINGLE_DATE:
-                    textView.setText(R.string.budget_item_single_date);
-                    dateEditText.setText(sdf.format(income.getSingle_date().getTime()));
-//                    budget_item.setSingle_date(currentDateAndTime);
-                    break;
-                case ITEM_BEGIN_DATE:
-                    textView.setText(R.string.budget_item_begin_date);
-                    dateEditText.setText(sdf.format(income.getBegin_date().getTime()));
-//                    budget_item.setBegin_date(currentDateAndTime);
-                    break;
-                case ITEM_END_DATE:
-                    textView.setText(R.string.budget_item_end_date);
-                    dateEditText.setText(sdf.format(income.getEnd_date().getTime()));
-//                    budget_item.setEnd_date(currentDateAndTime);
-                    break;
-            }
-
-            dateEditText.setOnClickListener(new View.OnClickListener() {
+        public void onClick(View v) {
+            DatePickerFragment datePicker = new DatePickerFragment(income.getSingle_date()) {
                 @Override
-                public void onClick(final View editText) {
-//                    DialogFragment datePicker = new DatePickerFragment() {
-//                        @Override
-//                        public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-//                            SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
-//                            Calendar calendar = Calendar.getInstance();
-//                            calendar.set(year, month, day);
-//                            ((EditText) editText).setText(sdf.format(calendar.getTime()));
-//                            switch (type) {
-//                                case ITEM_SINGLE_DATE:
-//                                    income.setSingle_date(calendar);
-//                                    break;
-//                                case ITEM_BEGIN_DATE:
-//                                    income.setBegin_date(calendar);
-//                                    break;
-//                                case ITEM_END_DATE:
-//                                    income.setEnd_date(calendar);
-//                                    break;
-//                            }
-//                        }
-//                    };
-//
-//                    datePicker.show(getFragmentManager(), "datePicker");
+                public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                    SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(year, month, day);
+                    tvSingleDateValue.setText(sdf.format(calendar.getTime()));
+                    income.setSingle_date(calendar);
                 }
-            });
-            return view;
-        };
+            };
 
-        private View getPeriodView (){
-            View view = (View) mInflater.inflate(R.layout.list_item_period, null);
-            TextView textView = (TextView) ((ViewGroup) view).findViewById(R.id.period_title);
-            textView.setText(R.string.budget_item_period);
+            datePicker.show(getFragmentManager(), "datePicker");
+        }
+    };
 
-//            Spinner spinner = (Spinner) ((ViewGroup) view).getChildAt(1);
-            Spinner spinner = (Spinner) ((ViewGroup) view).findViewById(R.id.period_type_spinner);
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item,
-                    getResources().getStringArray(R.array.budget_item_period_items));
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            spinner.setAdapter(adapter);
-            spinner.setSelection(income.getPeriod_type());
-            spinner.setOnItemSelectedListener(periodTypeSelectedListener);
+    private View.OnClickListener beginDateListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            DatePickerFragment datePicker = new DatePickerFragment(income.getBegin_date()) {
+                @Override
+                public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                    SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(year, month, day);
+                    tvBeginDateValue.setText(sdf.format(calendar.getTime()));
+                    income.setBegin_date(calendar);
+                }
+            };
 
-            EditText editText = (EditText) ((ViewGroup) view).findViewById(R.id.period_value);
-            editText.setRawInputType(Configuration.KEYBOARD_QWERTY);
-            editText.setText(Integer.toString(income.getPeriod_value()));
-            editText.addTextChangedListener(periodValueWatcher);
-            return view;
+            datePicker.show(getFragmentManager(), "datePicker");
+        }
+    };
+
+    private View.OnClickListener endDateListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            DatePickerFragment datePicker = new DatePickerFragment(income.getEnd_date()) {
+                @Override
+                public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                    SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(year, month, day);
+                    tvEndDateValue.setText(sdf.format(calendar.getTime()));
+                    income.setEnd_date(calendar);
+                }
+            };
+
+            datePicker.show(getFragmentManager(), "datePicker");
+        }
+    };
+
+    private AdapterView.OnItemSelectedListener periodTypeSelectedListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view,
+                                   int position, long id) {
+            income.setPeriod_type(position);
         }
 
-        private TextWatcher nameTextWatcher = new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                income.setName(charSequence.toString());
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    };
+
+    private TextWatcher periodValueWatcher = new TextWatcher() {
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            if (charSequence.length() > 0){
+                income.setPeriod_value(Integer.parseInt(charSequence.toString()));
             }
+        }
 
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
-            @Override
-            public void afterTextChanged(Editable editable) {}
-        };
-
-        private TextWatcher amountTextWatcher = new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length() > 0){
-                    income.setValue(Double.valueOf(charSequence.toString()));
-                }
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-            @Override
-            public void afterTextChanged(Editable editable) {}
-        };
-
-        private AdapterView.OnItemSelectedListener typeSelectedListener = new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id) {
-                Log.d("typeSelectedListener", "" + position);
-                if (position == Income.TYPE_PERIODICAL){
-                    income.setType(Income.TYPE_PERIODICAL);//1
-                    mAdapter.deleteItem(ITEM_SINGLE_DATE);
-                    mAdapter.addUniqItem(ITEM_BEGIN_DATE);
-                    mAdapter.addUniqItem(ITEM_END_DATE);
-                    mAdapter.addUniqItem(ITEM_PERIOD);
-                    mAdapter.notifyDataSetChanged();
-                }else {
-                    income.setType(Income.TYPE_SINGLE);//0
-                    mAdapter.deleteItem(ITEM_BEGIN_DATE);
-                    mAdapter.deleteItem(ITEM_END_DATE);
-                    mAdapter.deleteItem(ITEM_PERIOD);
-                    mAdapter.addUniqItem(ITEM_SINGLE_DATE);
-                    mAdapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        };
-
-        private AdapterView.OnItemSelectedListener periodTypeSelectedListener = new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view,
-                                       int position, long id) {
-                income.setPeriod_type(position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        };
-
-        private TextWatcher periodValueWatcher = new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length() > 0){
-                    income.setPeriod_value(Integer.parseInt(charSequence.toString()));
-                }
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-            @Override
-            public void afterTextChanged(Editable editable) {}
-        };
-    }
-
-    public static class ViewHolder {
-        EditText editText;
-        TextView textView;
-        Spinner spinner;
-    }
+        @Override
+        public void afterTextChanged(Editable editable) {}
+    };
 }

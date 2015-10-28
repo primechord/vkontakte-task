@@ -348,7 +348,7 @@ public class OutcomeItemFragment extends ListFragment {
             dateEditText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View editText) {
-                    DialogFragment datePicker = new DatePickerFragment() {
+                    DialogFragment datePicker = new DatePickerFragment(outcome.getSingle_date()) {
                         @Override
                         public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                             SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);

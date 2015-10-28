@@ -53,7 +53,7 @@ public class OutcomesFragment extends Fragment {
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);//switch on menu for fragment
         View rootView;
-        rootView = inflater.inflate(R.layout.fragment_budget_items, container, false);
+        rootView = inflater.inflate(R.layout.fragment_budget_items_list, container, false);
         ListView lvOutcomes = (ListView) rootView.findViewById(R.id.lv_budget_items);
         dao = new OutcomesDAO(activity.getBaseContext());
         dao.openReadable();

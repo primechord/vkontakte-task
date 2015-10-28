@@ -237,7 +237,8 @@ public class TotalsFragment extends Fragment{
             dateEditText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View editText) {
-                    DialogFragment datePicker = new DatePickerFragment() {
+                    Calendar calendar = Calendar.getInstance();
+                    DialogFragment datePicker = new DatePickerFragment(calendar) {
                         @Override
                         public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                             SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
