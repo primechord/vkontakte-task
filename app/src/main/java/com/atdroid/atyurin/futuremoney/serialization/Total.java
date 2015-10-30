@@ -10,6 +10,7 @@ public class Total implements Serializable {
     public static final int TYPE_ALL = 0;
     public static final int TYPE_SELECTED_DATE = 1;
 
+    private int beginDateType;
     private double summ = 0;
     private Calendar begin_date = Calendar.getInstance();
     private Calendar end_date = Calendar.getInstance();
@@ -18,7 +19,16 @@ public class Total implements Serializable {
         System.out.println(begin_date.getActualMinimum(Calendar.YEAR));
         begin_date.set(1,1,1);
         end_date.setTimeInMillis(System.currentTimeMillis());
+        beginDateType = TYPE_ALL;
 
+    }
+
+    public int getBeginDateType() {
+        return beginDateType;
+    }
+
+    public void setBeginDateType(int beginDateType) {
+        this.beginDateType = beginDateType;
     }
 
     public double getSumm() {

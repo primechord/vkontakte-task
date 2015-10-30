@@ -40,6 +40,7 @@
         <item>Год</item>
     </string-array>
     <string name="total_begin_type">Тип начальной даты</string>
+    <string name="total_calculate_date_title">Расчетная дата</string>
     <string-array name="total_begin_types">
         <item>За все время</item>
         <item>С заданной даты</item>

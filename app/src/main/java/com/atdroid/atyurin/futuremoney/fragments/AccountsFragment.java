@@ -8,7 +8,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -71,20 +70,6 @@ public class AccountsFragment extends Fragment {
             }
         });
         return rootView;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.budget_item, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_btn_add_item) {
-            addAccount();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     public void addAccount(){

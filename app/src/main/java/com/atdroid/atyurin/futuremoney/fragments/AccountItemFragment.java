@@ -1,7 +1,6 @@
 package com.atdroid.atyurin.futuremoney.fragments;
 
-import android.app.ListFragment;
-import android.content.Context;
+import android.app.Fragment;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.Editable;
@@ -13,37 +12,51 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.atdroid.atyurin.futuremoney.R;
 import com.atdroid.atyurin.futuremoney.dao.AccountsDAO;
 import com.atdroid.atyurin.futuremoney.serialization.Account;
 
-import java.util.ArrayList;
-
 /**
  * Created by atdroid on 14.09.2015.
+ *
+ * elements description
+ * 0 - name (EditText)
+ * 1 - amount (EditText)
+ * 2 - type (LinearLayout{Text, Spinner})
+ * 3 - single date (Date Picker)
+ * 4 - begin date (Date Picker)
+ * 5 - end date (Date Picker)
+ * 6 - period (LinearLayout{Text, Spinner, EditText(optional - depende on spinner)})
+ *
  */
 
-public class AccountItemFragment extends ListFragment {
-    private AccountItemListAdapter mAdapter;
+public class AccountItemFragment extends Fragment {
+    final static String INCOME_KEY = "key_account";
+    final static String LOG_TAG = "AccountItemFragment";
     Account account;
     boolean isNewItem = true;
-    final static String LOG_TAG = "AccountItemFragment";
-
+    EditText etName, etAmount;
+    TextView tvNameTitle, tvAmountTitle;
     public static AccountItemFragment newInstance() {
-        AccountItemFragment accountItemFragment = new AccountItemFragment();
-        accountItemFragment.account = new Account();
-        return accountItemFragment;
+        Log.d("Accountr fragment", "newInstance");
+
+        AccountItemFragment AccountItemFragment = new AccountItemFragment();
+        AccountItemFragment.account = new Account();
+        return AccountItemFragment;
     }
 
     public static AccountItemFragment newInstance(Account account) {
-        AccountItemFragment accountItemFragment = new AccountItemFragment();
-        accountItemFragment.account = account;
-        accountItemFragment.isNewItem = false;
-        return accountItemFragment;
+        Log.d("Accountr fragment", "newInstance");
+        AccountItemFragment AccountItemFragment = new AccountItemFragment();
+//        Bundle args = new Bundle();
+//        args.putSerializable(INCOME_KEY, budget_item);
+        AccountItemFragment.account = account;
+        AccountItemFragment.isNewItem = false;
+        return AccountItemFragment;
     }
 
     public AccountItemFragment() {
@@ -55,13 +68,24 @@ public class AccountItemFragment extends ListFragment {
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);//switch off menu for fragment
 
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-
-        mAdapter = new AccountItemListAdapter();
-        mAdapter.addItem(AccountItemListAdapter.ITEM_NAME);
-        mAdapter.addItem(AccountItemListAdapter.ITEM_AMOUNT);
-
-        setListAdapter(mAdapter);
+        View rootView =  inflater.inflate(R.layout.fragment_account_item, container, false);
+        //name
+        tvNameTitle = (TextView) rootView.findViewById(R.id.tv_account_name_title);
+        etName = (EditText) rootView.findViewById(R.id.et_account_name_value);
+        if (account.getName().length() > 0){
+            etName.setText(account.getName());
+            tvNameTitle.setVisibility(View.VISIBLE);
+        }
+        etName.addTextChangedListener(nameTextWatcher);
+        //amount
+        tvAmountTitle = (TextView) rootView.findViewById(R.id.tv_account_amount_title);
+        etAmount = (EditText) rootView.findViewById(R.id.et_account_amount_value);
+        etAmount.setRawInputType(Configuration.KEYBOARD_QWERTY);
+        if (account.getValue() > 0){
+            etAmount.setText(Double.toString(account.getValue()));
+            tvAmountTitle.setVisibility(View.VISIBLE);
+        }
+        etAmount.addTextChangedListener(amountTextWatcher);
 
         return rootView;
 
@@ -69,15 +93,17 @@ public class AccountItemFragment extends ListFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        //super.onCreateOptionsMenu(menu, inflater);
+//        Log.d("AccountItemFragment", "onCreateOptionsMenu");
         inflater.inflate(R.menu.menu_budget_item_new_item, menu);
     }
 
     public void onPrepareOptionsMenu(Menu menu) {
-//        Log.d("IncomeItemFragment", "onPrepareOptionsMenu");
+//        Log.d("AccountItemFragment", "onPrepareOptionsMenu");
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d(LOG_TAG, "onOptionsItemSelected");
+        Log.d("AccountItemFragment", "onOptionsItemSelected");
         if (item.getItemId() == R.id.action_btn_add_budget_item_confirm) {
             if (account.getName().length() < 1){
                 Toast.makeText(getActivity().getBaseContext(), R.string.msg_budget_item_empty_name, Toast.LENGTH_LONG).show();
@@ -91,7 +117,7 @@ public class AccountItemFragment extends ListFragment {
             dao.openWritable();
             if (isNewItem){
                 if (dao.addAccount(account)){
-                 Toast.makeText(getActivity().getBaseContext(), getResources().getString(R.string.msg_budget_item_success), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity().getBaseContext(), getResources().getString(R.string.msg_budget_item_success), Toast.LENGTH_LONG).show();
                 };
             }else{
                 if (dao.updateAccount(account)){
@@ -108,155 +134,46 @@ public class AccountItemFragment extends ListFragment {
         return super.onOptionsItemSelected(item);
     }
 
-    public class AccountItemListAdapter extends BaseAdapter {
-        /**
-         * position description
-         * 0 - name (EditText)
-         * 1 - amount (EditText)
-         * */
-
-        private static final int ITEM_NAME = 0;
-        private static final int ITEM_AMOUNT = 1;
-        private static final int ITEM_MAX_COUNT = ITEM_AMOUNT + 1;
-        Context context = getActivity().getBaseContext();
-
-        private ArrayList<Integer> itemsTypes = new ArrayList<Integer>();
-        private LayoutInflater mInflater;
-
-        public AccountItemListAdapter() {
-            mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        }
-
-        public void addItem(final int itemType) {
-            itemsTypes.add(itemType);
-            notifyDataSetChanged();
-        }
-
-        public void addUniqItem(final int itemType) {
-            boolean isExist = false;
-            for (int index = 0; index <  itemsTypes.size(); index++){
-                if (itemsTypes.get(index) == itemType){
-                    isExist = true;
-                }
-            }
-            if (!isExist) itemsTypes.add(itemType);
-            notifyDataSetChanged();
-        }
-
-        public void deleteItem(final int itemType){
-            for (int index = 0; index <  itemsTypes.size(); index++){
-                if (itemsTypes.get(index) == itemType){
-                    itemsTypes.remove(index);
-                }
-            }
+    private TextWatcher nameTextWatcher = new TextWatcher() {
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            account.setName(charSequence.toString());
         }
 
         @Override
-        public int getItemViewType(int position) {
-            return itemsTypes.get(position);
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            if (editable.length() > 0){
+                tvNameTitle.setVisibility(View.VISIBLE);
+            }else{
+                tvNameTitle.setVisibility(View.GONE);
+            }
+        }
+    };
+
+    private TextWatcher amountTextWatcher = new TextWatcher() {
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         }
 
         @Override
-        public int getViewTypeCount() {
-            return ITEM_MAX_COUNT;
-        }
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
         @Override
-        public int getCount() {
-            return itemsTypes.size();
-        }
-
-        @Override
-        public Integer getItem(int position) {
-            return itemsTypes.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder = null;
-            int type = getItemViewType(position);
-            System.out.println("getView " + position + " " + convertView + " type = " + type);
-            if (convertView == null) {
-                holder = new ViewHolder();
-                switch (type) {
-                    case ITEM_NAME:
-                        convertView = getNameView();
-                        holder.editText = (EditText) convertView;
-                        break;
-                    case ITEM_AMOUNT:
-                        convertView = getAmountView();
-                        holder.editText = (EditText) convertView;
-                        break;
-
-                }
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
+        public void afterTextChanged(Editable editable) {
+            Log.d(LOG_TAG, editable.toString());
+            if (editable.length() > 0){
+                account.setValue(Double.valueOf(editable.toString()));
             }
-
-            return convertView;
+            if (editable.length() > 0){
+                tvAmountTitle.setVisibility(View.VISIBLE);
+            }else{
+                tvAmountTitle.setVisibility(View.GONE);
+            }
         }
-
-        private View getNameView (){
-            EditText editText = (EditText) mInflater.inflate(R.layout.list_item_edit_text, null);
-            editText.setHint(R.string.budget_item_name);
-            if (account.getName().length() > 0){
-                editText.setText(account.getName());
-            }
-            editText.addTextChangedListener(nameTextWatcher);
-
-            return editText;
-        }
-
-        private View getAmountView (){
-            EditText editText = (EditText) mInflater.inflate(R.layout.list_item_edit_text, null);
-            editText.setRawInputType(Configuration.KEYBOARD_QWERTY);
-            editText.setHint(R.string.budget_item_amount);
-            if (account.getValue() > 0){
-                editText.setText(Double.toString(account.getValue()));
-            }
-            editText.addTextChangedListener(amountTextWatcher);
-
-            return editText;
-        }
+    };
 
 
-
-        private TextWatcher nameTextWatcher = new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                account.setName(charSequence.toString());
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-            @Override
-            public void afterTextChanged(Editable editable) {}
-        };
-
-        private TextWatcher amountTextWatcher = new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length() > 0){
-                    account.setValue(Double.valueOf(charSequence.toString()));
-                }
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-            @Override
-            public void afterTextChanged(Editable editable) {}
-        };
-    }
-
-    public static class ViewHolder {
-        EditText editText;
-    }
 }
