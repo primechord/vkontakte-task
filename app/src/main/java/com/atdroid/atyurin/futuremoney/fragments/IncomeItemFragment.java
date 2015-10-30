@@ -1,6 +1,7 @@
 package com.atdroid.atyurin.futuremoney.fragments;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.Editable;
@@ -51,6 +52,7 @@ public class IncomeItemFragment extends Fragment {
     EditText etName, etAmount, etPeriodValue;
     TextView tvNameTitle, tvAmountTitle, tvTypeTitle, tvSingleDateTitle, tvSingleDateValue, tvBeginDateTitle, tvBeginDateValue,tvEndDateTitle, tvEndDateValue, tvPeriodTitle;
     Spinner spType, spPeriodType;
+    FragmentManager fragmentManager;
     LinearLayout llName, llAmount, llSingleDate, llBeginDate, llEndDate, llPeriod;
     ArrayAdapter<String> adapterType, adapterPeriodType;
     public static IncomeItemFragment newInstance() {
@@ -265,8 +267,9 @@ public class IncomeItemFragment extends Fragment {
                     income.setSingle_date(calendar);
                 }
             };
-
             datePicker.show(getFragmentManager(), "datePicker");
+
+
         }
     };
 

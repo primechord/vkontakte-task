@@ -6,5 +6,7 @@
     <color name="income_item_value">#0C7507</color>
     <color name="outcome_item_value">#752315</color>
     <color name="themeDark">#37474F</color>
+    <color name="buttonNormalBgd">#37474F</color>
+    <color name="buttonPressedBgd">#90A4AE</color>
     <color name="themeLight">#ECEFF1</color>
 </resources>

@@ -62,7 +62,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        android:background="@color/themeDark"
+        android:background="@drawable/button_background"
         android:text="@string/btn_calc_totals_name"
         android:textStyle="bold"
         android:textColor="@color/themeLight"

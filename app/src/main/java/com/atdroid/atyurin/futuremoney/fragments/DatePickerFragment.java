@@ -16,7 +16,11 @@ public class DatePickerFragment extends DialogFragment
     Calendar calendar;
 
     public DatePickerFragment(Calendar calendar) {
+        super();
         this.calendar = calendar;
+    }
+
+    public DatePickerFragment() {
     }
 
     @Override
@@ -25,6 +29,8 @@ public class DatePickerFragment extends DialogFragment
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+
 
         // Create a new instance of DatePickerDialog and return it
         return new DatePickerDialog(getActivity(), this, year, month, day);
