@@ -92,21 +92,33 @@ public class OutcomesDAO {
         return outcomes;
     }
 
-    public ArrayList<Outcome> getIncomesFromBeginDate(Calendar calendar_begin,Calendar calendar_end) {
+    public ArrayList<Outcome> getOutcomesInPeriodWithType(final int outcomeType, Calendar calendar_begin, Calendar calendar_end) {
         ArrayList<Outcome> outcomes = new ArrayList<Outcome>();
+        Cursor cursor = null;
+        if (outcomeType == Outcome.TYPE_PERIODICAL){
+            cursor = database.query(DBHelper.TABLE_OUTCOMES,
+                    allColumns,
+                    DBHelper.COLUMN_BEGIN_DATE + " >= ? AND " + DBHelper.COLUMN_BEGIN_DATE + " <= ? AND " + DBHelper.COLUMN_TYPE + " = ?",
+                    new String[]{Long.toString(calendar_begin.getTimeInMillis()),
+                            Long.toString(calendar_end.getTimeInMillis()),
+                            Integer.toString(Outcome.TYPE_PERIODICAL)},
+                    null, null, null);
+        } else if (outcomeType == Outcome.TYPE_SINGLE){
+            cursor = database.query(DBHelper.TABLE_OUTCOMES,
+                    allColumns,
+                    DBHelper.COLUMN_SINGLE_DATE + " >= ? AND " + DBHelper.COLUMN_SINGLE_DATE + " <= ? AND " + DBHelper.COLUMN_TYPE + " = ?",
+                    new String[]{Long.toString(calendar_begin.getTimeInMillis()),
+                            Long.toString(calendar_end.getTimeInMillis()),
+                            Integer.toString(Outcome.TYPE_SINGLE)},
+                    null, null, null);
+        }
 
-        Cursor cursor = database.query(DBHelper.TABLE_OUTCOMES,
-                allColumns,
-                DBHelper.COLUMN_BEGIN_DATE + " >= ? AND " + DBHelper.COLUMN_END_DATE + " <= ?",
-                new String[]{Long.toString(calendar_begin.getTimeInMillis()),Long.toString(calendar_end.getTimeInMillis())},
-                null, null, null);
-        Log.d(TAG, "Incomes List:");
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Outcome outcome = cursorToOutcome(cursor);
             outcomes.add(outcome);
             cursor.moveToNext();
-//            Log.d(TAG, "Income: " + outcome.toString());
+            Log.d(TAG, "Outcome: " + outcome.toString());
         }
         // make sure to close the cursor
         cursor.close();

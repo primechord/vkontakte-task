@@ -29,12 +29,38 @@
         <View style="@style/Divider" />
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/ll_calculate_date"
+        android:id="@+id/ll_begin_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingTop="5dp"
         android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_begin_date_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="@string/total_calculate_date_title"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_begin_date_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:textSize="16sp" />
+
+        <View style="@style/Divider" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ll_calculate_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="5dp" >
 
         <TextView
             android:id="@+id/tv_calculate_date_title"

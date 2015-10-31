@@ -92,14 +92,27 @@ public class IncomesDAO {
         return incomes;
     }
 
-    public ArrayList<Income> getIncomesFromBeginDate(Calendar calendar_begin,Calendar calendar_end) {
+    public ArrayList<Income> getIncomesInPeriodWithType(final int incomeType, Calendar calendar_begin, Calendar calendar_end) {
         ArrayList<Income> incomes = new ArrayList<Income>();
+        Cursor cursor = null;
+        if (incomeType == Income.TYPE_PERIODICAL){
+            cursor = database.query(DBHelper.TABLE_INCOMES,
+                    allColumns,
+                    DBHelper.COLUMN_BEGIN_DATE + " >= ? AND " + DBHelper.COLUMN_BEGIN_DATE + " <= ? AND " + DBHelper.COLUMN_TYPE + " = ?",
+                    new String[]{Long.toString(calendar_begin.getTimeInMillis()),
+                            Long.toString(calendar_end.getTimeInMillis()),
+                            Integer.toString(Income.TYPE_PERIODICAL)},
+                    null, null, null);
+        } else if (incomeType == Income.TYPE_SINGLE){
+            cursor = database.query(DBHelper.TABLE_INCOMES,
+                    allColumns,
+                    DBHelper.COLUMN_SINGLE_DATE + " >= ? AND " + DBHelper.COLUMN_SINGLE_DATE + " <= ? AND " + DBHelper.COLUMN_TYPE + " = ?",
+                    new String[]{Long.toString(calendar_begin.getTimeInMillis()),
+                            Long.toString(calendar_end.getTimeInMillis()),
+                            Integer.toString(Income.TYPE_SINGLE)},
+                    null, null, null);
+        }
 
-        Cursor cursor = database.query(DBHelper.TABLE_INCOMES,
-                allColumns,
-                DBHelper.COLUMN_BEGIN_DATE + " >= ? AND " + DBHelper.COLUMN_END_DATE + " <= ?",
-                new String[]{Long.toString(calendar_begin.getTimeInMillis()),Long.toString(calendar_end.getTimeInMillis())},
-                null, null, null);
         Log.d(TAG, "Incomes List:");
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
