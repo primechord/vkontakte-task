@@ -35,7 +35,7 @@ public class Total implements Serializable {
     public void setBeginDateType(int beginDateType) {
         this.beginDateType = beginDateType;
         if (beginDateType == TYPE_ALL){
-            this.begin_date.set(1,1,1);
+            this.begin_date.set(1, 1, 1);
         }
     }
 

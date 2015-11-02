@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     Fragment fragment = null;
+    FragmentManager fragmentManager = null;
     Toolbar toolbar = null;
 
     @Override
@@ -59,7 +60,14 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+//            /*if (!fragment.getClass()
+//                    .equals(TotalsFragment.class)){
+//                toolbar.setTitle(R.string.title_section_totals);
+//                fragment =  TotalsFragment.newInstance(this, fragmentManager);
+//                fragmentManager.beginTransaction()
+//                        .replace(R.id.container, fragment)
+//                        .commit();
+//            }*/
         }
     }
 
@@ -89,8 +97,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        FragmentManager fragmentManager = getFragmentManager();
-
+        fragmentManager = getFragmentManager();
+        fragment =  TotalsFragment.newInstance(this, fragmentManager);
         int id = item.getItemId();
 
         if (id == R.id.nav_totals) {

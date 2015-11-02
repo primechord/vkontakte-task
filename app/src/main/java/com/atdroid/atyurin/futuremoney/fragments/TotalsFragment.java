@@ -51,10 +51,11 @@ public class TotalsFragment extends Fragment {
     final static String INCOME_KEY = "key_total";
     final static String LOG_TAG = "TotalsFragment";
     Total total;
+    View rootView;
     Spinner spType;
-    TextView tvCalculateDateValue, tvBeginDateValue;
+    TextView tvCalculateDateValue, tvBeginDateValue, tvAccountsTotalValue, tvOutcomesTotalValue, tvIncomesTotalValue, tvTotalValue;
     ArrayAdapter<String> adapterType;
-    LinearLayout llCalculateDate,llBeginDate;
+    LinearLayout llCalculateDate,llBeginDate,llTotalsLayout;
     Activity activity;
     FragmentManager fragmentManager;
 
@@ -75,7 +76,7 @@ public class TotalsFragment extends Fragment {
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);//switch off menu for fragment
 
-        View rootView =  inflater.inflate(R.layout.fragment_totals, container, false);
+        rootView =  inflater.inflate(R.layout.fragment_totals, container, false);
         //begin date type
         spType = (Spinner) rootView.findViewById(R.id.sp_begin_date_type);
         adapterType = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item,
@@ -119,7 +120,13 @@ public class TotalsFragment extends Fragment {
                 llBeginDate.setVisibility(View.GONE);
             }else if (position == Total.TYPE_SELECTED_DATE) {
                 total.setBeginDateType(Total.TYPE_SELECTED_DATE);
+                SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(System.currentTimeMillis());
+                tvBeginDateValue.setText(sdf.format(calendar.getTime()));
                 llBeginDate.setVisibility(View.VISIBLE);
+                tvBeginDateValue.setText(sdf.format(calendar.getTime()));
+                total.setBegin_date(calendar);
             }
         }
 
@@ -220,6 +227,21 @@ public class TotalsFragment extends Fragment {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
+            llTotalsLayout = (LinearLayout) rootView.findViewById(R.id.ll_totals_values);
+            tvAccountsTotalValue = (TextView) rootView.findViewById(R.id.tv_accounts_total_value);
+            tvAccountsTotalValue.setText(Double.toString(total.getAccountsAmount()));
+            tvIncomesTotalValue = (TextView) rootView.findViewById(R.id.tv_incomes_total_value);
+            tvIncomesTotalValue.setText(Double.toString(total.getIncomeAmount()));
+            tvOutcomesTotalValue = (TextView) rootView.findViewById(R.id.tv_outcomes_total_value);
+            tvOutcomesTotalValue.setText(Double.toString(total.getOutcomeAmount()));
+            tvTotalValue = (TextView) rootView.findViewById(R.id.tv_total_value);
+            if (total.getTotalAmount() > 0){
+                tvTotalValue.setTextColor(getResources().getColor(R.color.income_item_value));
+            }else {
+                tvTotalValue.setTextColor(getResources().getColor(R.color.outcome_item_value));
+            }
+            tvTotalValue.setText(Double.toString(total.getTotalAmount()));
+            llTotalsLayout.setVisibility(View.VISIBLE);
             if (pd.isShowing()) {
                 pd.dismiss();
             }

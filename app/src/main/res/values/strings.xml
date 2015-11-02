@@ -40,11 +40,17 @@
         <item>Год</item>
     </string-array>
     <string name="total_begin_type">Тип начальной даты</string>
+    <string name="total_begin_date_title">Начальная дата</string>
     <string name="total_calculate_date_title">Расчетная дата</string>
     <string-array name="total_begin_types">
         <item>За все время</item>
         <item>С заданной даты</item>
     </string-array>
+    <string name="total_values_title">Итого:</string>
+    <string name="total_value_accounts_title">Счета:</string>
+    <string name="total_value_incomes_title">Доходы:</string>
+    <string name="total_value_outcomes_title">Расходы:</string>
+    <string name="total_value_totals_title">Итоговая сумма:</string>
     <string name="btn_calc_totals_name">Рассчитать</string>
     <string name="msg_budget_item_empty_name">Имя не задано!</string>
     <string name="msg_budget_item_empty_amount">Сумма не задана!</string>

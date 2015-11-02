@@ -99,6 +99,7 @@ public class IncomesFragment extends Fragment {
     public void addIncome(){
         fragmentManager.beginTransaction()
                 .replace(R.id.container, IncomeItemFragment.newInstance())
+                .addToBackStack(this.getClass().toString())
                 .commit();
     }
 
@@ -107,6 +108,7 @@ public class IncomesFragment extends Fragment {
 //        args.putSerializable(IncomeItemFragment.INCOME_KEY, budget_item);
         fragmentManager.beginTransaction()
                 .replace(R.id.container, IncomeItemFragment.newInstance(income))
+                .addToBackStack(this.getClass().toString())
                 .commit();
     }
     @Override
