@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.atdroid.atyurin.futuremoney.R;
 import com.atdroid.atyurin.futuremoney.adapters.IncomesAdapter;
@@ -32,6 +33,7 @@ public class IncomesFragment extends Fragment {
     ArrayList<Income> incomes;
     IncomesAdapter adapter;
     IncomesDAO dao;
+    View rootView;
     final static String LOG_TAG = "IncomesFragment";
     public static IncomesFragment newInstance(Activity activity, FragmentManager fragmentManager) {
         Log.d("Incomer fragment", "newInstance");
@@ -51,7 +53,7 @@ public class IncomesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);//switch on menu for fragment
-        View rootView;
+
         rootView = inflater.inflate(R.layout.fragment_budget_items_list, container, false);
         ListView lvIncomes = (ListView) rootView.findViewById(R.id.lv_budget_items);
         dao = new IncomesDAO(activity.getBaseContext());
@@ -75,26 +77,19 @@ public class IncomesFragment extends Fragment {
 
     }
 
-/*    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        //super.onCreateOptionsMenu(menu, inflater);
-        Log.d("IncomesFragment", "onCreateOptionsMenu");
-        inflater.inflate(R.menu.budget_item, menu);
-    }
-
-    public void onPrepareOptionsMenu(Menu menu) {
-        Log.d("Main Activity", "onPrepareOptionsMenu");
-    }
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d("Incomer fragment", "onOptionsItemSelected");
-        if (item.getItemId() == R.id.action_btn_add_item) {
-            addIncome();
-            return true;
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        TextView tvNoDataFound = (TextView) rootView.findViewById(R.id.tv_no_data_found);
+        View vDevider = (View) rootView.findViewById(R.id.view_devider);
+        if (adapter.getCount() == 0){
+            tvNoDataFound.setVisibility(View.VISIBLE);
+            vDevider.setVisibility(View.GONE);
+        } else {
+            tvNoDataFound.setVisibility(View.GONE);
+            vDevider.setVisibility(View.VISIBLE);
         }
-
-        return super.onOptionsItemSelected(item);
-    }*/
+    }
 
     public void addIncome(){
         fragmentManager.beginTransaction()

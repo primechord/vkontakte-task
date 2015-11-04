@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.atdroid.atyurin.futuremoney.R;
@@ -33,6 +34,7 @@ public class AccountsFragment extends Fragment {
     ArrayList<Account> accounts;
     AccountsAdapter adapter;
     AccountsDAO dao;
+    View rootView;
     final static String LOG_TAG = "AccountsFragment";
     public static AccountsFragment newInstance(Activity activity, FragmentManager fragmentManager) {
         AccountsFragment accountsFragment = new AccountsFragment();
@@ -48,7 +50,7 @@ public class AccountsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);//switch on menu for fragment
-        View rootView;
+
         rootView = inflater.inflate(R.layout.fragment_budget_items_list, container, false);
         ListView lvAccounts = (ListView) rootView.findViewById(R.id.lv_budget_items);
         dao = new AccountsDAO(activity.getBaseContext());
@@ -70,6 +72,20 @@ public class AccountsFragment extends Fragment {
             }
         });
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        TextView tvNoDataFound = (TextView) rootView.findViewById(R.id.tv_no_data_found);
+        View vDevider = (View) rootView.findViewById(R.id.view_devider);
+        if (adapter.getCount() == 0){
+            tvNoDataFound.setVisibility(View.VISIBLE);
+            vDevider.setVisibility(View.GONE);
+        } else {
+            tvNoDataFound.setVisibility(View.GONE);
+            vDevider.setVisibility(View.VISIBLE);
+        }
     }
 
     public void addAccount(){

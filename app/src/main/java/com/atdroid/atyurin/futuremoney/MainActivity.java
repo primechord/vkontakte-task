@@ -15,8 +15,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.atdroid.atyurin.futuremoney.fragments.AccountItemFragment;
 import com.atdroid.atyurin.futuremoney.fragments.AccountsFragment;
+import com.atdroid.atyurin.futuremoney.fragments.IncomeItemFragment;
 import com.atdroid.atyurin.futuremoney.fragments.IncomesFragment;
+import com.atdroid.atyurin.futuremoney.fragments.OutcomeItemFragment;
 import com.atdroid.atyurin.futuremoney.fragments.OutcomesFragment;
 import com.atdroid.atyurin.futuremoney.fragments.TotalsFragment;
 
@@ -33,6 +36,13 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        //show totals fragment then activity created
+        fragmentManager = getFragmentManager();
+        toolbar.setTitle(R.string.title_section_totals);
+        fragment =  TotalsFragment.newInstance(this, fragmentManager);
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -60,14 +70,37 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-//            /*if (!fragment.getClass()
-//                    .equals(TotalsFragment.class)){
-//                toolbar.setTitle(R.string.title_section_totals);
-//                fragment =  TotalsFragment.newInstance(this, fragmentManager);
-//                fragmentManager.beginTransaction()
-//                        .replace(R.id.container, fragment)
-//                        .commit();
-//            }*/
+            if (fragment.getClass().equals(IncomeItemFragment.class)){
+                toolbar.setTitle(R.string.title_section_totals);
+                fragment =  TotalsFragment.newInstance(this, fragmentManager);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, fragment)
+                        .commit();
+                return;
+            }
+            if (fragment.getClass().equals(OutcomeItemFragment.class)){
+                toolbar.setTitle(R.string.title_section_outcomes);
+                fragment =  OutcomesFragment.newInstance(this, fragmentManager);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, fragment)
+                        .commit();
+                return;
+            }
+            if (fragment.getClass().equals(AccountItemFragment.class)){
+                toolbar.setTitle(R.string.title_section_accounts);
+                fragment =  AccountsFragment.newInstance(this, fragmentManager);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, fragment)
+                        .commit();
+                return;
+            }
+            if (!fragment.getClass().equals(TotalsFragment.class)){
+                toolbar.setTitle(R.string.title_section_incomes);
+                fragment = IncomesFragment.newInstance(this, fragmentManager);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, fragment)
+                        .commit();
+            }
         }
     }
 
@@ -97,8 +130,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        fragmentManager = getFragmentManager();
-        fragment =  TotalsFragment.newInstance(this, fragmentManager);
+
+
         int id = item.getItemId();
 
         if (id == R.id.nav_totals) {

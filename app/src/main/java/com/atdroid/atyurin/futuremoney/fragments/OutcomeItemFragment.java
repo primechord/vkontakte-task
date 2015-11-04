@@ -164,6 +164,10 @@ public class OutcomeItemFragment extends Fragment {
                 Toast.makeText(getActivity().getBaseContext(), R.string.msg_budget_item_empty_amount, Toast.LENGTH_LONG).show();
                 return false;
             }
+            if (outcome.getBegin_date().after(outcome.getEnd_date())){
+                Toast.makeText(getActivity().getBaseContext(), R.string.msg_budget_item_wrong_dates, Toast.LENGTH_LONG).show();
+                return false;
+            }
             OutcomesDAO dao = new OutcomesDAO(getActivity().getBaseContext());
             dao.openWritable();
             if (isNewItem){

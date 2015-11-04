@@ -166,6 +166,10 @@ public class IncomeItemFragment extends Fragment {
                 Toast.makeText(getActivity().getBaseContext(), R.string.msg_budget_item_empty_amount, Toast.LENGTH_LONG).show();
                 return false;
             }
+            if (income.getBegin_date().after(income.getEnd_date())){
+                Toast.makeText(getActivity().getBaseContext(), R.string.msg_budget_item_wrong_dates, Toast.LENGTH_LONG).show();
+                return false;
+            }
             IncomesDAO dao = new IncomesDAO(getActivity().getBaseContext());
             dao.openWritable();
             if (isNewItem){

@@ -11,9 +11,20 @@
         android:paddingRight="16dp"
         />
     <View style="@style/Divider"
+        android:id="@+id/view_devider"
         android:layout_below="@id/lv_budget_items"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"/>
+    <TextView
+        android:id="@+id/tv_no_data_found"
+        android:visibility="gone"
+        android:paddingTop="8dp"
+        android:layout_below="@id/view_devider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="14sp"
+        android:text="@string/budget_items_no_data_found"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

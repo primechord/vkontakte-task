@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.atdroid.atyurin.futuremoney.R;
@@ -33,6 +34,7 @@ public class OutcomesFragment extends Fragment {
     ArrayList<Outcome> outcomes;
     OutcomesAdapter adapter;
     OutcomesDAO dao;
+    View rootView;
     final static String LOG_TAG = "OutcomesFragment";
     public static OutcomesFragment newInstance(Activity activity, FragmentManager fragmentManager) {
         Log.d(LOG_TAG, "newInstance");
@@ -52,7 +54,7 @@ public class OutcomesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);//switch on menu for fragment
-        View rootView;
+
         rootView = inflater.inflate(R.layout.fragment_budget_items_list, container, false);
         ListView lvOutcomes = (ListView) rootView.findViewById(R.id.lv_budget_items);
         dao = new OutcomesDAO(activity.getBaseContext());
@@ -75,27 +77,19 @@ public class OutcomesFragment extends Fragment {
         return rootView;
 
     }
-
-/*    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        //super.onCreateOptionsMenu(menu, inflater);
-//        Log.d(LOG_TAG, "onCreateOptionsMenu");
-        inflater.inflate(R.menu.budget_item, menu);
-    }
-
-    public void onPrepareOptionsMenu(Menu menu) {
-        Log.d("Main Activity", "onPrepareOptionsMenu");
-    }
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-//        Log.d(LOG_TAG, "onOptionsItemSelected");
-        if (item.getItemId() == R.id.action_btn_add_item) {
-            addOutcome();
-            return true;
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        TextView tvNoDataFound = (TextView) rootView.findViewById(R.id.tv_no_data_found);
+        View vDevider = (View) rootView.findViewById(R.id.view_devider);
+        if (adapter.getCount() == 0){
+            tvNoDataFound.setVisibility(View.VISIBLE);
+            vDevider.setVisibility(View.GONE);
+        } else {
+            tvNoDataFound.setVisibility(View.GONE);
+            vDevider.setVisibility(View.VISIBLE);
         }
-
-        return super.onOptionsItemSelected(item);
-    }*/
+    }
 
     public void addOutcome(){
         fragmentManager.beginTransaction()
