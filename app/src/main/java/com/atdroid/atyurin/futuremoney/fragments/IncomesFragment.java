@@ -127,7 +127,6 @@ public class IncomesFragment extends Fragment {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch(item.getItemId()) {
             case R.id.menu_delete_budget_item:
-                Log.d("e", incomes.get(info.position).getName());
                 dao.openWritable();
                 dao.deleteIncome(incomes.get(info.position));
                 dao.close();

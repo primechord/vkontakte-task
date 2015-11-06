@@ -71,8 +71,8 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             if (fragment.getClass().equals(IncomeItemFragment.class)){
-                toolbar.setTitle(R.string.title_section_totals);
-                fragment =  TotalsFragment.newInstance(this, fragmentManager);
+                toolbar.setTitle(R.string.title_section_incomes);
+                fragment =  IncomesFragment.newInstance(this, fragmentManager);
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragment)
                         .commit();
@@ -95,11 +95,13 @@ public class MainActivity extends AppCompatActivity
                 return;
             }
             if (!fragment.getClass().equals(TotalsFragment.class)){
-                toolbar.setTitle(R.string.title_section_incomes);
-                fragment = IncomesFragment.newInstance(this, fragmentManager);
+                toolbar.setTitle(R.string.title_section_totals);
+                fragment = TotalsFragment.newInstance(this, fragmentManager);
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragment)
                         .commit();
+            }else if(fragment.getClass().equals(TotalsFragment.class)){
+                super.onBackPressed();
             }
         }
     }

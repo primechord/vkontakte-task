@@ -1,11 +1,11 @@
 <resources>
-    <string name="app_name">Future money</string>
+    <string name="app_name">Money Planner</string>
 
     <string name="title_section_totals">Итоги</string>
     <string name="title_section_accounts">Счета</string>
     <string name="title_section_incomes">Доходы</string>
     <string name="title_section_outcomes">Расходы</string>
-    <string name="title_section_about">О приложении</string>
+    <string name="title_section_about">Как пользоваться</string>
     <string-array name="views_array">
         <item>Итоги</item>
         <item>Счета</item>
@@ -17,7 +17,7 @@
     <string name="navigation_drawer_close">Закрыть меню</string>
     <string name="add_income_item">Добавить</string>
     <string name="delete_income_item">Удалить</string>
-    <string name="add_income_item_confirm">Готово</string>
+    <string name="add_income_item_confirm">Сохранить</string>
     <string name="action_example">Действие</string>
 
     <string name="action_settings">Настройки</string>
