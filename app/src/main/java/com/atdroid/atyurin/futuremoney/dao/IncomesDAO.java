@@ -92,6 +92,27 @@ public class IncomesDAO {
         return incomes;
     }
 
+    public ArrayList<Income> getIncomesWithType(final int incomeType) {
+        ArrayList<Income> incomes = new ArrayList<Income>();
+        Cursor cursor = null;
+        cursor = database.query(DBHelper.TABLE_INCOMES,
+                    allColumns,
+                    DBHelper.COLUMN_TYPE + " = ?",
+                    new String[]{Integer.toString(incomeType)},
+                    null, null, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Income income = cursorToIncome(cursor);
+            incomes.add(income);
+            cursor.moveToNext();
+            Log.d(TAG, "Income: " + income.toString());
+        }
+        // make sure to close the cursor
+        cursor.close();
+        return incomes;
+    }
+
     public ArrayList<Income> getIncomesInPeriodWithType(final int incomeType, Calendar calendar_begin, Calendar calendar_end) {
         ArrayList<Income> incomes = new ArrayList<Income>();
         Cursor cursor = null;

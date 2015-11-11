@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Money Planner</string>
-
+    <!--Navigation drawer-->
     <string name="title_section_totals">Итоги</string>
     <string name="title_section_accounts">Счета</string>
     <string name="title_section_incomes">Доходы</string>
@@ -15,6 +15,8 @@
     </string-array>
     <string name="navigation_drawer_open">Открыть меню</string>
     <string name="navigation_drawer_close">Закрыть меню</string>
+
+    <!--Actions-->
     <string name="add_income_item">Добавить</string>
     <string name="delete_income_item">Удалить</string>
     <string name="add_income_item_confirm">Сохранить</string>
@@ -22,6 +24,7 @@
 
     <string name="action_settings">Настройки</string>
 
+    <!--Budget item fields-->
     <string name="budget_item_name">Название</string>
     <string name="budget_item_type">Тип</string>
     <string-array name="budget_item_types">
@@ -40,6 +43,13 @@
         <item>Месяц</item>
         <item>Год</item>
     </string-array>
+    <!--Budget item tabs-->
+    <string-array name="budget_item_tabs">
+        <item>Постоянные</item>
+        <item>Все</item>
+        <item>Одноразовые</item>
+    </string-array>
+    <!--Totals fields-->
     <string name="total_begin_type">Тип начальной даты</string>
     <string name="total_begin_date_title">Начальная дата</string>
     <string name="total_calculate_date_title">Расчетная дата</string>
@@ -47,12 +57,17 @@
         <item>За все время</item>
         <item>С заданной даты</item>
     </string-array>
+    <!--Total result fields-->
     <string name="total_values_title">Итого:</string>
     <string name="total_value_accounts_title">Счета:</string>
     <string name="total_value_incomes_title">Доходы:</string>
     <string name="total_value_outcomes_title">Расходы:</string>
     <string name="total_value_totals_title">Итоговая сумма:</string>
+
+    <!--Buttons-->
     <string name="btn_calc_totals_name">Рассчитать</string>
+
+    <!--User messages-->
     <string name="msg_budget_item_empty_name">Имя не задано!</string>
     <string name="msg_budget_item_empty_amount">Сумма не задана!</string>
     <string name="msg_budget_item_wrong_dates">Начальная дата больше конечной!</string>

@@ -1,8 +1,9 @@
 package com.atdroid.atyurin.futuremoney.fragments;
 
-import android.app.Fragment;
+
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -33,6 +34,7 @@ import com.atdroid.atyurin.futuremoney.serialization.Account;
  * 6 - period (LinearLayout{Text, Spinner, EditText(optional - depende on spinner)})
  *
  */
+
 
 public class AccountItemFragment extends Fragment {
     final static String INCOME_KEY = "key_account";

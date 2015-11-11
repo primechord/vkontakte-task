@@ -1,10 +1,11 @@
 package com.atdroid.atyurin.futuremoney;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -19,13 +20,14 @@ import com.atdroid.atyurin.futuremoney.fragments.AccountItemFragment;
 import com.atdroid.atyurin.futuremoney.fragments.AccountsFragment;
 import com.atdroid.atyurin.futuremoney.fragments.IncomeItemFragment;
 import com.atdroid.atyurin.futuremoney.fragments.IncomesFragment;
+import com.atdroid.atyurin.futuremoney.fragments.IncomesFragmentContainer;
 import com.atdroid.atyurin.futuremoney.fragments.OutcomeItemFragment;
 import com.atdroid.atyurin.futuremoney.fragments.OutcomesFragment;
 import com.atdroid.atyurin.futuremoney.fragments.TotalsFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    final static String LOG_TAG = "MainActivity";
     Fragment fragment = null;
     FragmentManager fragmentManager = null;
     Toolbar toolbar = null;
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //show totals fragment then activity created
-        fragmentManager = getFragmentManager();
+        fragmentManager = getSupportFragmentManager();
         toolbar.setTitle(R.string.title_section_totals);
         fragment =  TotalsFragment.newInstance(this, fragmentManager);
         fragmentManager.beginTransaction()
@@ -72,29 +74,26 @@ public class MainActivity extends AppCompatActivity
         } else {
             if (fragment.getClass().equals(IncomeItemFragment.class)){
                 toolbar.setTitle(R.string.title_section_incomes);
-                fragment =  IncomesFragment.newInstance(this, fragmentManager);
+                fragment =  IncomesFragment.newInstance(0, fragmentManager);
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragment)
                         .commit();
                 return;
-            }
-            if (fragment.getClass().equals(OutcomeItemFragment.class)){
+            } else if (fragment.getClass().equals(OutcomeItemFragment.class)){
                 toolbar.setTitle(R.string.title_section_outcomes);
                 fragment =  OutcomesFragment.newInstance(this, fragmentManager);
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragment)
                         .commit();
                 return;
-            }
-            if (fragment.getClass().equals(AccountItemFragment.class)){
+            }else if (fragment.getClass().equals(AccountItemFragment.class)){
                 toolbar.setTitle(R.string.title_section_accounts);
                 fragment =  AccountsFragment.newInstance(this, fragmentManager);
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragment)
                         .commit();
                 return;
-            }
-            if (!fragment.getClass().equals(TotalsFragment.class)){
+            }else if (!fragment.getClass().equals(TotalsFragment.class)){
                 toolbar.setTitle(R.string.title_section_totals);
                 fragment = TotalsFragment.newInstance(this, fragmentManager);
                 fragmentManager.beginTransaction()
@@ -144,7 +143,7 @@ public class MainActivity extends AppCompatActivity
             fragment =  AccountsFragment.newInstance(this, fragmentManager);
         } else if (id == R.id.nav_incomes) {
             toolbar.setTitle(R.string.title_section_incomes);
-            fragment =  IncomesFragment.newInstance(this, fragmentManager);
+            fragment =  IncomesFragmentContainer.newInstance();
         } else if (id == R.id.nav_outcomes) {
             toolbar.setTitle(R.string.title_section_outcomes);
             fragment = OutcomesFragment.newInstance(this, fragmentManager);
@@ -158,4 +157,11 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    public void getIncomeFragment(){
+
+
+
+    }
+
 }

@@ -1,10 +1,9 @@
 package com.atdroid.atyurin.futuremoney.fragments;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
+
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -28,25 +27,33 @@ import java.util.ArrayList;
  */
 
 public class IncomesFragment extends Fragment {
-    Activity activity;
-    FragmentManager fragmentManager;
     ArrayList<Income> incomes;
     IncomesAdapter adapter;
     IncomesDAO dao;
     View rootView;
+    int pageType;
+    ViewGroup container;
+    FragmentManager fragmentManager;
     final static String LOG_TAG = "IncomesFragment";
-    public static IncomesFragment newInstance(Activity activity, FragmentManager fragmentManager) {
+    static final String ARGUMENT_PAGE_TYPE = "arg_page_type";
+
+    public static IncomesFragment newInstance(final int type, FragmentManager fragmentManager) {
         Log.d("Incomer fragment", "newInstance");
 
         IncomesFragment incomesFragment = new IncomesFragment();
-        incomesFragment.activity = activity;
+        Bundle arguments = new Bundle();
+        arguments.putInt(ARGUMENT_PAGE_TYPE, type);
+        incomesFragment.setArguments(arguments);
         incomesFragment.fragmentManager = fragmentManager;
-
-
         return incomesFragment;
     }
 
     public IncomesFragment() {
+    }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        pageType = getArguments().getInt(ARGUMENT_PAGE_TYPE);
     }
 
     @Override
@@ -54,24 +61,23 @@ public class IncomesFragment extends Fragment {
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);//switch on menu for fragment
 
+        this.container = container;
         rootView = inflater.inflate(R.layout.fragment_budget_items_list, container, false);
         ListView lvIncomes = (ListView) rootView.findViewById(R.id.lv_budget_items);
-        dao = new IncomesDAO(activity.getBaseContext());
+        dao = new IncomesDAO(getActivity().getBaseContext());
         dao.openReadable();
-        incomes = dao.getAllIncomes();
+        if (pageType == 0){
+            incomes = dao.getIncomesWithType(Income.TYPE_PERIODICAL);
+        }else if (pageType == 1){
+            incomes = dao.getAllIncomes();
+        }else if (pageType == 2){
+            incomes = dao.getIncomesWithType(Income.TYPE_SINGLE);
+        }
         dao.close();
-        adapter = new IncomesAdapter(activity.getBaseContext(), incomes);
+        adapter = new IncomesAdapter(getActivity().getBaseContext(), incomes);
         lvIncomes.setAdapter(adapter);
         lvIncomes.setOnItemClickListener(itemClickListener);
         registerForContextMenu(lvIncomes);
-
-        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addIncome();
-            }
-        });
 
         return rootView;
 
@@ -91,26 +97,19 @@ public class IncomesFragment extends Fragment {
         }
     }
 
-    public void addIncome(){
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, IncomeItemFragment.newInstance())
-                .addToBackStack(this.getClass().toString())
-                .commit();
-    }
-
     public void updateIncome(Income income){
 //        Bundle args = new Bundle();
 //        args.putSerializable(IncomeItemFragment.INCOME_KEY, budget_item);
+        Log.e(LOG_TAG, "getChildFragmentManager: " + getChildFragmentManager().toString());
         fragmentManager.beginTransaction()
                 .replace(R.id.container, IncomeItemFragment.newInstance(income))
-                .addToBackStack(this.getClass().toString())
                 .commit();
     }
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         if (v.getId()==R.id.lv_budget_items) {
-            MenuInflater inflater = activity.getMenuInflater();
+            MenuInflater inflater = getActivity().getMenuInflater();
             inflater.inflate(R.menu.menu_budget_item_list_context, menu);
         }
     }
@@ -137,4 +136,5 @@ public class IncomesFragment extends Fragment {
                 return super.onContextItemSelected(item);
         }
     }
+
 }

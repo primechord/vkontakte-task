@@ -1,9 +1,9 @@
 package com.atdroid.atyurin.futuremoney.fragments;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -64,7 +64,7 @@ public class IncomeItemFragment extends Fragment {
     }
 
     public static IncomeItemFragment newInstance(Income income) {
-        Log.d("Incomer fragment", "newInstance");
+        Log.d(LOG_TAG, "newInstance");
         IncomeItemFragment IncomeItemFragment = new IncomeItemFragment();
 //        Bundle args = new Bundle();
 //        args.putSerializable(INCOME_KEY, budget_item);
@@ -81,8 +81,10 @@ public class IncomeItemFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);//switch off menu for fragment
-
+        Log.d(LOG_TAG, "onCreateView, container: " + container.toString());
         View rootView =  inflater.inflate(R.layout.fragment_budget_item, container, false);
+
+        Log.d(LOG_TAG, "onCreateView find elements" );
         //name
         tvNameTitle = (TextView) rootView.findViewById(R.id.tv_item_name_title);
         etName = (EditText) rootView.findViewById(R.id.et_item_name_value);
@@ -182,7 +184,7 @@ public class IncomeItemFragment extends Fragment {
                 }
             }
             getFragmentManager().beginTransaction()
-                    .replace(R.id.container, IncomesFragment.newInstance(getActivity(), getFragmentManager()))
+                    .replace(R.id.container, IncomesFragmentContainer.newInstance())
                     .commit();
             dao.close();
             return true;
