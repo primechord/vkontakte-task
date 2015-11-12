@@ -23,6 +23,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:textSize">14sp</item>
+        <item name="indicatorColor">#607D8B</item>
     </style>
 
 </resources>

@@ -10,15 +10,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-        <android.support.v4.view.PagerTitleStrip
-            android:id="@+id/view_pager_title_strip"
+        <com.atdroid.atyurin.futuremoney.custom_views.MyPagerTabStrip
             android:layout_width="match_parent"
+            android:id="@+id/view_pager_title_strip"
             style="@style/viepagertitlestrip"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:background="@color/themeDark"
             android:padding="@dimen/abc_action_bar_content_inset_material">
-        </android.support.v4.view.PagerTitleStrip>
+        </com.atdroid.atyurin.futuremoney.custom_views.MyPagerTabStrip>
     </android.support.v4.view.ViewPager>
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

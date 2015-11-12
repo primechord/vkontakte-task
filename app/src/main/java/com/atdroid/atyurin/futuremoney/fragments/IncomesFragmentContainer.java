@@ -44,11 +44,11 @@ public class IncomesFragmentContainer extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
-        ViewPager pager = (ViewPager) view.findViewById(R.id.view_pager);
-        PagerAdapter pagerAdapter = new IncomeFragmentPagerAdapter(getChildFragmentManager());
+        final ViewPager pager = (ViewPager) view.findViewById(R.id.view_pager);
+        final PagerAdapter pagerAdapter = new IncomeFragmentPagerAdapter(getChildFragmentManager());
         pager.setAdapter(pagerAdapter);
         pager.setCurrentItem(1);
-//        pagerAdapter.notifyDataSetChanged();
+
     }
 
     public void addIncome(){
@@ -60,12 +60,14 @@ public class IncomesFragmentContainer extends Fragment {
 
     public class IncomeFragmentPagerAdapter extends FragmentPagerAdapter {
         private final String[] TITLES = getResources().getStringArray(R.array.budget_item_tabs);
+
         public IncomeFragmentPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
         @Override
         public Fragment getItem(int position) {
+            Log.d(LOG_TAG, "IncomeFragmentPagerAdapter - getItem");
             return IncomesFragment.newInstance(position, getFragmentManager());
         }
 

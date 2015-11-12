@@ -38,7 +38,7 @@ public class IncomesFragment extends Fragment {
     static final String ARGUMENT_PAGE_TYPE = "arg_page_type";
 
     public static IncomesFragment newInstance(final int type, FragmentManager fragmentManager) {
-        Log.d("Incomer fragment", "newInstance");
+        Log.d(LOG_TAG, "newInstance");
 
         IncomesFragment incomesFragment = new IncomesFragment();
         Bundle arguments = new Bundle();
@@ -60,20 +60,12 @@ public class IncomesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);//switch on menu for fragment
-
+        incomes = new ArrayList<>();
+        Log.d(LOG_TAG, "onCreateView");
         this.container = container;
         rootView = inflater.inflate(R.layout.fragment_budget_items_list, container, false);
         ListView lvIncomes = (ListView) rootView.findViewById(R.id.lv_budget_items);
-        dao = new IncomesDAO(getActivity().getBaseContext());
-        dao.openReadable();
-        if (pageType == 0){
-            incomes = dao.getIncomesWithType(Income.TYPE_PERIODICAL);
-        }else if (pageType == 1){
-            incomes = dao.getAllIncomes();
-        }else if (pageType == 2){
-            incomes = dao.getIncomesWithType(Income.TYPE_SINGLE);
-        }
-        dao.close();
+        loadData();
         adapter = new IncomesAdapter(getActivity().getBaseContext(), incomes);
         lvIncomes.setAdapter(adapter);
         lvIncomes.setOnItemClickListener(itemClickListener);
@@ -86,6 +78,7 @@ public class IncomesFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.d(LOG_TAG, "onViewCreated");
         TextView tvNoDataFound = (TextView) rootView.findViewById(R.id.tv_no_data_found);
         View vDevider = (View) rootView.findViewById(R.id.view_devider);
         if (adapter.getCount() == 0){
@@ -104,6 +97,24 @@ public class IncomesFragment extends Fragment {
         fragmentManager.beginTransaction()
                 .replace(R.id.container, IncomeItemFragment.newInstance(income))
                 .commit();
+    }
+
+    public void updateDisplay(){
+        loadData();
+        adapter.notifyDataSetChanged();
+    }
+
+    public void loadData(){
+        dao = new IncomesDAO(getActivity().getBaseContext());
+        dao.openReadable();
+        if (pageType == 0){
+            incomes = dao.getIncomesWithType(Income.TYPE_PERIODICAL);
+        }else if (pageType == 1){
+            incomes = dao.getAllIncomes();
+        }else if (pageType == 2){
+            incomes = dao.getIncomesWithType(Income.TYPE_SINGLE);
+        }
+        dao.close();
     }
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -131,6 +142,9 @@ public class IncomesFragment extends Fragment {
                 dao.close();
                 incomes.remove(info.position);
                 adapter.notifyDataSetChanged();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, IncomesFragmentContainer.newInstance())
+                        .commit();
                 return true;
             default:
                 return super.onContextItemSelected(item);
