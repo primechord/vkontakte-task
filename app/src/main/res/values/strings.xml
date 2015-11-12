@@ -68,7 +68,7 @@
     <string name="btn_calc_totals_name">Рассчитать</string>
 
     <!--User messages-->
-    <string name="msg_budget_item_empty_name">Имя не задано!</string>
+    <string name="msg_budget_item_empty_name">Название не задано!</string>
     <string name="msg_budget_item_empty_amount">Сумма не задана!</string>
     <string name="msg_budget_item_wrong_dates">Начальная дата больше конечной!</string>
     <string name="msg_budget_item_success">Выполнено успешно</string>

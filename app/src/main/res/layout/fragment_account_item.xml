@@ -30,7 +30,6 @@
             android:paddingTop="16dp"
             android:textSize="16sp" />
 
-        <View style="@style/Divider" />
     </LinearLayout>
 
     <LinearLayout
@@ -58,7 +57,6 @@
             android:paddingTop="16dp"
             android:textSize="16sp" />
 
-        <View style="@style/Divider" />
     </LinearLayout>
 
 </LinearLayout>

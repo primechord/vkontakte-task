@@ -1,0 +1,40 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ListView
+        android:id="@+id/lv_budget_items"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        />
+    <View style="@style/Divider"
+        android:id="@+id/view_devider"
+        android:layout_below="@id/lv_budget_items"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"/>
+    <TextView
+        android:id="@+id/tv_no_data_found"
+        android:visibility="gone"
+        android:paddingTop="8dp"
+        android:layout_below="@id/view_devider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="14sp"
+        android:text="@string/budget_items_no_data_found"/>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@mipmap/ic_add"
+        />
+
+
+</RelativeLayout>
