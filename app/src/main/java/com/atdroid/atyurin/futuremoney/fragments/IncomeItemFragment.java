@@ -263,7 +263,7 @@ public class IncomeItemFragment extends Fragment {
     private View.OnClickListener singleDateListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            DatePickerFragment datePicker = new DatePickerFragment(income.getSingle_date()) {
+            DatePickerFragment datePicker = new DatePickerFragment() {
                 @Override
                 public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                     SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
@@ -273,6 +273,7 @@ public class IncomeItemFragment extends Fragment {
                     income.setSingle_date(calendar);
                 }
             };
+            datePicker.setCalendar(income.getSingle_date());
             datePicker.show(getFragmentManager(), "datePicker");
 
 
@@ -282,7 +283,7 @@ public class IncomeItemFragment extends Fragment {
     private View.OnClickListener beginDateListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            DatePickerFragment datePicker = new DatePickerFragment(income.getBegin_date()) {
+            DatePickerFragment datePicker = new DatePickerFragment() {
                 @Override
                 public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                     SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
@@ -292,7 +293,7 @@ public class IncomeItemFragment extends Fragment {
                     income.setBegin_date(calendar);
                 }
             };
-
+            datePicker.setCalendar(income.getBegin_date());
             datePicker.show(getFragmentManager(), "datePicker");
         }
     };
@@ -300,7 +301,7 @@ public class IncomeItemFragment extends Fragment {
     private View.OnClickListener endDateListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            DatePickerFragment datePicker = new DatePickerFragment(income.getEnd_date()) {
+            DatePickerFragment datePicker = new DatePickerFragment() {
                 @Override
                 public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                     SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
@@ -310,7 +311,7 @@ public class IncomeItemFragment extends Fragment {
                     income.setEnd_date(calendar);
                 }
             };
-
+            datePicker.setCalendar(income.getEnd_date());
             datePicker.show(getFragmentManager(), "datePicker");
         }
     };

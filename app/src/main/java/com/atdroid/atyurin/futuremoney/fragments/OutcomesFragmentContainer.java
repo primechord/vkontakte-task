@@ -19,10 +19,10 @@ import com.atdroid.atyurin.futuremoney.utils.KeyboardManager;
 /**
  * Created by atdroid on 10.11.2015.
  */
-public class IncomesFragmentContainer extends Fragment {
+public class OutcomesFragmentContainer extends Fragment {
     final static String LOG_TAG = "IncomesFragmentConta";
-    public static IncomesFragmentContainer newInstance(){
-        return new IncomesFragmentContainer();
+    public static OutcomesFragmentContainer newInstance(){
+        return new OutcomesFragmentContainer();
     }
 
     public void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class IncomesFragmentContainer extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addIncome();
+                addOutcome();
             }
         });
         return rootView;
@@ -47,30 +47,30 @@ public class IncomesFragmentContainer extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
         final ViewPager pager = (ViewPager) view.findViewById(R.id.view_pager);
-        final PagerAdapter pagerAdapter = new IncomeFragmentPagerAdapter(getChildFragmentManager());
+        final PagerAdapter pagerAdapter = new OutcomeFragmentPagerAdapter(getChildFragmentManager());
         pager.setAdapter(pagerAdapter);
         pager.setCurrentItem(1);
 
     }
 
-    public void addIncome(){
+    public void addOutcome(){
         Log.e(LOG_TAG, "getFragmentManager: " + getFragmentManager().toString());
         getFragmentManager().beginTransaction()
-                .replace(R.id.container, IncomeItemFragment.newInstance())
+                .replace(R.id.container, OutcomeItemFragment.newInstance())
                 .commit();
     }
 
-    public class IncomeFragmentPagerAdapter extends FragmentPagerAdapter {
+    public class OutcomeFragmentPagerAdapter extends FragmentPagerAdapter {
         private final String[] TITLES = getResources().getStringArray(R.array.budget_item_tabs);
 
-        public IncomeFragmentPagerAdapter(FragmentManager fm) {
+        public OutcomeFragmentPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
         @Override
         public Fragment getItem(int position) {
-            Log.d(LOG_TAG, "IncomeFragmentPagerAdapter - getItem");
-            return IncomesFragment.newInstance(position, getFragmentManager());
+            Log.d(LOG_TAG, "OutcomeFragmentPagerAdapter - getItem");
+            return OutcomesFragment.newInstance(position, getFragmentManager());
         }
 
         @Override

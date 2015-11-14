@@ -1,6 +1,7 @@
 package com.atdroid.atyurin.futuremoney;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -23,7 +24,9 @@ import com.atdroid.atyurin.futuremoney.fragments.IncomesFragment;
 import com.atdroid.atyurin.futuremoney.fragments.IncomesFragmentContainer;
 import com.atdroid.atyurin.futuremoney.fragments.OutcomeItemFragment;
 import com.atdroid.atyurin.futuremoney.fragments.OutcomesFragment;
+import com.atdroid.atyurin.futuremoney.fragments.OutcomesFragmentContainer;
 import com.atdroid.atyurin.futuremoney.fragments.TotalsFragment;
+import com.atdroid.atyurin.futuremoney.utils.KeyboardManager;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -81,7 +84,7 @@ public class MainActivity extends AppCompatActivity
                 return;
             } else if (fragment.getClass().equals(OutcomeItemFragment.class)){
                 toolbar.setTitle(R.string.title_section_outcomes);
-                fragment =  OutcomesFragment.newInstance(this, fragmentManager);
+                fragment = OutcomesFragmentContainer.newInstance();
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragment)
                         .commit();
@@ -146,7 +149,7 @@ public class MainActivity extends AppCompatActivity
             fragment =  IncomesFragmentContainer.newInstance();
         } else if (id == R.id.nav_outcomes) {
             toolbar.setTitle(R.string.title_section_outcomes);
-            fragment = OutcomesFragment.newInstance(this, fragmentManager);
+            fragment = OutcomesFragmentContainer.newInstance();
         } else if (id == R.id.nav_about) {
             toolbar.setTitle(R.string.title_section_about);
         }

@@ -1,6 +1,7 @@
 package com.atdroid.atyurin.futuremoney.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.app.ProgressDialog;
@@ -10,11 +11,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -27,6 +30,7 @@ import com.atdroid.atyurin.futuremoney.serialization.Income;
 import com.atdroid.atyurin.futuremoney.serialization.Outcome;
 import com.atdroid.atyurin.futuremoney.serialization.Total;
 import com.atdroid.atyurin.futuremoney.utils.DateFormater;
+import com.atdroid.atyurin.futuremoney.utils.KeyboardManager;
 import com.atdroid.atyurin.futuremoney.utils.TotalsCalculator;
 
 import java.text.SimpleDateFormat;
@@ -55,7 +59,8 @@ public class TotalsFragment extends Fragment {
     Spinner spType;
     TextView tvCalculateDateValue, tvBeginDateValue, tvAccountsTotalValue, tvOutcomesTotalValue, tvIncomesTotalValue, tvTotalValue;
     ArrayAdapter<String> adapterType;
-    LinearLayout llCalculateDate,llBeginDate,llTotalsLayout;
+    LinearLayout llCalculateDate,llTotalsLayout;
+    RelativeLayout llBeginDate;
     Activity activity;
     FragmentManager fragmentManager;
 
@@ -75,7 +80,7 @@ public class TotalsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);//switch off menu for fragment
-
+        new KeyboardManager(this).closeKeyboard();
         rootView =  inflater.inflate(R.layout.fragment_totals, container, false);
         //begin date type
         spType = (Spinner) rootView.findViewById(R.id.sp_begin_date_type);
@@ -87,7 +92,7 @@ public class TotalsFragment extends Fragment {
         adapterType.notifyDataSetChanged();
         spType.setOnItemSelectedListener(typeSelectedListener);
         //calculate date
-        llBeginDate = (LinearLayout) rootView.findViewById(R.id.ll_begin_date);
+        llBeginDate = (RelativeLayout) rootView.findViewById(R.id.ll_begin_date);
         llBeginDate.setOnClickListener(beginDateListener);
         SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
         tvBeginDateValue = (TextView) rootView.findViewById(R.id.tv_begin_date_value);
@@ -138,7 +143,7 @@ public class TotalsFragment extends Fragment {
     private View.OnClickListener beginDateListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            DatePickerFragment datePicker = new DatePickerFragment(total.getBegin_date()) {
+            DatePickerFragment datePicker = new DatePickerFragment() {
                 @Override
                 public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                     SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
@@ -148,14 +153,14 @@ public class TotalsFragment extends Fragment {
                     total.setBegin_date(calendar);
                 }
             };
-
+            datePicker.setCalendar(total.getBegin_date());
             datePicker.show(getFragmentManager(), "datePicker");
         }
     };
     private View.OnClickListener endDateListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            DatePickerFragment datePicker = new DatePickerFragment(total.getEnd_date()) {
+            DatePickerFragment datePicker = new DatePickerFragment() {
                 @Override
                 public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                     SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
@@ -165,11 +170,12 @@ public class TotalsFragment extends Fragment {
                     total.setEnd_date(calendar);
                 }
             };
-
+            datePicker.setCalendar(total.getEnd_date());
             datePicker.show(getFragmentManager(), "datePicker");
+//            new CloseKeyboard().execute(datePicker);
+
         }
     };
-
     public void calcTotals(){
         new CalculateTotalsTask(getActivity()).execute();
     }
@@ -248,5 +254,36 @@ public class TotalsFragment extends Fragment {
             Log.d(LOG_TAG, "Total Amt: " + Double.toString(total.getTotalAmount()));
         }
     }
+
+  /*  public class CloseKeyboard extends AsyncTask<DatePickerFragment,DatePickerFragment,DatePickerFragment>{
+
+        @Override
+        protected DatePickerFragment doInBackground(DatePickerFragment... params) {
+            DatePickerFragment dbf = params[0];
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return dbf;
+        }
+        @Override
+        protected void onPostExecute(DatePickerFragment dbf){
+            super.onPostExecute(dbf);
+            Activity activity;
+            activity = getActivity();
+            Log.d(LOG_TAG, "CloseKeyboard - onPostExecute");
+            View view = activity
+                    .getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+
+            boolean b = dbf.isVisible();
+            b = !b;
+        }
+    }*/
+
 
 }

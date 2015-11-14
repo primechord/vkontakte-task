@@ -112,7 +112,8 @@
                 android:layout_alignParentTop="true"
                 android:paddingBottom="8dp"
                 android:paddingTop="8dp"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textColor="@android:color/black"/>
 
             <View style="@style/Divider" />
         </LinearLayout>
@@ -139,7 +140,8 @@
                 android:layout_alignParentTop="true"
                 android:paddingBottom="8dp"
                 android:paddingTop="8dp"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textColor="@android:color/black"/>
 
             <View style="@style/Divider" />
         </LinearLayout>
@@ -166,7 +168,8 @@
                 android:layout_alignParentTop="true"
                 android:paddingBottom="8dp"
                 android:paddingTop="8dp"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textColor="@android:color/black"/>
 
             <View style="@style/Divider" />
         </LinearLayout>

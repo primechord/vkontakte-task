@@ -91,7 +91,26 @@ public class OutcomesDAO {
         cursor.close();
         return outcomes;
     }
+    public ArrayList<Outcome> getOutcomesWithType(final int outcomeType) {
+        ArrayList<Outcome> outcomes = new ArrayList<Outcome>();
+        Cursor cursor = null;
+        cursor = database.query(DBHelper.TABLE_OUTCOMES,
+                allColumns,
+                DBHelper.COLUMN_TYPE + " = ?",
+                new String[]{Integer.toString(outcomeType)},
+                null, null, null);
 
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Outcome outcome = cursorToOutcome(cursor);
+            outcomes.add(outcome);
+            cursor.moveToNext();
+            Log.d(TAG, "Outcome: " + outcome.toString());
+        }
+        // make sure to close the cursor
+        cursor.close();
+        return outcomes;
+    }
     public ArrayList<Outcome> getOutcomesInPeriodWithType(final int outcomeType, Calendar calendar_begin, Calendar calendar_end) {
         ArrayList<Outcome> outcomes = new ArrayList<Outcome>();
         Cursor cursor = null;

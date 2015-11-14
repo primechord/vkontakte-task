@@ -21,6 +21,7 @@ import com.atdroid.atyurin.futuremoney.R;
 import com.atdroid.atyurin.futuremoney.adapters.AccountsAdapter;
 import com.atdroid.atyurin.futuremoney.dao.AccountsDAO;
 import com.atdroid.atyurin.futuremoney.serialization.Account;
+import com.atdroid.atyurin.futuremoney.utils.KeyboardManager;
 
 import java.util.ArrayList;
 
@@ -50,7 +51,7 @@ public class AccountsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);//switch on menu for fragment
-
+        new KeyboardManager(this).closeKeyboard();
         rootView = inflater.inflate(R.layout.fragment_account_items_list, container, false);
         ListView lvAccounts = (ListView) rootView.findViewById(R.id.lv_budget_items);
         dao = new AccountsDAO(activity.getBaseContext());

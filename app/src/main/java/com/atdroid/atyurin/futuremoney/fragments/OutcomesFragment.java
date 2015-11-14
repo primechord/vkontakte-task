@@ -29,57 +29,58 @@ import java.util.ArrayList;
  */
 
 public class OutcomesFragment extends Fragment {
-    Activity activity;
-    FragmentManager fragmentManager;
     ArrayList<Outcome> outcomes;
     OutcomesAdapter adapter;
     OutcomesDAO dao;
     View rootView;
-    final static String LOG_TAG = "OutcomesFragment";
-    public static OutcomesFragment newInstance(Activity activity, FragmentManager fragmentManager) {
+    int pageType;
+    ViewGroup container;
+    FragmentManager fragmentManager;
+    final static String LOG_TAG = "IncomesFragment";
+    static final String ARGUMENT_PAGE_TYPE = "arg_page_type";
+
+    public static OutcomesFragment newInstance(final int type, FragmentManager fragmentManager) {
         Log.d(LOG_TAG, "newInstance");
 
         OutcomesFragment outcomesFragment = new OutcomesFragment();
-        outcomesFragment.activity = activity;
+        Bundle arguments = new Bundle();
+        arguments.putInt(ARGUMENT_PAGE_TYPE, type);
+        outcomesFragment.setArguments(arguments);
         outcomesFragment.fragmentManager = fragmentManager;
-
-
         return outcomesFragment;
     }
 
     public OutcomesFragment() {
+    }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        pageType = getArguments().getInt(ARGUMENT_PAGE_TYPE);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);//switch on menu for fragment
-
+        outcomes = new ArrayList<>();
+        Log.d(LOG_TAG, "onCreateView");
+        this.container = container;
         rootView = inflater.inflate(R.layout.fragment_budget_items_list, container, false);
-        ListView lvOutcomes = (ListView) rootView.findViewById(R.id.lv_budget_items);
-        dao = new OutcomesDAO(activity.getBaseContext());
-        dao.openReadable();
-        outcomes = dao.getAllOutcomes();
-        dao.close();
-        adapter = new OutcomesAdapter(activity.getBaseContext(), outcomes);
-        lvOutcomes.setAdapter(adapter);
-        lvOutcomes.setOnItemClickListener(itemClickListener);
-        registerForContextMenu(lvOutcomes);
-
-        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addOutcome();
-            }
-        });
+        ListView lvIncomes = (ListView) rootView.findViewById(R.id.lv_budget_items);
+        loadData();
+        adapter = new OutcomesAdapter(getActivity().getBaseContext(), outcomes);
+        lvIncomes.setAdapter(adapter);
+        lvIncomes.setOnItemClickListener(itemClickListener);
+        registerForContextMenu(lvIncomes);
 
         return rootView;
 
     }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.d(LOG_TAG, "onViewCreated");
         TextView tvNoDataFound = (TextView) rootView.findViewById(R.id.tv_no_data_found);
         View vDevider = (View) rootView.findViewById(R.id.view_devider);
         if (adapter.getCount() == 0){
@@ -91,24 +92,37 @@ public class OutcomesFragment extends Fragment {
         }
     }
 
-    public void addOutcome(){
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, OutcomeItemFragment.newInstance())
-                .commit();
-    }
-
-    public void updateOutcome(Outcome outcome){
+    public void updateIncome(Outcome outcome){
 //        Bundle args = new Bundle();
 //        args.putSerializable(IncomeItemFragment.INCOME_KEY, budget_item);
+        Log.e(LOG_TAG, "getChildFragmentManager: " + getChildFragmentManager().toString());
         fragmentManager.beginTransaction()
                 .replace(R.id.container, OutcomeItemFragment.newInstance(outcome))
                 .commit();
+    }
+
+    public void updateDisplay(){
+        loadData();
+        adapter.notifyDataSetChanged();
+    }
+
+    public void loadData(){
+        dao = new OutcomesDAO(getActivity().getBaseContext());
+        dao.openReadable();
+        if (pageType == 0){
+            outcomes = dao.getOutcomesWithType(Outcome.TYPE_PERIODICAL);
+        }else if (pageType == 1){
+            outcomes = dao.getAllOutcomes();
+        }else if (pageType == 2){
+            outcomes = dao.getOutcomesWithType(Outcome.TYPE_SINGLE);
+        }
+        dao.close();
     }
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         if (v.getId()==R.id.lv_budget_items) {
-            MenuInflater inflater = activity.getMenuInflater();
+            MenuInflater inflater = getActivity().getMenuInflater();
             inflater.inflate(R.menu.menu_budget_item_list_context, menu);
         }
     }
@@ -116,7 +130,7 @@ public class OutcomesFragment extends Fragment {
     public AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener(){
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-            updateOutcome(outcomes.get(position));
+            updateIncome(outcomes.get(position));
         }
     };
 
@@ -125,16 +139,18 @@ public class OutcomesFragment extends Fragment {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch(item.getItemId()) {
             case R.id.menu_delete_budget_item:
-                Log.d(LOG_TAG, outcomes.get(info.position).getName());
                 dao.openWritable();
                 dao.deleteOutcome(outcomes.get(info.position));
                 dao.close();
                 outcomes.remove(info.position);
                 adapter.notifyDataSetChanged();
-                Toast.makeText(getActivity().getBaseContext(), getResources().getString(R.string.msg_budget_item_success), Toast.LENGTH_LONG).show();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, OutcomesFragmentContainer.newInstance())
+                        .commit();
                 return true;
             default:
                 return super.onContextItemSelected(item);
         }
     }
+
 }
