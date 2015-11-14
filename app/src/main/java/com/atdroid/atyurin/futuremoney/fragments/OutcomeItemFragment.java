@@ -131,7 +131,7 @@ public class OutcomeItemFragment extends Fragment {
         llEndDate = (RelativeLayout) rootView.findViewById(R.id.ll_item_end_date);
         llEndDate.setOnClickListener(endDateListener);
         tvEndDateTitle = (TextView) llEndDate.findViewById(R.id.tv_date_title);
-        tvEndDateValue.setText(R.string.budget_item_end_date);
+        tvEndDateTitle.setText(R.string.budget_item_end_date);
         tvEndDateValue = (TextView) llEndDate.findViewById(R.id.tv_date_value);
         tvEndDateValue.setText(sdf.format(outcome.getEnd_date().getTime()));        //period
         llPeriod = (LinearLayout) rootView.findViewById(R.id.ll_item_period);
