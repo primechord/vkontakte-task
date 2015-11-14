@@ -19,6 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.atdroid.atyurin.futuremoney.fragments.AccountItemFragment;
 import com.atdroid.atyurin.futuremoney.fragments.AccountsFragment;
+import com.atdroid.atyurin.futuremoney.fragments.HowToFragment;
 import com.atdroid.atyurin.futuremoney.fragments.IncomeItemFragment;
 import com.atdroid.atyurin.futuremoney.fragments.IncomesFragment;
 import com.atdroid.atyurin.futuremoney.fragments.IncomesFragmentContainer;
@@ -140,18 +141,19 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_totals) {
             toolbar.setTitle(R.string.title_section_totals);
-            fragment =  TotalsFragment.newInstance(this, fragmentManager);
+            fragment = TotalsFragment.newInstance(this, fragmentManager);
         } else if (id == R.id.nav_accounts) {
             toolbar.setTitle(R.string.title_section_accounts);
-            fragment =  AccountsFragment.newInstance(this, fragmentManager);
+            fragment = AccountsFragment.newInstance(this, fragmentManager);
         } else if (id == R.id.nav_incomes) {
             toolbar.setTitle(R.string.title_section_incomes);
-            fragment =  IncomesFragmentContainer.newInstance();
+            fragment = IncomesFragmentContainer.newInstance();
         } else if (id == R.id.nav_outcomes) {
             toolbar.setTitle(R.string.title_section_outcomes);
             fragment = OutcomesFragmentContainer.newInstance();
         } else if (id == R.id.nav_about) {
             toolbar.setTitle(R.string.title_section_about);
+            fragment = HowToFragment.newInstance();
         }
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
@@ -159,12 +161,6 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    public void getIncomeFragment(){
-
-
-
     }
 
 }

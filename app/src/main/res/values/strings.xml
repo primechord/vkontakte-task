@@ -72,4 +72,7 @@
     <string name="msg_budget_item_empty_amount">Сумма не задана!</string>
     <string name="msg_budget_item_wrong_dates">Начальная дата больше конечной!</string>
     <string name="msg_budget_item_success">Выполнено успешно</string>
+
+    <!--How to fragment-->
+    <string name="how_to_description">Нашим приложением надо пользоваться правильно!!!</string>
 </resources>

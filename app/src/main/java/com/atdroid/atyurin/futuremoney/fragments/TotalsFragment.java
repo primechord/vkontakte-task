@@ -57,10 +57,10 @@ public class TotalsFragment extends Fragment {
     Total total;
     View rootView;
     Spinner spType;
-    TextView tvCalculateDateValue, tvBeginDateValue, tvAccountsTotalValue, tvOutcomesTotalValue, tvIncomesTotalValue, tvTotalValue;
+    TextView tvCalculateDateValue,tvCalculateDateTitle, tvBeginDateTitle, tvBeginDateValue, tvAccountsTotalValue, tvOutcomesTotalValue, tvIncomesTotalValue, tvTotalValue;
     ArrayAdapter<String> adapterType;
-    LinearLayout llCalculateDate,llTotalsLayout;
-    RelativeLayout llBeginDate;
+    LinearLayout llTotalsLayout;
+    RelativeLayout llCalculateDate, llBeginDate;
     Activity activity;
     FragmentManager fragmentManager;
 
@@ -91,17 +91,22 @@ public class TotalsFragment extends Fragment {
         spType.setSelection(total.getBeginDateType());
         adapterType.notifyDataSetChanged();
         spType.setOnItemSelectedListener(typeSelectedListener);
-        //calculate date
+
+        SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
+        //begin date
         llBeginDate = (RelativeLayout) rootView.findViewById(R.id.ll_begin_date);
         llBeginDate.setOnClickListener(beginDateListener);
-        SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
-        tvBeginDateValue = (TextView) rootView.findViewById(R.id.tv_begin_date_value);
+        tvBeginDateTitle = (TextView) llBeginDate.findViewById(R.id.tv_date_title);
+        tvBeginDateTitle.setText(R.string.total_begin_date_title);
+        tvBeginDateValue = (TextView) llBeginDate.findViewById(R.id.tv_date_value);
         tvBeginDateValue.setText(sdf.format(total.getBegin_date().getTime()));
 
         //calculate date
-        llCalculateDate = (LinearLayout) rootView.findViewById(R.id.ll_calculate_date);
+        llCalculateDate = (RelativeLayout) rootView.findViewById(R.id.ll_calculate_date);
         llCalculateDate.setOnClickListener(endDateListener);
-        tvCalculateDateValue = (TextView) rootView.findViewById(R.id.tv_calculate_date_value);
+        tvCalculateDateTitle = (TextView) llCalculateDate.findViewById(R.id.tv_date_title);
+        tvCalculateDateTitle.setText(R.string.total_calculate_date_title);
+        tvCalculateDateValue = (TextView) llCalculateDate.findViewById(R.id.tv_date_value);
         tvCalculateDateValue.setText(sdf.format(total.getEnd_date().getTime()));
 
         Button btnCalculate = (Button) rootView.findViewById(R.id.btn_calc_totals);

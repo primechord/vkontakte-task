@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,7 +54,8 @@ public class IncomeItemFragment extends Fragment {
     TextView tvNameTitle, tvAmountTitle, tvTypeTitle, tvSingleDateTitle, tvSingleDateValue, tvBeginDateTitle, tvBeginDateValue,tvEndDateTitle, tvEndDateValue, tvPeriodTitle;
     Spinner spType, spPeriodType;
     FragmentManager fragmentManager;
-    LinearLayout llName, llAmount, llSingleDate, llBeginDate, llEndDate, llPeriod;
+    RelativeLayout llSingleDate, llBeginDate, llEndDate;
+    LinearLayout llPeriod;
     ArrayAdapter<String> adapterType, adapterPeriodType;
     public static IncomeItemFragment newInstance() {
         Log.d("Incomer fragment", "newInstance");
@@ -65,12 +67,12 @@ public class IncomeItemFragment extends Fragment {
 
     public static IncomeItemFragment newInstance(Income income) {
         Log.d(LOG_TAG, "newInstance");
-        IncomeItemFragment IncomeItemFragment = new IncomeItemFragment();
+        IncomeItemFragment incomeItemFragment = new IncomeItemFragment();
 //        Bundle args = new Bundle();
 //        args.putSerializable(INCOME_KEY, budget_item);
-        IncomeItemFragment.income = income;
-        IncomeItemFragment.isNewItem = false;
-        return IncomeItemFragment;
+        incomeItemFragment.income = income;
+        incomeItemFragment.isNewItem = false;
+        return incomeItemFragment;
     }
 
     public IncomeItemFragment() {
@@ -112,21 +114,27 @@ public class IncomeItemFragment extends Fragment {
         spType.setSelection(income.getType());
         adapterType.notifyDataSetChanged();
         spType.setOnItemSelectedListener(typeSelectedListener);
-        //single date
-        llSingleDate = (LinearLayout) rootView.findViewById(R.id.ll_item_single_date);
-        llSingleDate.setOnClickListener(singleDateListener);
         SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
-        tvSingleDateValue = (TextView) rootView.findViewById(R.id.tv_item_single_date_value);
+        //single date
+        llSingleDate = (RelativeLayout) rootView.findViewById(R.id.ll_item_single_date);
+        llSingleDate.setOnClickListener(singleDateListener);
+        tvSingleDateTitle = (TextView) llSingleDate.findViewById(R.id.tv_date_title);
+        tvSingleDateTitle.setText(R.string.budget_item_single_date);
+        tvSingleDateValue = (TextView) llSingleDate.findViewById(R.id.tv_date_value);
         tvSingleDateValue.setText(sdf.format(income.getSingle_date().getTime()));
         //begin date
-        llBeginDate = (LinearLayout) rootView.findViewById(R.id.ll_item_begin_date);
+        llBeginDate = (RelativeLayout) rootView.findViewById(R.id.ll_item_begin_date);
         llBeginDate.setOnClickListener(beginDateListener);
-        tvBeginDateValue = (TextView) rootView.findViewById(R.id.tv_item_begin_date_value);
+        tvBeginDateTitle = (TextView) llBeginDate.findViewById(R.id.tv_date_title);
+        tvBeginDateTitle.setText(R.string.budget_item_begin_date);
+        tvBeginDateValue = (TextView) llBeginDate.findViewById(R.id.tv_date_value);
         tvBeginDateValue.setText(sdf.format(income.getBegin_date().getTime()));
         //End date
-        llEndDate = (LinearLayout) rootView.findViewById(R.id.ll_item_end_date);
+        llEndDate = (RelativeLayout) rootView.findViewById(R.id.ll_item_end_date);
         llEndDate.setOnClickListener(endDateListener);
-        tvEndDateValue = (TextView) rootView.findViewById(R.id.tv_item_end_date_value);
+        tvEndDateTitle = (TextView) llEndDate.findViewById(R.id.tv_date_title);
+        tvEndDateTitle.setText(R.string.budget_item_end_date);
+        tvEndDateValue = (TextView) llEndDate.findViewById(R.id.tv_date_value);
         tvEndDateValue.setText(sdf.format(income.getEnd_date().getTime()));
         //period
         llPeriod = (LinearLayout) rootView.findViewById(R.id.ll_item_period);

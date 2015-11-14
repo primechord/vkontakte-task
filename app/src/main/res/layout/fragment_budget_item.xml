@@ -90,89 +90,17 @@
             <View style="@style/Divider" />
         </LinearLayout>
 
-        <LinearLayout
+        <include
             android:id="@+id/ll_item_single_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="5dp">
+            layout="@layout/date_picker_layout" />
 
-            <TextView
-                android:id="@+id/tv_item_single_date_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:text="@string/budget_item_single_date"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/tv_item_single_date_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"/>
-
-            <View style="@style/Divider" />
-        </LinearLayout>
-
-        <LinearLayout
+        <include
             android:id="@+id/ll_item_begin_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="5dp">
+            layout="@layout/date_picker_layout" />
 
-            <TextView
-                android:id="@+id/tv_item_begin_date_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:text="@string/budget_item_begin_date"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/tv_item_begin_date_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"/>
-
-            <View style="@style/Divider" />
-        </LinearLayout>
-
-        <LinearLayout
+        <include
             android:id="@+id/ll_item_end_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="5dp">
-
-            <TextView
-                android:id="@+id/tv_item_end_date_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:text="@string/budget_item_end_date"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/tv_item_end_date_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"/>
-
-            <View style="@style/Divider" />
-        </LinearLayout>
+            layout="@layout/date_picker_layout" />
 
         <LinearLayout
             android:id="@+id/ll_item_period"

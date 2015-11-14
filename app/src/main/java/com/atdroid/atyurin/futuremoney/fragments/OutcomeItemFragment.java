@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,7 +54,8 @@ public class OutcomeItemFragment extends Fragment {
     EditText etName, etAmount, etPeriodValue;
     TextView tvNameTitle, tvAmountTitle, tvTypeTitle, tvSingleDateTitle, tvSingleDateValue, tvBeginDateTitle, tvBeginDateValue,tvEndDateTitle, tvEndDateValue, tvPeriodTitle;
     Spinner spType, spPeriodType;
-    LinearLayout llName, llAmount, llSingleDate, llBeginDate, llEndDate, llPeriod;
+    LinearLayout llName, llAmount, llPeriod;
+    RelativeLayout llSingleDate, llBeginDate, llEndDate;
     ArrayAdapter<String> adapterType, adapterPeriodType;
     public static OutcomeItemFragment newInstance() {
         Log.d("Outcomer fragment", "newInstance");
@@ -110,23 +112,28 @@ public class OutcomeItemFragment extends Fragment {
         spType.setSelection(outcome.getType());
         adapterType.notifyDataSetChanged();
         spType.setOnItemSelectedListener(typeSelectedListener);
-        //single date
-        llSingleDate = (LinearLayout) rootView.findViewById(R.id.ll_item_single_date);
-        llSingleDate.setOnClickListener(singleDateListener);
         SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
-        tvSingleDateValue = (TextView) rootView.findViewById(R.id.tv_item_single_date_value);
+        //single date
+        llSingleDate = (RelativeLayout) rootView.findViewById(R.id.ll_item_single_date);
+        llSingleDate.setOnClickListener(singleDateListener);
+        tvSingleDateTitle = (TextView) llSingleDate.findViewById(R.id.tv_date_title);
+        tvSingleDateTitle.setText(R.string.budget_item_single_date);
+        tvSingleDateValue = (TextView) llSingleDate.findViewById(R.id.tv_date_value);
         tvSingleDateValue.setText(sdf.format(outcome.getSingle_date().getTime()));
         //begin date
-        llBeginDate = (LinearLayout) rootView.findViewById(R.id.ll_item_begin_date);
+        llBeginDate = (RelativeLayout) rootView.findViewById(R.id.ll_item_begin_date);
         llBeginDate.setOnClickListener(beginDateListener);
-        tvBeginDateValue = (TextView) rootView.findViewById(R.id.tv_item_begin_date_value);
+        tvBeginDateTitle = (TextView) llBeginDate.findViewById(R.id.tv_date_title);
+        tvBeginDateTitle.setText(R.string.budget_item_begin_date);
+        tvBeginDateValue = (TextView) llBeginDate.findViewById(R.id.tv_date_value);
         tvBeginDateValue.setText(sdf.format(outcome.getBegin_date().getTime()));
         //End date
-        llEndDate = (LinearLayout) rootView.findViewById(R.id.ll_item_end_date);
+        llEndDate = (RelativeLayout) rootView.findViewById(R.id.ll_item_end_date);
         llEndDate.setOnClickListener(endDateListener);
-        tvEndDateValue = (TextView) rootView.findViewById(R.id.tv_item_end_date_value);
-        tvEndDateValue.setText(sdf.format(outcome.getEnd_date().getTime()));
-        //period
+        tvEndDateTitle = (TextView) llEndDate.findViewById(R.id.tv_date_title);
+        tvEndDateValue.setText(R.string.budget_item_end_date);
+        tvEndDateValue = (TextView) llEndDate.findViewById(R.id.tv_date_value);
+        tvEndDateValue.setText(sdf.format(outcome.getEnd_date().getTime()));        //period
         llPeriod = (LinearLayout) rootView.findViewById(R.id.ll_item_period);
         spPeriodType = (Spinner) rootView.findViewById(R.id.sp_period_type_spinner);
         adapterPeriodType = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item,
