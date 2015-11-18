@@ -30,6 +30,7 @@ import com.atdroid.atyurin.futuremoney.serialization.Total;
 import com.atdroid.atyurin.futuremoney.utils.DateFormater;
 import com.atdroid.atyurin.futuremoney.utils.FragmentContainer;
 import com.atdroid.atyurin.futuremoney.utils.KeyboardManager;
+import com.atdroid.atyurin.futuremoney.utils.StringUtil;
 import com.atdroid.atyurin.futuremoney.utils.TotalsCalculator;
 
 import java.text.SimpleDateFormat;
@@ -240,18 +241,18 @@ public class TotalsFragment extends Fragment {
             super.onPostExecute(result);
             llTotalsLayout = (LinearLayout) rootView.findViewById(R.id.ll_totals_values);
             tvAccountsTotalValue = (TextView) rootView.findViewById(R.id.tv_accounts_total_value);
-            tvAccountsTotalValue.setText(Double.toString(total.getAccountsAmount()));
+            tvAccountsTotalValue.setText(StringUtil.formatDouble(total.getAccountsAmount()));
             tvIncomesTotalValue = (TextView) rootView.findViewById(R.id.tv_incomes_total_value);
-            tvIncomesTotalValue.setText(Double.toString(total.getIncomeAmount()));
+            tvIncomesTotalValue.setText(StringUtil.formatDouble(total.getIncomeAmount()));
             tvOutcomesTotalValue = (TextView) rootView.findViewById(R.id.tv_outcomes_total_value);
-            tvOutcomesTotalValue.setText(Double.toString(total.getOutcomeAmount()));
+            tvOutcomesTotalValue.setText(StringUtil.formatDouble(total.getOutcomeAmount()));
             tvTotalValue = (TextView) rootView.findViewById(R.id.tv_total_value);
             if (total.getTotalAmount() > 0){
                 tvTotalValue.setTextColor(getResources().getColor(R.color.income_item_value));
             }else {
                 tvTotalValue.setTextColor(getResources().getColor(R.color.outcome_item_value));
             }
-            tvTotalValue.setText(Double.toString(total.getTotalAmount()));
+            tvTotalValue.setText(StringUtil.formatDouble(total.getTotalAmount()));
             llTotalsLayout.setVisibility(View.VISIBLE);
             if (pd.isShowing()) {
                 pd.dismiss();

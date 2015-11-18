@@ -5,46 +5,31 @@
     android:paddingLeft="16dp"
     android:paddingTop="12dp">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/tv_budget_item_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_alignParentLeft="true">
+        android:layout_alignParentTop="true"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tv_budget_item_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tv_budget_item_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#2B2B2B"
-            android:textSize="14sp" />
-    </LinearLayout>
-    <LinearLayout
+    <TextView
+        android:id="@+id/tv_budget_item_value"
+        android:layout_alignParentBottom="true"
+        android:gravity="bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:textColor="#2B2B2B"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_budget_item_date"
         android:layout_alignParentRight="true"
-        android:gravity="center_vertical">
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#797979"
+        android:textSize="10sp" />
 
-        <TextView
-            android:id="@+id/tv_budget_item_begin_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#797979"
-            android:textSize="10sp" />
-
-        <TextView
-            android:id="@+id/tv_budget_item_end_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#797979"
-            android:textSize="10sp" />
-    </LinearLayout>
 </RelativeLayout>

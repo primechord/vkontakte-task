@@ -3,6 +3,7 @@ package com.atdroid.atyurin.futuremoney.utils;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 
 import java.text.DecimalFormat;
@@ -15,16 +16,20 @@ public class NumberTextWatcher implements TextWatcher {
 
     private DecimalFormat df;
     private DecimalFormat dfnd;
+    private View invisibleView;
     private boolean hasFractionalPart;
     private Double value;
     private int trailingZeroCount;
     private EditText et;
-
-    public NumberTextWatcher(EditText et) {
+    /*
+    *  invisibleView - the view will be visible then editText length > 0
+    * */
+    public NumberTextWatcher(EditText et, View invisibleView) {
         df = new DecimalFormat("#,###.##");
         df.setDecimalSeparatorAlwaysShown(true);
         dfnd = new DecimalFormat("#,###");
         this.et = et;
+        this.invisibleView = invisibleView;
         hasFractionalPart = false;
         et.addTextChangedListener(this);
     }
@@ -35,11 +40,15 @@ public class NumberTextWatcher implements TextWatcher {
     public void afterTextChanged(Editable s) {
         et.removeTextChangedListener(this);
         Log.d("DecimalFormatSymb", df.getDecimalFormatSymbols().toString());
-        Number n = null;
+        Number n = 0;
         try {
             int inilen, endlen;
             inilen = et.getText().length();
-
+            if (inilen > 0){
+                invisibleView.setVisibility(View.VISIBLE);
+            }else{
+                invisibleView.setVisibility(View.GONE);
+            }
             String v = s.toString().replace(String.valueOf(df.getDecimalFormatSymbols().getGroupingSeparator()), "");
             n = df.parse(v);
             int cp = et.getSelectionStart();

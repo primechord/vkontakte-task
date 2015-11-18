@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.atdroid.atyurin.futuremoney.R;
 import com.atdroid.atyurin.futuremoney.serialization.Account;
+import com.atdroid.atyurin.futuremoney.utils.StringUtil;
 
 import java.util.ArrayList;
 
@@ -54,7 +55,7 @@ public class AccountsAdapter extends BaseAdapter {
 //        TextView tvName = (TextView) view.findViewById(android.R.id.text1);
 //        TextView tvValue = (TextView) view.findViewById(android.R.id.text2);
         tvName.setText(accounts.get(position).getName());
-        tvValue.setText(Double.toString(accounts.get(position).getValue()));
+        tvValue.setText(StringUtil.formatDouble(accounts.get(position).getValue()));
         tvValue.setTextColor(context.getResources().getColor(R.color.income_item_value));
         return view;
     }

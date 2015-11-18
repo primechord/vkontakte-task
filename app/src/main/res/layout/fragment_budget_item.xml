@@ -59,7 +59,8 @@
                 android:id="@+id/et_item_amount_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLength="12"
+
+                android:maxLength="15"
                 android:hint="@string/budget_item_amount"
                 android:paddingBottom="16dp"
                 android:paddingTop="16dp"
@@ -128,6 +129,8 @@
                     android:id="@+id/et_period_value"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:digits="0123456789"
+                    android:inputType="number"
                     android:layout_marginRight="16dp"
                     android:layout_weight="2"
                     android:maxLength="5"

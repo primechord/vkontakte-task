@@ -55,18 +55,16 @@ public class IncomesAdapter extends BaseAdapter {
         Income income = incomes.get(position);
         TextView tvName = (TextView) view.findViewById(R.id.tv_budget_item_name);
         TextView tvValue = (TextView) view.findViewById(R.id.tv_budget_item_value);
-        TextView tvBeginDate = (TextView) view.findViewById(R.id.tv_budget_item_begin_date);
-        TextView tvEndDate = (TextView) view.findViewById(R.id.tv_budget_item_end_date);
+        TextView tvDate = (TextView) view.findViewById(R.id.tv_budget_item_date);
         tvName.setText(income.getName());
         tvValue.setText(StringUtil.formatDouble(income.getValue()));
         tvValue.setTextColor(context.getResources().getColor(R.color.income_item_value));
         SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.SHORT_DATE_FORMAT);
         if (income.getType() == Income.TYPE_PERIODICAL){
-            tvBeginDate.setText(context.getResources().getString(R.string.budget_item_begin_date_short) + " " + sdf.format(income.getBegin_date().getTime()));
-            tvEndDate.setText(context.getResources().getString(R.string.budget_item_end_date_short) + " " + sdf.format(income.getEnd_date().getTime()));
+            tvDate.setText(context.getResources().getString(R.string.budget_item_begin_date_short) + " " + sdf.format(income.getBegin_date().getTime()) + " "
+                    + context.getResources().getString(R.string.budget_item_end_date_short) + " " + sdf.format(income.getEnd_date().getTime()));
         }else if(income.getType() == Income.TYPE_SINGLE){
-            tvBeginDate.setText(sdf.format(income.getSingle_date().getTime()));
-            tvEndDate.setText("");
+            tvDate.setText(sdf.format(income.getSingle_date().getTime()));
         }
         return view;
     }

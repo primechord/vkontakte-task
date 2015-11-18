@@ -100,7 +100,7 @@ public class IncomeItemFragment extends Fragment {
         //amount
         tvAmountTitle = (TextView) rootView.findViewById(R.id.tv_item_amount_title);
         etAmount = (EditText) rootView.findViewById(R.id.et_item_amount_value);
-        ntw = new NumberTextWatcher(etAmount);
+        ntw = new NumberTextWatcher(etAmount, tvAmountTitle);
         etAmount.setRawInputType(Configuration.KEYBOARD_QWERTY);
         if (income.getValue() > 0){
             ntw.setValue(income.getValue());
@@ -220,34 +220,6 @@ public class IncomeItemFragment extends Fragment {
                 tvNameTitle.setVisibility(View.VISIBLE);
             }else{
                 tvNameTitle.setVisibility(View.GONE);
-            }
-        }
-    };
-
-    private TextWatcher amountTextWatcher = new TextWatcher() {
-
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-        @Override
-        public void afterTextChanged(Editable editable) {
-            Log.d(LOG_TAG, editable.toString());
-            try{
-                if (editable.length() > 0){
-                    income.setValue(Double.valueOf(editable.toString()));
-                }
-            }catch (NumberFormatException e){
-                income.setValue(0);
-            }
-            if (editable.length() > 0){
-                tvAmountTitle.setVisibility(View.VISIBLE);
-            }else{
-                tvAmountTitle.setVisibility(View.GONE);
             }
         }
     };

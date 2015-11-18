@@ -21,6 +21,7 @@ import com.atdroid.atyurin.futuremoney.R;
 import com.atdroid.atyurin.futuremoney.dao.AccountsDAO;
 import com.atdroid.atyurin.futuremoney.serialization.Account;
 import com.atdroid.atyurin.futuremoney.utils.FragmentContainer;
+import com.atdroid.atyurin.futuremoney.utils.NumberTextWatcher;
 
 /**
  * Created by atdroid on 14.09.2015.
@@ -44,6 +45,7 @@ public class AccountItemFragment extends Fragment {
     boolean isNewItem = true;
     EditText etName, etAmount;
     TextView tvNameTitle, tvAmountTitle;
+    NumberTextWatcher ntw;
     public static AccountItemFragment newInstance() {
         Log.d("Accountr fragment", "newInstance");
 
@@ -83,13 +85,13 @@ public class AccountItemFragment extends Fragment {
         //amount
         tvAmountTitle = (TextView) rootView.findViewById(R.id.tv_account_amount_title);
         etAmount = (EditText) rootView.findViewById(R.id.et_account_amount_value);
+        ntw = new NumberTextWatcher(etAmount, tvAmountTitle);
         etAmount.setRawInputType(Configuration.KEYBOARD_QWERTY);
         if (account.getValue() > 0){
-            etAmount.setText(Double.toString(account.getValue()));
+            ntw.setValue(account.getValue());
+            ntw.formatText();
             tvAmountTitle.setVisibility(View.VISIBLE);
         }
-        etAmount.addTextChangedListener(amountTextWatcher);
-
         return rootView;
 
     }
@@ -112,7 +114,8 @@ public class AccountItemFragment extends Fragment {
                 Toast.makeText(getActivity().getBaseContext(), R.string.msg_budget_item_empty_name, Toast.LENGTH_LONG).show();
                 return false;
             }
-            if (account.getValue() < 1){
+            account.setValue(ntw.getValue());
+            if (account.getValue() <= 0){
                 Toast.makeText(getActivity().getBaseContext(), R.string.msg_budget_item_empty_amount, Toast.LENGTH_LONG).show();
                 return false;
             }
