@@ -13,6 +13,8 @@ import com.atdroid.atyurin.futuremoney.utils.DateFormater;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by atdroid on 07.10.2015.
@@ -89,17 +91,41 @@ public class IncomesDAO {
         }
         // make sure to close the cursor
         cursor.close();
+        Collections.sort(incomes, new Comparator<Income>() {
+            @Override
+            public int compare(Income income1, Income income2) {
+                Calendar calendar1;
+                Calendar calendar2;
+                if (income1.getType() == Income.TYPE_PERIODICAL) {
+                    calendar1 = income1.getBegin_date();
+                } else {
+                    calendar1 = income1.getSingle_date();
+                }
+                if (income1.getType() == Income.TYPE_PERIODICAL) {
+                    calendar2 = income2.getBegin_date();
+                } else {
+                    calendar2 = income2.getSingle_date();
+                }
+                return calendar2.compareTo(calendar1);
+            }
+        });
         return incomes;
     }
 
     public ArrayList<Income> getIncomesWithType(final int incomeType) {
         ArrayList<Income> incomes = new ArrayList<Income>();
         Cursor cursor = null;
+        String orderBy = "";
+        if (incomeType == Income.TYPE_SINGLE){
+            orderBy = DBHelper.COLUMN_SINGLE_DATE + " DESC";
+        }else if (incomeType == Income.TYPE_PERIODICAL){
+            orderBy = DBHelper.COLUMN_BEGIN_DATE + " DESC";
+        }
         cursor = database.query(DBHelper.TABLE_INCOMES,
                     allColumns,
                     DBHelper.COLUMN_TYPE + " = ?",
                     new String[]{Integer.toString(incomeType)},
-                    null, null, null);
+                    null, null, orderBy);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -123,7 +149,7 @@ public class IncomesDAO {
                     new String[]{Long.toString(calendar_begin.getTimeInMillis()),
                             Long.toString(calendar_end.getTimeInMillis()),
                             Integer.toString(Income.TYPE_PERIODICAL)},
-                    null, null, null);
+                    null, null, DBHelper.COLUMN_BEGIN_DATE + " DESC");
         } else if (incomeType == Income.TYPE_SINGLE){
             cursor = database.query(DBHelper.TABLE_INCOMES,
                     allColumns,
@@ -131,7 +157,7 @@ public class IncomesDAO {
                     new String[]{Long.toString(calendar_begin.getTimeInMillis()),
                             Long.toString(calendar_end.getTimeInMillis()),
                             Integer.toString(Income.TYPE_SINGLE)},
-                    null, null, null);
+                    null, null, DBHelper.COLUMN_SINGLE_DATE + " DESC");
         }
 
         Log.d(TAG, "Incomes List:");

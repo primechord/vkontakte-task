@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.atdroid.atyurin.futuremoney.R;
+import com.atdroid.atyurin.futuremoney.utils.FragmentContainer;
 import com.atdroid.atyurin.futuremoney.utils.KeyboardManager;
 
 /**
@@ -31,6 +32,7 @@ public class OutcomesFragmentContainer extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        FragmentContainer.setCurentFragment(this.getClass().toString());
         new KeyboardManager(this).closeKeyboard();
         View rootView = inflater.inflate(R.layout.budget_item_view_pager, container , false);
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);

@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.atdroid.atyurin.futuremoney.R;
 import com.atdroid.atyurin.futuremoney.dao.AccountsDAO;
 import com.atdroid.atyurin.futuremoney.serialization.Account;
+import com.atdroid.atyurin.futuremoney.utils.FragmentContainer;
 
 /**
  * Created by atdroid on 14.09.2015.
@@ -69,7 +70,7 @@ public class AccountItemFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);//switch off menu for fragment
-
+        FragmentContainer.setCurentFragment(this.getClass().toString());
         View rootView =  inflater.inflate(R.layout.fragment_account_item, container, false);
         //name
         tvNameTitle = (TextView) rootView.findViewById(R.id.tv_account_name_title);

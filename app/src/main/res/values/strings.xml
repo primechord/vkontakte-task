@@ -35,6 +35,8 @@
     <string name="budget_item_single_date">Дата</string>
     <string name="budget_item_begin_date">Дата начала</string>
     <string name="budget_item_end_date">Дата окончания</string>
+    <string name="budget_item_begin_date_short">с</string>
+    <string name="budget_item_end_date_short">до</string>
     <string name="budget_item_period">Период</string>
     <string name="budget_items_no_data_found">Нет данных</string>
     <string-array name="budget_item_period_items">

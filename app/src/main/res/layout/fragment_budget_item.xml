@@ -31,6 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/budget_item_name"
+                android:maxLength="30"
                 android:paddingBottom="16dp"
                 android:paddingTop="16dp"
                 android:textSize="16sp" />
@@ -58,6 +59,7 @@
                 android:id="@+id/et_item_amount_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:maxLength="12"
                 android:hint="@string/budget_item_amount"
                 android:paddingBottom="16dp"
                 android:paddingTop="16dp"

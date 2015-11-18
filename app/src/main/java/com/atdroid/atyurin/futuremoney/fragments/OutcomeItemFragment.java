@@ -27,7 +27,7 @@ import com.atdroid.atyurin.futuremoney.R;
 import com.atdroid.atyurin.futuremoney.dao.OutcomesDAO;
 import com.atdroid.atyurin.futuremoney.serialization.Outcome;
 import com.atdroid.atyurin.futuremoney.utils.DateFormater;
-import com.atdroid.atyurin.futuremoney.utils.KeyboardManager;
+import com.atdroid.atyurin.futuremoney.utils.FragmentContainer;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -83,7 +83,7 @@ public class OutcomeItemFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);//switch off menu for fragment
-
+        FragmentContainer.setCurentFragment(this.getClass().toString());
         View rootView =  inflater.inflate(R.layout.fragment_budget_item, container, false);
         //name
         tvNameTitle = (TextView) rootView.findViewById(R.id.tv_item_name_title);

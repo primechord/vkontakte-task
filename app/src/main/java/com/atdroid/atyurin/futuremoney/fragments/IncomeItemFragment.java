@@ -27,6 +27,8 @@ import com.atdroid.atyurin.futuremoney.R;
 import com.atdroid.atyurin.futuremoney.dao.IncomesDAO;
 import com.atdroid.atyurin.futuremoney.serialization.Income;
 import com.atdroid.atyurin.futuremoney.utils.DateFormater;
+import com.atdroid.atyurin.futuremoney.utils.FragmentContainer;
+import com.atdroid.atyurin.futuremoney.utils.NumberTextWatcher;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -48,15 +50,17 @@ import java.util.Calendar;
 public class IncomeItemFragment extends Fragment {
     final static String INCOME_KEY = "key_income";
     final static String LOG_TAG = "IncomeItemFragment";
+    final static String regex = "\\d{3}\\ \\d{3}\\ \\d{3}\\ \\d{3}";
     Income income;
     boolean isNewItem = true;
-    EditText etName, etAmount, etPeriodValue;
+    EditText etName,etAmount, etPeriodValue;
     TextView tvNameTitle, tvAmountTitle, tvTypeTitle, tvSingleDateTitle, tvSingleDateValue, tvBeginDateTitle, tvBeginDateValue,tvEndDateTitle, tvEndDateValue, tvPeriodTitle;
     Spinner spType, spPeriodType;
     FragmentManager fragmentManager;
     RelativeLayout llSingleDate, llBeginDate, llEndDate;
     LinearLayout llPeriod;
     ArrayAdapter<String> adapterType, adapterPeriodType;
+    NumberTextWatcher ntw;
     public static IncomeItemFragment newInstance() {
         Log.d("Incomer fragment", "newInstance");
 
@@ -83,10 +87,8 @@ public class IncomeItemFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);//switch off menu for fragment
-        Log.d(LOG_TAG, "onCreateView, container: " + container.toString());
+        FragmentContainer.setCurentFragment(this.getClass().toString());
         View rootView =  inflater.inflate(R.layout.fragment_budget_item, container, false);
-
-        Log.d(LOG_TAG, "onCreateView find elements" );
         //name
         tvNameTitle = (TextView) rootView.findViewById(R.id.tv_item_name_title);
         etName = (EditText) rootView.findViewById(R.id.et_item_name_value);
@@ -98,12 +100,13 @@ public class IncomeItemFragment extends Fragment {
         //amount
         tvAmountTitle = (TextView) rootView.findViewById(R.id.tv_item_amount_title);
         etAmount = (EditText) rootView.findViewById(R.id.et_item_amount_value);
+        ntw = new NumberTextWatcher(etAmount);
         etAmount.setRawInputType(Configuration.KEYBOARD_QWERTY);
         if (income.getValue() > 0){
-            etAmount.setText(Double.toString(income.getValue()));
+            ntw.setValue(income.getValue());
+            ntw.formatText();
             tvAmountTitle.setVisibility(View.VISIBLE);
-    }
-        etAmount.addTextChangedListener(amountTextWatcher);
+        }
         //type
 //        tvTypeTitle = (TextView) rootView.findViewById(R.id.tv_item_);
         spType = (Spinner) rootView.findViewById(R.id.sp_item_type);
@@ -172,7 +175,8 @@ public class IncomeItemFragment extends Fragment {
                 Toast.makeText(getActivity().getBaseContext(), R.string.msg_budget_item_empty_name, Toast.LENGTH_LONG).show();
                 return false;
             }
-            if (income.getValue() < 1){
+            income.setValue(ntw.getValue());
+            if (income.getValue() <= 0){
                 Toast.makeText(getActivity().getBaseContext(), R.string.msg_budget_item_empty_amount, Toast.LENGTH_LONG).show();
                 return false;
             }
@@ -221,6 +225,8 @@ public class IncomeItemFragment extends Fragment {
     };
 
     private TextWatcher amountTextWatcher = new TextWatcher() {
+
+
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         }
@@ -231,8 +237,12 @@ public class IncomeItemFragment extends Fragment {
         @Override
         public void afterTextChanged(Editable editable) {
             Log.d(LOG_TAG, editable.toString());
-            if (editable.length() > 0){
-                income.setValue(Double.valueOf(editable.toString()));
+            try{
+                if (editable.length() > 0){
+                    income.setValue(Double.valueOf(editable.toString()));
+                }
+            }catch (NumberFormatException e){
+                income.setValue(0);
             }
             if (editable.length() > 0){
                 tvAmountTitle.setVisibility(View.VISIBLE);

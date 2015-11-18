@@ -1,7 +1,6 @@
 package com.atdroid.atyurin.futuremoney;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -12,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,13 +21,11 @@ import com.atdroid.atyurin.futuremoney.fragments.AccountItemFragment;
 import com.atdroid.atyurin.futuremoney.fragments.AccountsFragment;
 import com.atdroid.atyurin.futuremoney.fragments.HowToFragment;
 import com.atdroid.atyurin.futuremoney.fragments.IncomeItemFragment;
-import com.atdroid.atyurin.futuremoney.fragments.IncomesFragment;
 import com.atdroid.atyurin.futuremoney.fragments.IncomesFragmentContainer;
 import com.atdroid.atyurin.futuremoney.fragments.OutcomeItemFragment;
-import com.atdroid.atyurin.futuremoney.fragments.OutcomesFragment;
 import com.atdroid.atyurin.futuremoney.fragments.OutcomesFragmentContainer;
 import com.atdroid.atyurin.futuremoney.fragments.TotalsFragment;
-import com.atdroid.atyurin.futuremoney.utils.KeyboardManager;
+import com.atdroid.atyurin.futuremoney.utils.FragmentContainer;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -76,34 +74,35 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            if (fragment.getClass().equals(IncomeItemFragment.class)){
+            Log.d(LOG_TAG, "CurFrag: '" + FragmentContainer.getCurentFragment() + "', \nIncomeItemFragment.class: '" + IncomeItemFragment.class.toString() + "'");
+            if (FragmentContainer.getCurentFragment().equals(IncomeItemFragment.class.toString())){
                 toolbar.setTitle(R.string.title_section_incomes);
-                fragment =  IncomesFragment.newInstance(0, fragmentManager);
+                fragment =  IncomesFragmentContainer.newInstance();
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragment)
                         .commit();
                 return;
-            } else if (fragment.getClass().equals(OutcomeItemFragment.class)){
+            } else if (FragmentContainer.getCurentFragment().equals(OutcomeItemFragment.class.toString())){
                 toolbar.setTitle(R.string.title_section_outcomes);
                 fragment = OutcomesFragmentContainer.newInstance();
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragment)
                         .commit();
                 return;
-            }else if (fragment.getClass().equals(AccountItemFragment.class)){
+            }else if (FragmentContainer.getCurentFragment().equals(AccountItemFragment.class.toString())){
                 toolbar.setTitle(R.string.title_section_accounts);
                 fragment =  AccountsFragment.newInstance(this, fragmentManager);
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragment)
                         .commit();
                 return;
-            }else if (!fragment.getClass().equals(TotalsFragment.class)){
+            }else if (!FragmentContainer.getCurentFragment().equals(TotalsFragment.class.toString())){
                 toolbar.setTitle(R.string.title_section_totals);
                 fragment = TotalsFragment.newInstance(this, fragmentManager);
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragment)
                         .commit();
-            }else if(fragment.getClass().equals(TotalsFragment.class)){
+            }else if(FragmentContainer.getCurentFragment().equals(TotalsFragment.class.toString())){
                 super.onBackPressed();
             }
         }

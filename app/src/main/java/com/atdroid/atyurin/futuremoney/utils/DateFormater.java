@@ -8,6 +8,7 @@ import java.util.Calendar;
  */
 public class DateFormater {
     public static final String DATE_FORMAT = "dd MMMM yyyy";
+    public static final String SHORT_DATE_FORMAT = "dd.MM.yy";
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
 
     public static long formatCalendarToLong(Calendar cal){
