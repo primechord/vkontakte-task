@@ -76,5 +76,9 @@
     <string name="msg_budget_item_success">Выполнено успешно</string>
 
     <!--How to fragment-->
-    <string name="how_to_description">Нашим приложением надо пользоваться правильно!!!</string>
+    <string name="how_to_description">
+        <![CDATA[
+        <b>Нашим</b> приложением надо пользоваться правильно!!!
+        ]]>
+    </string>
 </resources>

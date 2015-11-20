@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.atdroid.atyurin.futuremoney.R;
 import com.atdroid.atyurin.futuremoney.dao.OutcomesDAO;
+import com.atdroid.atyurin.futuremoney.serialization.Account;
 import com.atdroid.atyurin.futuremoney.serialization.Outcome;
 import com.atdroid.atyurin.futuremoney.utils.DateFormater;
 import com.atdroid.atyurin.futuremoney.utils.FragmentContainer;
@@ -48,7 +49,8 @@ import java.util.Calendar;
  */
 
 public class OutcomeItemFragment extends Fragment {
-    final static String INCOME_KEY = "key_outcome";
+    final static String KEY_OUTCOME = "key_outcome";
+    final static String KEY_NEW_ITEM = "key_new_item";
     final static String LOG_TAG = "OutcomeItemFragment";
     Outcome outcome;
     boolean isNewItem = true;
@@ -62,19 +64,22 @@ public class OutcomeItemFragment extends Fragment {
     public static OutcomeItemFragment newInstance() {
         Log.d("Outcomer fragment", "newInstance");
 
-        OutcomeItemFragment OutcomeItemFragment = new OutcomeItemFragment();
-        OutcomeItemFragment.outcome = new Outcome();
-        return OutcomeItemFragment;
+        OutcomeItemFragment outcomeItemFragment = new OutcomeItemFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(KEY_OUTCOME, new Outcome());
+        args.putBoolean(KEY_NEW_ITEM, true);
+        outcomeItemFragment.setArguments(args);
+        return outcomeItemFragment;
     }
 
     public static OutcomeItemFragment newInstance(Outcome outcome) {
         Log.d("Outcomer fragment", "newInstance");
-        OutcomeItemFragment OutcomeItemFragment = new OutcomeItemFragment();
-//        Bundle args = new Bundle();
-//        args.putSerializable(INCOME_KEY, budget_item);
-        OutcomeItemFragment.outcome = outcome;
-        OutcomeItemFragment.isNewItem = false;
-        return OutcomeItemFragment;
+        OutcomeItemFragment outcomeItemFragment = new OutcomeItemFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(KEY_OUTCOME, outcome);
+        args.putBoolean(KEY_NEW_ITEM, false);
+        outcomeItemFragment.setArguments(args);
+        return outcomeItemFragment;
     }
 
     public OutcomeItemFragment() {
@@ -85,6 +90,8 @@ public class OutcomeItemFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);//switch off menu for fragment
+        this.outcome = (Outcome) this.getArguments().getSerializable(KEY_OUTCOME);
+        this.isNewItem = this.getArguments().getBoolean(KEY_NEW_ITEM);
         FragmentContainer.setCurentFragment(this.getClass().toString());
         View rootView =  inflater.inflate(R.layout.fragment_budget_item, container, false);
         //name

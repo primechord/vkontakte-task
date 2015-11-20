@@ -2,9 +2,11 @@ package com.atdroid.atyurin.futuremoney.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.atdroid.atyurin.futuremoney.R;
 import com.atdroid.atyurin.futuremoney.utils.FragmentContainer;
@@ -25,6 +27,8 @@ public class HowToFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_how_to, container,false);
         FragmentContainer.setCurentFragment(this.getClass().toString());
+        TextView tvHowTo = (TextView) rootView.findViewById(R.id.tv_how_to_description);
+        tvHowTo.setText(Html.fromHtml(getString(R.string.how_to_description)));
         return  rootView;
     }
 }

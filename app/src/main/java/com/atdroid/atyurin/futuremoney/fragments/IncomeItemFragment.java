@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.atdroid.atyurin.futuremoney.R;
 import com.atdroid.atyurin.futuremoney.dao.IncomesDAO;
 import com.atdroid.atyurin.futuremoney.serialization.Income;
+import com.atdroid.atyurin.futuremoney.serialization.Outcome;
 import com.atdroid.atyurin.futuremoney.utils.DateFormater;
 import com.atdroid.atyurin.futuremoney.utils.FragmentContainer;
 import com.atdroid.atyurin.futuremoney.utils.NumberTextWatcher;
@@ -48,15 +49,14 @@ import java.util.Calendar;
  */
 
 public class IncomeItemFragment extends Fragment {
-    final static String INCOME_KEY = "key_income";
+    final static String KEY_INCOME = "key_income";
+    final static String KEY_NEW_ITEM = "key_new_item";
     final static String LOG_TAG = "IncomeItemFragment";
-    final static String regex = "\\d{3}\\ \\d{3}\\ \\d{3}\\ \\d{3}";
     Income income;
     boolean isNewItem = true;
     EditText etName,etAmount, etPeriodValue;
     TextView tvNameTitle, tvAmountTitle, tvTypeTitle, tvSingleDateTitle, tvSingleDateValue, tvBeginDateTitle, tvBeginDateValue,tvEndDateTitle, tvEndDateValue, tvPeriodTitle;
     Spinner spType, spPeriodType;
-    FragmentManager fragmentManager;
     RelativeLayout llSingleDate, llBeginDate, llEndDate;
     LinearLayout llPeriod;
     ArrayAdapter<String> adapterType, adapterPeriodType;
@@ -64,18 +64,21 @@ public class IncomeItemFragment extends Fragment {
     public static IncomeItemFragment newInstance() {
         Log.d("Incomer fragment", "newInstance");
 
-        IncomeItemFragment IncomeItemFragment = new IncomeItemFragment();
-        IncomeItemFragment.income = new Income();
-        return IncomeItemFragment;
+        IncomeItemFragment incomeItemFragment = new IncomeItemFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(KEY_INCOME, new Outcome());
+        args.putBoolean(KEY_NEW_ITEM, true);
+        incomeItemFragment.setArguments(args);
+        return incomeItemFragment;
     }
 
     public static IncomeItemFragment newInstance(Income income) {
         Log.d(LOG_TAG, "newInstance");
         IncomeItemFragment incomeItemFragment = new IncomeItemFragment();
-//        Bundle args = new Bundle();
-//        args.putSerializable(INCOME_KEY, budget_item);
-        incomeItemFragment.income = income;
-        incomeItemFragment.isNewItem = false;
+        Bundle args = new Bundle();
+        args.putSerializable(KEY_INCOME, income);
+        args.putBoolean(KEY_NEW_ITEM, false);
+        incomeItemFragment.setArguments(args);
         return incomeItemFragment;
     }
 
@@ -87,6 +90,8 @@ public class IncomeItemFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);//switch off menu for fragment
+        this.income = (Income) this.getArguments().getSerializable(KEY_INCOME);
+        this.isNewItem = this.getArguments().getBoolean(KEY_NEW_ITEM);
         FragmentContainer.setCurentFragment(this.getClass().toString());
         View rootView =  inflater.inflate(R.layout.fragment_budget_item, container, false);
         //name

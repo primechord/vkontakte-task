@@ -39,7 +39,8 @@ import com.atdroid.atyurin.futuremoney.utils.NumberTextWatcher;
 
 
 public class AccountItemFragment extends Fragment {
-    final static String INCOME_KEY = "key_account";
+    final static String KEY_ACCOUNT = "key_account";
+    final static String KEY_NEW_ITEM = "key_new_item";
     final static String LOG_TAG = "AccountItemFragment";
     Account account;
     boolean isNewItem = true;
@@ -49,19 +50,22 @@ public class AccountItemFragment extends Fragment {
     public static AccountItemFragment newInstance() {
         Log.d("Accountr fragment", "newInstance");
 
-        AccountItemFragment AccountItemFragment = new AccountItemFragment();
-        AccountItemFragment.account = new Account();
-        return AccountItemFragment;
+        AccountItemFragment accountItemFragment = new AccountItemFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(KEY_ACCOUNT, new Account());
+        args.putBoolean(KEY_NEW_ITEM, true);
+        accountItemFragment.setArguments(args);
+        return accountItemFragment;
     }
 
     public static AccountItemFragment newInstance(Account account) {
         Log.d("Accountr fragment", "newInstance");
-        AccountItemFragment AccountItemFragment = new AccountItemFragment();
-//        Bundle args = new Bundle();
-//        args.putSerializable(INCOME_KEY, budget_item);
-        AccountItemFragment.account = account;
-        AccountItemFragment.isNewItem = false;
-        return AccountItemFragment;
+        AccountItemFragment accountItemFragment = new AccountItemFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(KEY_ACCOUNT, new Account());
+        args.putBoolean(KEY_NEW_ITEM, false);
+        accountItemFragment.setArguments(args);
+        return accountItemFragment;
     }
 
     public AccountItemFragment() {
@@ -72,6 +76,8 @@ public class AccountItemFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);//switch off menu for fragment
+        this.account = (Account) this.getArguments().getSerializable(KEY_ACCOUNT);
+        this.isNewItem = this.getArguments().getBoolean(KEY_NEW_ITEM);
         FragmentContainer.setCurentFragment(this.getClass().toString());
         View rootView =  inflater.inflate(R.layout.fragment_account_item, container, false);
         //name
