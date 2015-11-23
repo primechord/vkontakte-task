@@ -66,7 +66,7 @@ public class IncomeItemFragment extends Fragment {
 
         IncomeItemFragment incomeItemFragment = new IncomeItemFragment();
         Bundle args = new Bundle();
-        args.putSerializable(KEY_INCOME, new Outcome());
+        args.putSerializable(KEY_INCOME, new Income());
         args.putBoolean(KEY_NEW_ITEM, true);
         incomeItemFragment.setArguments(args);
         return incomeItemFragment;

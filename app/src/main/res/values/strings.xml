@@ -5,7 +5,7 @@
     <string name="title_section_accounts">Счета</string>
     <string name="title_section_incomes">Доходы</string>
     <string name="title_section_outcomes">Расходы</string>
-    <string name="title_section_about">Как пользоваться</string>
+    <string name="title_section_about">О приложении</string>
     <string-array name="views_array">
         <item>Итоги</item>
         <item>Счета</item>
@@ -28,7 +28,7 @@
     <string name="budget_item_name">Название</string>
     <string name="budget_item_type">Тип</string>
     <string-array name="budget_item_types">
-        <item>Одноразовый</item>
+        <item>Разовый</item>
         <item>Постоянный</item>
     </string-array>
     <string name="budget_item_amount">Сумма</string>
@@ -49,7 +49,7 @@
     <string-array name="budget_item_tabs">
         <item>Постоянные</item>
         <item>Все</item>
-        <item>Одноразовые</item>
+        <item>Разовые</item>
     </string-array>
     <!--Totals fields-->
     <string name="total_begin_type">Тип начальной даты</string>
@@ -76,9 +76,17 @@
     <string name="msg_budget_item_success">Выполнено успешно</string>
 
     <!--How to fragment-->
-    <string name="how_to_description">
+    <string name="about_description">
         <![CDATA[
-        <b>Нашим</b> приложением надо пользоваться правильно!!!
+        <p><b>Money Planner</b> позволяет определить количество денег, которое у вас будет в любой момент времени.</p>
+        <p>Просто задайте ваши постоянные <b>Доходы</b> (зарплата, квартальная премия, доход от аренды недвижимости и т.п.)
+        и <b>Расходы</b> (квартплата, ипотека, плата за обучение и т.п.), а так же укажите в разделе <b>Счета</b> уже имеющиися средства
+        (счет в банке, наличные и т.п.).</p>
+        <p>Для получения более точных результатов, а так же наблюдения за своими финансами, добавляйте <b>разовые</b>
+        доходы и расходы после совершения операций с деньгами.</p>
+        <p>Все данные, которые вы вводите, хранятся исключительно в вашем телефоне и не передаются третьим лицам!</p>
+        <p align="right"><b>Money Planner 1.0</b></p>
         ]]>
     </string>
+
 </resources>

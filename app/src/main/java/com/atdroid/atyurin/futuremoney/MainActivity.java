@@ -19,7 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.atdroid.atyurin.futuremoney.fragments.AccountItemFragment;
 import com.atdroid.atyurin.futuremoney.fragments.AccountsFragment;
-import com.atdroid.atyurin.futuremoney.fragments.HowToFragment;
+import com.atdroid.atyurin.futuremoney.fragments.AboutFragment;
 import com.atdroid.atyurin.futuremoney.fragments.IncomeItemFragment;
 import com.atdroid.atyurin.futuremoney.fragments.IncomesFragmentContainer;
 import com.atdroid.atyurin.futuremoney.fragments.OutcomeItemFragment;
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity
             fragment = OutcomesFragmentContainer.newInstance();
         } else if (id == R.id.nav_about) {
             toolbar.setTitle(R.string.title_section_about);
-            fragment = HowToFragment.newInstance();
+            fragment = AboutFragment.newInstance();
         }
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)

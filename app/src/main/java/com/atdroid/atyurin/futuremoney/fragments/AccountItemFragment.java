@@ -62,7 +62,7 @@ public class AccountItemFragment extends Fragment {
         Log.d("Accountr fragment", "newInstance");
         AccountItemFragment accountItemFragment = new AccountItemFragment();
         Bundle args = new Bundle();
-        args.putSerializable(KEY_ACCOUNT, new Account());
+        args.putSerializable(KEY_ACCOUNT, account);
         args.putBoolean(KEY_NEW_ITEM, false);
         accountItemFragment.setArguments(args);
         return accountItemFragment;
