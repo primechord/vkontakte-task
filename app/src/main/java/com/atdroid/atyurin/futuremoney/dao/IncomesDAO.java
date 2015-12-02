@@ -145,9 +145,11 @@ public class IncomesDAO {
         if (incomeType == Income.TYPE_PERIODICAL){
             cursor = database.query(DBHelper.TABLE_INCOMES,
                     allColumns,
-                    DBHelper.COLUMN_BEGIN_DATE + " >= ? AND " + DBHelper.COLUMN_BEGIN_DATE + " <= ? AND " + DBHelper.COLUMN_TYPE + " = ?",
-                    new String[]{Long.toString(calendar_begin.getTimeInMillis()),
-                            Long.toString(calendar_end.getTimeInMillis()),
+                    DBHelper.COLUMN_BEGIN_DATE + " <= ? " +
+                            "AND " + DBHelper.COLUMN_END_DATE + " >= ? " +
+                            "AND " + DBHelper.COLUMN_TYPE + " = ?",
+                    new String[]{Long.toString(calendar_end.getTimeInMillis()),
+                            Long.toString(calendar_begin.getTimeInMillis()),
                             Integer.toString(Income.TYPE_PERIODICAL)},
                     null, null, DBHelper.COLUMN_BEGIN_DATE + " DESC");
         } else if (incomeType == Income.TYPE_SINGLE){

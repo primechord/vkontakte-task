@@ -117,9 +117,10 @@ public class OutcomesDAO {
         if (outcomeType == Outcome.TYPE_PERIODICAL){
             cursor = database.query(DBHelper.TABLE_OUTCOMES,
                     allColumns,
-                    DBHelper.COLUMN_BEGIN_DATE + " >= ? AND " + DBHelper.COLUMN_BEGIN_DATE + " <= ? AND " + DBHelper.COLUMN_TYPE + " = ?",
-                    new String[]{Long.toString(calendar_begin.getTimeInMillis()),
-                            Long.toString(calendar_end.getTimeInMillis()),
+                    DBHelper.COLUMN_BEGIN_DATE + " <= ? AND " + DBHelper.COLUMN_END_DATE + " >= ? " +
+                            "AND " + DBHelper.COLUMN_TYPE + " = ?",
+                    new String[]{Long.toString(calendar_end.getTimeInMillis()),
+                            Long.toString(calendar_begin.getTimeInMillis()),
                             Integer.toString(Outcome.TYPE_PERIODICAL)},
                     null, null, null);
         } else if (outcomeType == Outcome.TYPE_SINGLE){

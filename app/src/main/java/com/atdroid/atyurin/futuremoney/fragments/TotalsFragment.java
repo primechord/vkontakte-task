@@ -260,36 +260,4 @@ public class TotalsFragment extends Fragment {
             Log.d(LOG_TAG, "Total Amt: " + Double.toString(total.getTotalAmount()));
         }
     }
-
-  /*  public class CloseKeyboard extends AsyncTask<DatePickerFragment,DatePickerFragment,DatePickerFragment>{
-
-        @Override
-        protected DatePickerFragment doInBackground(DatePickerFragment... params) {
-            DatePickerFragment dbf = params[0];
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return dbf;
-        }
-        @Override
-        protected void onPostExecute(DatePickerFragment dbf){
-            super.onPostExecute(dbf);
-            Activity activity;
-            activity = getActivity();
-            Log.d(LOG_TAG, "CloseKeyboard - onPostExecute");
-            View view = activity
-                    .getCurrentFocus();
-            if (view != null) {
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-            }
-
-            boolean b = dbf.isVisible();
-            b = !b;
-        }
-    }*/
-
-
 }
