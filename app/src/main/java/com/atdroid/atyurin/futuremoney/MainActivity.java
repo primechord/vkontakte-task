@@ -17,15 +17,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.atdroid.atyurin.futuremoney.fragments.AboutFragment;
 import com.atdroid.atyurin.futuremoney.fragments.AccountItemFragment;
 import com.atdroid.atyurin.futuremoney.fragments.AccountsFragment;
-import com.atdroid.atyurin.futuremoney.fragments.AboutFragment;
 import com.atdroid.atyurin.futuremoney.fragments.IncomeItemFragment;
 import com.atdroid.atyurin.futuremoney.fragments.IncomesFragmentContainer;
 import com.atdroid.atyurin.futuremoney.fragments.OutcomeItemFragment;
 import com.atdroid.atyurin.futuremoney.fragments.OutcomesFragmentContainer;
 import com.atdroid.atyurin.futuremoney.fragments.TotalsFragment;
 import com.atdroid.atyurin.futuremoney.utils.FragmentContainer;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -66,6 +68,12 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("994210F407CD60F2EB5FACDA49406A54")
+                .build();
+        mAdView.loadAd(adRequest);
     }
 
     @Override
@@ -96,13 +104,13 @@ public class MainActivity extends AppCompatActivity
                         .replace(R.id.container, fragment)
                         .commit();
                 return;
-            }else if (!FragmentContainer.getCurentFragment().equals(TotalsFragment.class.toString())){
+            }/*else if (!FragmentContainer.getCurentFragment().equals(TotalsFragment.class.toString())){
                 toolbar.setTitle(R.string.title_section_totals);
                 fragment = TotalsFragment.newInstance(this, fragmentManager);
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragment)
                         .commit();
-            }else if(FragmentContainer.getCurentFragment().equals(TotalsFragment.class.toString())){
+            }*/else if(FragmentContainer.getCurentFragment().equals(TotalsFragment.class.toString())){
                 super.onBackPressed();
             }
         }
