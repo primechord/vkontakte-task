@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">Money Planner</string>
     <!--Navigation drawer-->
-    <string name="title_section_totals">Итоги</string>
-    <string name="title_section_accounts">Счета</string>
-    <string name="title_section_incomes">Доходы</string>
-    <string name="title_section_outcomes">Расходы</string>
-    <string name="title_section_about">О приложении</string>
+    <string name="title_section_totals">Totals</string>
+    <string name="title_section_accounts">Accounts</string>
+    <string name="title_section_incomes">Incomes</string>
+    <string name="title_section_outcomes">Expenses</string>
+    <string name="title_section_about">About app</string>
     <string-array name="views_array">
         <item>Итоги</item>
         <item>Счета</item>
@@ -13,32 +13,31 @@
         <item>Расходы</item>
         <item>О приложении</item>
     </string-array>
-    <string name="navigation_drawer_open">Открыть меню</string>
-    <string name="navigation_drawer_close">Закрыть меню</string>
+    <string name="navigation_drawer_open">Open menu</string>
+    <string name="navigation_drawer_close">Close menu</string>
 
     <!--Actions-->
-    <string name="add_income_item">Добавить</string>
-    <string name="delete_income_item">Удалить</string>
-    <string name="add_income_item_confirm">Сохранить</string>
-    <string name="action_example">Действие</string>
+    <string name="add_income_item">Add</string>
+    <string name="delete_income_item">Delete</string>
+    <string name="add_income_item_confirm">Save</string>
 
-    <string name="action_settings">Настройки</string>
+    <string name="action_settings">Settings</string>
 
     <!--Budget item fields-->
-    <string name="budget_item_name">Название</string>
-    <string name="budget_item_type">Тип</string>
+    <string name="budget_item_name">Name</string>
+    <string name="budget_item_type">Type</string>
     <string-array name="budget_item_types">
         <item>Разовый</item>
         <item>Постоянный</item>
     </string-array>
-    <string name="budget_item_amount">Сумма</string>
-    <string name="budget_item_single_date">Дата</string>
-    <string name="budget_item_begin_date">Дата начала</string>
-    <string name="budget_item_end_date">Дата окончания</string>
-    <string name="budget_item_begin_date_short">с</string>
-    <string name="budget_item_end_date_short">до</string>
-    <string name="budget_item_period">Период</string>
-    <string name="budget_items_no_data_found">Нет данных</string>
+    <string name="budget_item_amount">Amount</string>
+    <string name="budget_item_single_date">Date</string>
+    <string name="budget_item_begin_date">Begin date</string>
+    <string name="budget_item_end_date">End date</string>
+    <string name="budget_item_begin_date_short">from</string>
+    <string name="budget_item_end_date_short">to</string>
+    <string name="budget_item_period">Period</string>
+    <string name="budget_items_no_data_found">No data found</string>
     <string-array name="budget_item_period_items">
         <item>День</item>
         <item>Неделя</item>
@@ -52,42 +51,42 @@
         <item>Разовые</item>
     </string-array>
     <!--Totals fields-->
-    <string name="total_begin_type">Рассчитывать</string>
-    <string name="total_begin_date_title">Начальная дата</string>
-    <string name="total_calculate_date_title">Расчетная дата</string>
+    <string name="total_begin_type">Calculate</string>
+    <string name="total_begin_date_title">Begin date</string>
+    <string name="total_calculate_date_title">Settlement date</string>
     <string-array name="total_begin_types">
         <item>За все время</item>
         <item>С заданной даты</item>
     </string-array>
     <!--Total result fields-->
-    <string name="total_values_title">Итого:</string>
-    <string name="total_value_accounts_title">Счета:</string>
-    <string name="total_value_incomes_title">Доходы:</string>
-    <string name="total_value_outcomes_title">Расходы:</string>
-    <string name="total_value_totals_title">Итоговая сумма:</string>
+    <string name="total_values_title">Total:</string>
+    <string name="total_value_accounts_title">Accounts:</string>
+    <string name="total_value_incomes_title">Incomes:</string>
+    <string name="total_value_outcomes_title">Expenses:</string>
+    <string name="total_value_totals_title">Total amount:</string>
 
     <!--Buttons-->
-    <string name="btn_calc_totals_name">Рассчитать</string>
+    <string name="btn_calc_totals_name">Calculate</string>
 
     <!--User messages-->
-    <string name="msg_budget_item_empty_name">Название не задано!</string>
-    <string name="msg_budget_item_empty_amount">Сумма не задана!</string>
-    <string name="msg_budget_item_wrong_dates">Начальная дата больше конечной!</string>
-    <string name="msg_budget_item_success">Выполнено успешно</string>
+    <string name="msg_budget_item_empty_name">The name is not specified!</string>
+    <string name="msg_budget_item_empty_amount">The amount is not specified!</string>
+    <string name="msg_budget_item_wrong_dates">The begin date is greater than the end date</string>
+    <string name="msg_budget_item_success">Done</string>
 
     <!--How to fragment-->
     <string name="about_description">
         <![CDATA[
-        <p><b>Money Planner</b> позволяет определить количество денег, которое у вас будет в любой момент времени.</p>
-        <p>Просто задайте ваши постоянные <b>Доходы</b> (зарплата, квартальная премия, доход от аренды недвижимости и т.п.)
-        и <b>Расходы</b> (квартплата, ипотека, плата за обучение и т.п.), а так же укажите в разделе <b>Счета</b> уже имеющиеся средства
-        (счет в банке, наличные и т.п.).</p>
-        <p>Для получения более точных результатов, а так же наблюдения за своими финансами, добавляйте <b>разовые</b>
-        доходы и расходы после совершения операций с деньгами.</p>
-        <p>Очень важно для правильности расчета итоговой суммы перед началом расчета указать актуальные значения в разделе <b>Счета</b>!</p>
-        <p>Все данные, которые вы вводите, хранятся исключительно в вашем телефоне и не передаются третьим лицам!</p>
-        <p align="right"><b>Money Planner 1.0</b></p>
+<p> <b> Money Planner </b> allows you to specify the amount of money you will have at any time. </p>
+        <p> Just specify your constant <b> Incomes </b> (salary, quarterly bonus, rental income from property, etc.)
+        and <b> Expenses </b> (rent, mortgage, school fees, etc.). Also you need to  specify the means you already have (bank account, cash, etc.) in the <b> Accounts </b> . </p>
+        <p> To obtain more accurate results, as well as monitoring of your finances, add <b> single </b> incomes and expenses after each transaction with the money. </p>
+        <p> It is very important for the correct calculation of the final amount to  indicate actual values in the <b> Accounts </b> before starting of the calculation ! </p>
+        <p> All data that you enter are stored only on your phone and are not transferred to third parties! </p>
+<p>Thank you for downloading of this application! We hope that it will be useful to you. </p>
+        <p align = "right"> <b> Money Planner 1.0 </b> </p>
         ]]>
     </string>
+    <string name="action_example">Actions</string>
 
 </resources>
