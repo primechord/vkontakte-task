@@ -25,7 +25,7 @@ public class AboutFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_how_to, container,false);
+        View rootView = inflater.inflate(R.layout.fragment_about, container,false);
         FragmentContainer.setCurentFragment(this.getClass().toString());
         TextView tvHowTo = (TextView) rootView.findViewById(R.id.tv_how_to_description);
         tvHowTo.setText(Html.fromHtml(getString(R.string.about_description)));

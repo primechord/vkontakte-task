@@ -11,7 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -70,10 +69,12 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         AdView mAdView = (AdView) findViewById(R.id.adView);
+        mAdView.setVisibility(View.GONE);
         AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("994210F407CD60F2EB5FACDA49406A54")
+                //.addTestDevice("994210F407CD60F2EB5FACDA49406A54")
+                //.addTestDevice("2EB4ADE9EE7B457CAAD2CC9EF86B4308")
                 .build();
-        mAdView.loadAd(adRequest);
+        //mAdView.loadAd(adRequest);
     }
 
     @Override
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            Log.d(LOG_TAG, "CurFrag: '" + FragmentContainer.getCurentFragment() + "', \nIncomeItemFragment.class: '" + IncomeItemFragment.class.toString() + "'");
+//          Log.d(LOG_TAG, "CurFrag: '" + FragmentContainer.getCurentFragment() + "', \nIncomeItemFragment.class: '" + IncomeItemFragment.class.toString() + "'");
             if (FragmentContainer.getCurentFragment().equals(IncomeItemFragment.class.toString())){
                 toolbar.setTitle(R.string.title_section_incomes);
                 fragment =  IncomesFragmentContainer.newInstance();
@@ -110,7 +111,8 @@ public class MainActivity extends AppCompatActivity
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, fragment)
                         .commit();
-            }*/else if(FragmentContainer.getCurentFragment().equals(TotalsFragment.class.toString())){
+            }*/
+            else{
                 super.onBackPressed();
             }
         }
