@@ -24,6 +24,7 @@ import com.atdroid.atyurin.futuremoney.fragments.IncomesFragmentContainer;
 import com.atdroid.atyurin.futuremoney.fragments.OutcomeItemFragment;
 import com.atdroid.atyurin.futuremoney.fragments.OutcomesFragmentContainer;
 import com.atdroid.atyurin.futuremoney.fragments.TotalsFragment;
+import com.atdroid.atyurin.futuremoney.utils.BackupAgent;
 import com.atdroid.atyurin.futuremoney.utils.FragmentContainer;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        BackupAgent.requestBackup(this);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

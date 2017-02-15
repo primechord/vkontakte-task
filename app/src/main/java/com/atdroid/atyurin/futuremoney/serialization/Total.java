@@ -52,6 +52,7 @@ public class Total implements Serializable {
     public void setEnd_date(Calendar end_date) {
         this.end_date = end_date;
     }
+
     public double getIncomeAmount() {
         return incomeAmount;
     }

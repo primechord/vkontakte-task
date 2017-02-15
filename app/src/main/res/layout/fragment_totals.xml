@@ -11,39 +11,6 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/ll_begin_date_type"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/total_begin_type"
-                android:textSize="12sp" />
-
-            <Spinner
-                android:id="@+id/sp_begin_date_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="16dp"
-                android:paddingTop="16dp" />
-
-            <View style="@style/Divider" />
-        </LinearLayout>
-
-        <include layout="@layout/date_picker_layout"
-            android:id="@+id/ll_begin_date"
-            android:visibility="gone"
-           />
-        <include layout="@layout/date_picker_layout"
-                    android:id="@+id/ll_calculate_date"/>
-
-
-
-        <LinearLayout
             android:id="@+id/ll_totals_values"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -58,6 +25,11 @@
                 android:layout_alignParentTop="true"
                 android:text="@string/total_values_title"
                 android:textSize="12sp" />
+
+            <com.jjoe64.graphview.GraphView
+                android:layout_width="match_parent"
+                android:layout_height="200dip"
+                android:id="@+id/graph_view_totals" />
 
             <TableLayout
                 android:layout_width="match_parent"
@@ -163,7 +135,38 @@
             <View style="@style/Divider" />
         </LinearLayout>
 
-        <Button
+        <LinearLayout
+            android:id="@+id/ll_begin_date_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/total_begin_type"
+                android:textSize="12sp" />
+
+            <Spinner
+                android:id="@+id/sp_begin_date_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"
+                android:paddingTop="16dp" />
+
+            <View style="@style/Divider" />
+        </LinearLayout>
+
+        <include layout="@layout/date_picker_layout"
+            android:id="@+id/ll_begin_date"
+            android:visibility="gone"
+           />
+        <include layout="@layout/date_picker_layout"
+                    android:id="@+id/ll_calculate_date"/>
+
+        <!--<Button
             android:id="@+id/btn_calc_totals"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -174,6 +177,6 @@
             android:background="@drawable/button_background"
             android:text="@string/btn_calc_totals_name"
             android:textColor="@color/themeLight"
-            android:textStyle="bold" />
+            android:textStyle="bold" />-->
     </LinearLayout>
 </ScrollView>

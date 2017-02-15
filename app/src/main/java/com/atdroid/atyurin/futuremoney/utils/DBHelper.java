@@ -24,11 +24,11 @@ public class DBHelper extends SQLiteOpenHelper {
     public final static String COLUMN_END_DATE = "end_date";
     public final static String COLUMN_PERIOD_TYPE = "period_type";
     public final static String COLUMN_PERIOD_VALUE = "period_date";
-
+    public final static String DATABASE_NAME = "FutureMoneyDB";
 
     public DBHelper(Context context) {
         // конструктор суперкласса
-        super(context, "FutureMoneyDB", null, 1);
+        super(context, DATABASE_NAME, null, 1);
     }
 
     public static String[] getIncomeColumns(){

@@ -3,6 +3,8 @@ package com.atdroid.atyurin.futuremoney.utils;
 import android.util.Log;
 
 import com.atdroid.atyurin.futuremoney.serialization.Account;
+import com.atdroid.atyurin.futuremoney.serialization.DateTotal;
+import com.atdroid.atyurin.futuremoney.serialization.DateTotalsMap;
 import com.atdroid.atyurin.futuremoney.serialization.Income;
 import com.atdroid.atyurin.futuremoney.serialization.Outcome;
 import com.atdroid.atyurin.futuremoney.serialization.Total;
@@ -15,6 +17,8 @@ import org.joda.time.Years;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by atdroid on 31.10.2015.
@@ -27,7 +31,7 @@ public class TotalsCalculator {
     ArrayList<Outcome> singleOutcomes;
     ArrayList<Outcome> periodicalOutcomes;
     ArrayList<Account> accounts;
-
+    DateTotalsMap dateTotalsMap = new DateTotalsMap();
     double incomesAmount = 0;
     double outcomesAmount = 0;
     double accountsAmount = 0;
@@ -44,6 +48,7 @@ public class TotalsCalculator {
 
         for (Income incomeItem : singleIncomes){
             addIncomesAmount(incomeItem.getValue());
+            dateTotalsMap.addIncome(incomeItem, new DateTime(incomeItem.getSingle_date()).withTimeAtStartOfDay().toDate());
         }
         for (Income incomeItem : periodicalIncomes){
             Date incomeBeginDate = new DateTime(incomeItem.getBegin_date()).withTimeAtStartOfDay().toDate();
@@ -53,6 +58,8 @@ public class TotalsCalculator {
 
             int periodCount = 0;
             int beforeCalcPeriodCount = 0;//число периодов получения дохода до начальной даты расчета
+
+            //возможно стоит заменить на сравнение дат
             if (incomeItem.getBegin_date().before(total.getBegin_date())){//если начальная дата получения дохода меньше начальной даты расчета
                 if (incomeItem.getPeriod_type() == Income.PERIOD_DAY){
                     beforeCalcPeriodCount = (Days.daysBetween(new DateTime(incomeBeginDate), new DateTime(calcPeriodBeginDate))
@@ -127,9 +134,24 @@ public class TotalsCalculator {
             periodCount++;
             Log.d(LOG_TAG, "periodCounts: " + periodCount);
             addIncomesAmount(periodCount * incomeItem.getValue());
+            for (int periodNumber = 1; periodNumber <= periodCount; periodNumber++){
+                Date incomeDate = incomeBeginDate;
+                DateTime beginDateTime = new DateTime(incomeBeginDate);
+                if (incomeItem.getPeriod_type() == Income.PERIOD_DAY){
+                    incomeDate = beginDateTime.plusDays(periodNumber*incomeItem.getPeriod_value()).withTimeAtStartOfDay().toDate();
+                }else if (incomeItem.getPeriod_type() == Income.PERIOD_WEEK){
+                    incomeDate = beginDateTime.plusWeeks(periodNumber*incomeItem.getPeriod_value()).withTimeAtStartOfDay().toDate();
+                }else if (incomeItem.getPeriod_type() == Income.PERIOD_MONTH){
+                    incomeDate = beginDateTime.plusMonths(periodNumber*incomeItem.getPeriod_value()).withTimeAtStartOfDay().toDate();
+                }else if (incomeItem.getPeriod_type() == Income.PERIOD_YEAR){
+                    incomeDate = beginDateTime.plusYears(periodNumber*incomeItem.getPeriod_value()).withTimeAtStartOfDay().toDate();
+                }
+                dateTotalsMap.addIncome(incomeItem, incomeDate);
+            }
         }
         for (Outcome outcomeItem : singleOutcomes){
             addOutcomesAmount(outcomeItem.getValue());
+            dateTotalsMap.addOutcome(outcomeItem, new DateTime(outcomeItem.getSingle_date()).withTimeAtStartOfDay().toDate());
         }
         for (Outcome outcomeItem : periodicalOutcomes){
             Date outcomeBeginDate = new DateTime(outcomeItem.getBegin_date()).withTimeAtStartOfDay().toDate();
@@ -213,6 +235,20 @@ public class TotalsCalculator {
             periodCount++;
             Log.d(LOG_TAG, "periodCounts: " + periodCount);
             addOutcomesAmount(periodCount * outcomeItem.getValue());
+            for (int periodNumber = 1; periodNumber <= periodCount; periodNumber++){
+                Date outcomeDate = outcomeBeginDate;
+                DateTime beginDateTime = new DateTime(outcomeBeginDate);
+                if (outcomeItem.getPeriod_type() == Income.PERIOD_DAY){
+                    outcomeDate = beginDateTime.plusDays(periodNumber*outcomeItem.getPeriod_value()).withTimeAtStartOfDay().toDate();
+                }else if (outcomeItem.getPeriod_type() == Income.PERIOD_WEEK){
+                    outcomeDate = beginDateTime.plusWeeks(periodNumber*outcomeItem.getPeriod_value()).withTimeAtStartOfDay().toDate();
+                }else if (outcomeItem.getPeriod_type() == Income.PERIOD_MONTH){
+                    outcomeDate = beginDateTime.plusMonths(periodNumber*outcomeItem.getPeriod_value()).withTimeAtStartOfDay().toDate();
+                }else if (outcomeItem.getPeriod_type() == Income.PERIOD_YEAR){
+                    outcomeDate = beginDateTime.plusYears(periodNumber*outcomeItem.getPeriod_value()).withTimeAtStartOfDay().toDate();
+                }
+                dateTotalsMap.addOutcome(outcomeItem, outcomeDate);
+            }
         }
         for (Account accountItem : accounts){
             addAccountsAmount(accountItem.getValue());
@@ -279,6 +315,12 @@ public class TotalsCalculator {
 
     private void addAccountsAmount(double accountsAmount) {
         this.accountsAmount += accountsAmount;
+    }
+
+
+
+    public DateTotalsMap getDateTotalsMap() {
+        return dateTotalsMap;
     }
 
     @Override

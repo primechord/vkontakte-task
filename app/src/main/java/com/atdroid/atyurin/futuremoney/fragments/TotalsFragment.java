@@ -8,6 +8,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -18,12 +21,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.atdroid.atyurin.futuremoney.R;
 import com.atdroid.atyurin.futuremoney.dao.AccountsDAO;
 import com.atdroid.atyurin.futuremoney.dao.IncomesDAO;
 import com.atdroid.atyurin.futuremoney.dao.OutcomesDAO;
 import com.atdroid.atyurin.futuremoney.serialization.Account;
+import com.atdroid.atyurin.futuremoney.serialization.DateTotal;
 import com.atdroid.atyurin.futuremoney.serialization.Income;
 import com.atdroid.atyurin.futuremoney.serialization.Outcome;
 import com.atdroid.atyurin.futuremoney.serialization.Total;
@@ -32,10 +37,19 @@ import com.atdroid.atyurin.futuremoney.utils.FragmentContainer;
 import com.atdroid.atyurin.futuremoney.utils.KeyboardManager;
 import com.atdroid.atyurin.futuremoney.utils.StringUtil;
 import com.atdroid.atyurin.futuremoney.utils.TotalsCalculator;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.DataPointInterface;
+import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.OnDataPointTapListener;
+import com.jjoe64.graphview.series.Series;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Map;
 
 /**
  * Created by atdroid on 14.09.2015.
@@ -63,6 +77,9 @@ public class TotalsFragment extends Fragment {
     RelativeLayout llCalculateDate, llBeginDate;
     Activity activity;
     FragmentManager fragmentManager;
+    GraphView graph;
+    LineGraphSeries<DataPoint> dataSeries;
+    DataPoint[] dataPoints;
 
     public static TotalsFragment newInstance(Activity activity, FragmentManager fragmentManager) {
         TotalsFragment totalsFragment = new TotalsFragment();
@@ -79,7 +96,7 @@ public class TotalsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        setHasOptionsMenu(true);//switch off menu for fragment
+        setHasOptionsMenu(true);
         FragmentContainer.setCurentFragment(this.getClass().toString());
         new KeyboardManager(this).closeKeyboard();
         rootView =  inflater.inflate(R.layout.fragment_totals, container, false);
@@ -103,6 +120,7 @@ public class TotalsFragment extends Fragment {
         tvBeginDateValue.setText(sdf.format(total.getBegin_date().getTime()));
 
         //calculate date
+
         llCalculateDate = (RelativeLayout) rootView.findViewById(R.id.ll_calculate_date);
         llCalculateDate.setOnClickListener(endDateListener);
         tvCalculateDateTitle = (TextView) llCalculateDate.findViewById(R.id.tv_date_title);
@@ -110,17 +128,38 @@ public class TotalsFragment extends Fragment {
         tvCalculateDateValue = (TextView) llCalculateDate.findViewById(R.id.tv_date_value);
         tvCalculateDateValue.setText(sdf.format(total.getEnd_date().getTime()));
 
-        Button btnCalculate = (Button) rootView.findViewById(R.id.btn_calc_totals);
+        //graph view totals
+        graph = (GraphView) rootView.findViewById(R.id.graph_view_totals);
+        graph.getGridLabelRenderer().setNumHorizontalLabels(3); // only 4 because of the space
+
+        /*Button btnCalculate = (Button) rootView.findViewById(R.id.btn_calc_totals);
         btnCalculate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 calcTotals();
             }
-        });
+        });*/
         return rootView;
 
     }
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        //super.onCreateOptionsMenu(menu, inflater);
+        Log.d("TotalsFragme", "onCreateOptionsMenu");
+        inflater.inflate(R.menu.menu_totals, menu);
+    }
+    public void onPrepareOptionsMenu(Menu menu) {
 
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d("TotalsFragme", "onOptionsItemSelected");
+        if (item.getItemId() == R.id.action_btn_calc_totals) {
+            calcTotals();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
     private AdapterView.OnItemSelectedListener typeSelectedListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view,
@@ -187,18 +226,18 @@ public class TotalsFragment extends Fragment {
     }
 
     public class CalculateTotalsTask extends AsyncTask<Void,Void,Void> {
-        ProgressDialog pd;
+        ProgressDialog progressDialog;
 
         public CalculateTotalsTask(Activity activity) {
-            this.pd = new ProgressDialog(activity);
+            this.progressDialog = new ProgressDialog(activity);
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             Log.d(LOG_TAG, "CalculateTotalsTask");
-            pd.setMessage("Start");
-            pd.show();
+            progressDialog.setMessage("Start");
+            progressDialog.show();
         }
         @Override
         protected Void doInBackground(Void... params) {
@@ -233,6 +272,19 @@ public class TotalsFragment extends Fragment {
             total.setIncomeAmount(totalsCalc.getIncomesAmount());
             total.setOutcomeAmount(totalsCalc.getOutcomesAmount());
             total.setTotalAmount(totalsCalc.getTotalAmount());
+            dataPoints = new DataPoint[totalsCalc.getDateTotalsMap().getSize()];
+            int i = 0;
+            double currentAmount = totalsCalc.getAccountsAmount();
+            for (Map.Entry<Date,DateTotal> dateTotal : totalsCalc.getDateTotalsMap().getSortedDateTotalsMap().entrySet()){
+                Log.d(LOG_TAG, dateTotal.getKey().toString() + " ---- " + dateTotal.getValue().toString());
+                dataPoints[i] = new DataPoint(dateTotal.getKey(), dateTotal.getValue().getDateTotalValue() + currentAmount);
+                currentAmount +=  dateTotal.getValue().getDateTotalValue();
+                i++;
+            }
+            Log.w(LOG_TAG, dataPoints.toString());
+            dataSeries = new LineGraphSeries<DataPoint>(dataPoints);
+
+
             return null;
         }
 
@@ -253,11 +305,46 @@ public class TotalsFragment extends Fragment {
                 tvTotalValue.setTextColor(getResources().getColor(R.color.outcome_item_value));
             }
             tvTotalValue.setText(StringUtil.formatDouble(total.getTotalAmount()));
+
+
+            dataSeries.setOnDataPointTapListener(new OnDataPointTapListener() {
+                @Override
+                public void onTap(Series series, DataPointInterface dataPoint) {
+                    Toast.makeText(getActivity(), "Series1: On Data Point clicked: "+dataPoint, Toast.LENGTH_SHORT).show();
+                }
+            });
+            Log.w(LOG_TAG, dataSeries.toString());
+            Log.w(LOG_TAG, graph.toString());
+            graph.removeAllSeries();
+            graph.destroyDrawingCache();
+            graph.addSeries(dataSeries);
+            // set date label formatter
+            graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
+
+
+            double minY = dataPoints[0].getY();
+            double maxY = dataPoints[0].getY();
+            for (int i= 0; i < dataPoints.length; i++){
+                if (minY > dataPoints[i].getY()){
+                    minY = dataPoints[i].getY();
+                }
+                if (maxY < dataPoints[i].getY()){
+                    maxY = dataPoints[i].getY();
+                }
+            }
+            // set manual x bounds to have nice steps
+            graph.getViewport().setMinX(dataPoints[0].getX());
+            graph.getViewport().setMaxX(dataPoints[dataPoints.length - 1].getX());
+            graph.getViewport().setMinY(minY - 10);
+            graph.getViewport().setMaxY(maxY + 10);
+            graph.getViewport().setXAxisBoundsManual(true);
+
             llTotalsLayout.setVisibility(View.VISIBLE);
-            if (pd.isShowing()) {
-                pd.dismiss();
+            if (progressDialog.isShowing()) {
+                progressDialog.dismiss();
             }
             Log.d(LOG_TAG, "Total Amt: " + Double.toString(total.getTotalAmount()));
+
         }
     }
 }
