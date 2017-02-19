@@ -74,7 +74,7 @@
     <string name="msg_budget_item_empty_amount">Сумма не задана!</string>
     <string name="msg_budget_item_wrong_dates">Начальная дата больше конечной!</string>
     <string name="msg_budget_item_success">Выполнено успешно</string>
-
+    <string name="msg_no_data_found">Нет данных для указанного периода</string>
     <!--How to fragment-->
     <string name="about_description">
         <![CDATA[

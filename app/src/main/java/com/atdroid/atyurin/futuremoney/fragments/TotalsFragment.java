@@ -321,29 +321,53 @@ public class TotalsFragment extends Fragment {
             // set date label formatter
             graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
 
+            if (dataPoints.length > 0) {
+                double minY = dataPoints[0].getY();
+                double maxY = dataPoints[0].getY();
+                for (int i= 0; i < dataPoints.length; i++){
+                    if (minY > dataPoints[i].getY()){
+                        minY = dataPoints[i].getY();
+                    }
+                    if (maxY < dataPoints[i].getY()){
+                        maxY = dataPoints[i].getY();
+                    }
+                }
+                // set manual x bounds to have nice steps
+                graph.getViewport().setMinX(dataPoints[0].getX());
 
-            double minY = dataPoints[0].getY();
-            double maxY = dataPoints[0].getY();
-            for (int i= 0; i < dataPoints.length; i++){
-                if (minY > dataPoints[i].getY()){
-                    minY = dataPoints[i].getY();
-                }
-                if (maxY < dataPoints[i].getY()){
-                    maxY = dataPoints[i].getY();
-                }
+                SimpleDateFormat sdf2 = new SimpleDateFormat(DateFormater.DATE_FORMAT);
+                Log.d(LOG_TAG, sdf2.format(dataPoints[0].getX()));
+                graph.getViewport().setMaxX(dataPoints[dataPoints.length - 1].getX());
+                Log.d(LOG_TAG, sdf2.format(dataPoints[dataPoints.length - 1].getX()));
+                graph.getViewport().setMinY(minY - 10);
+                graph.getViewport().setMaxY(maxY + 10);
+                graph.getViewport().setXAxisBoundsManual(true);
+
+                // activate scaling and zooming
+                // activate horizontal zooming and scrolling
+                graph.getViewport().setScalable(true);
+
+                // activate horizontal scrolling
+                graph.getViewport().setScrollable(true);
+
+                // activate horizontal and vertical zooming and scrolling
+                graph.getViewport().setScalableY(true);
+
+                // activate vertical scrolling
+                graph.getViewport().setScrollableY(true);
+                graph.setVisibility(View.VISIBLE);
+                //graph.getGridLabelRenderer().setGridColor();
+            }else{
+                Toast.makeText(getActivity().getBaseContext(), R.string.msg_no_data_found, Toast.LENGTH_SHORT).show();
+                graph.setVisibility(View.GONE);
             }
-            // set manual x bounds to have nice steps
-            graph.getViewport().setMinX(dataPoints[0].getX());
-            graph.getViewport().setMaxX(dataPoints[dataPoints.length - 1].getX());
-            graph.getViewport().setMinY(minY - 10);
-            graph.getViewport().setMaxY(maxY + 10);
-            graph.getViewport().setXAxisBoundsManual(true);
 
             llTotalsLayout.setVisibility(View.VISIBLE);
             if (progressDialog.isShowing()) {
                 progressDialog.dismiss();
             }
             Log.d(LOG_TAG, "Total Amt: " + Double.toString(total.getTotalAmount()));
+
 
         }
     }

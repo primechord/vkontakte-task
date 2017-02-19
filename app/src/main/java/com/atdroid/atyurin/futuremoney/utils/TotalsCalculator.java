@@ -3,7 +3,6 @@ package com.atdroid.atyurin.futuremoney.utils;
 import android.util.Log;
 
 import com.atdroid.atyurin.futuremoney.serialization.Account;
-import com.atdroid.atyurin.futuremoney.serialization.DateTotal;
 import com.atdroid.atyurin.futuremoney.serialization.DateTotalsMap;
 import com.atdroid.atyurin.futuremoney.serialization.Income;
 import com.atdroid.atyurin.futuremoney.serialization.Outcome;
@@ -17,8 +16,6 @@ import org.joda.time.Years;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by atdroid on 31.10.2015.
@@ -51,85 +48,90 @@ public class TotalsCalculator {
             dateTotalsMap.addIncome(incomeItem, new DateTime(incomeItem.getSingle_date()).withTimeAtStartOfDay().toDate());
         }
         for (Income incomeItem : periodicalIncomes){
-            Date incomeBeginDate = new DateTime(incomeItem.getBegin_date()).withTimeAtStartOfDay().toDate();
-            Date incomeEndDate = new DateTime(incomeItem.getEnd_date()).withTimeAtStartOfDay().toDate();
-            Date beginCalcPeriodDate = incomeBeginDate;
-            Date endCalcPeriodDate;
+            Date incomeBeginDate = new DateTime(incomeItem.getBegin_date()).withTimeAtStartOfDay().toDate();//начальная дата получения дохода
+            Date incomeEndDate = new DateTime(incomeItem.getEnd_date()).withTimeAtStartOfDay().toDate();//конечная дата получения дохода
+            Date incomeCalcPeriodBeginDate = incomeBeginDate; //начальная дата получения дохода в рассчетный период
+            Date incomeCalcPeriodEndDate;//конечная дата получения дохода в рассчетный период
 
             int periodCount = 0;
             int beforeCalcPeriodCount = 0;//число периодов получения дохода до начальной даты расчета
 
             //возможно стоит заменить на сравнение дат
-            if (incomeItem.getBegin_date().before(total.getBegin_date())){//если начальная дата получения дохода меньше начальной даты расчета
+            //если начальная дата получения дохода меньше начальной даты расчного периода
+            if (incomeBeginDate.before(calcPeriodBeginDate)){
                 if (incomeItem.getPeriod_type() == Income.PERIOD_DAY){
-                    beforeCalcPeriodCount = (Days.daysBetween(new DateTime(incomeBeginDate), new DateTime(calcPeriodBeginDate))
-                            .getDays())
+                    beforeCalcPeriodCount = (Days.daysBetween(new DateTime(incomeBeginDate), new DateTime(calcPeriodBeginDate)).getDays())
                             /incomeItem.getPeriod_value();
                     //проверяем, что полученная дата не меньше начальной даты расчетного периода
                     if ((new DateTime(incomeBeginDate).plusDays(incomeItem.getPeriod_value() * beforeCalcPeriodCount).toDate())
-                            .compareTo(beginCalcPeriodDate) < 0 ){
+                            .compareTo(calcPeriodBeginDate) < 0 ){
                         //если она меньше, то добавляем еще один период получения дохода к дате начала расчета дохода
                         beforeCalcPeriodCount++;
                     }
-                    beginCalcPeriodDate = new DateTime(incomeBeginDate).plusDays(incomeItem.getPeriod_value()*beforeCalcPeriodCount).toDate();
+                    //дата первого получения дохода, после начала расчетного периода
+                    //она может быть больше конечной даты расчетного периода, тогда доход не учитывается. Эта проверка выполняется позже
+                    incomeCalcPeriodBeginDate = new DateTime(incomeBeginDate).plusDays(incomeItem.getPeriod_value()*beforeCalcPeriodCount).toDate();
                 }else if (incomeItem.getPeriod_type() == Income.PERIOD_WEEK){
-                    beforeCalcPeriodCount = (Weeks.weeksBetween(new DateTime(incomeBeginDate), new DateTime(calcPeriodBeginDate))
-                            .getWeeks())
+                    beforeCalcPeriodCount = (Weeks.weeksBetween(new DateTime(incomeBeginDate), new DateTime(calcPeriodBeginDate)).getWeeks())
                             /incomeItem.getPeriod_value();
                     //проверяем, что полученная дата не меньше начальной даты расчетного периода
                     if ((new DateTime(incomeBeginDate).plusWeeks(incomeItem.getPeriod_value() * beforeCalcPeriodCount).toDate())
-                            .compareTo(beginCalcPeriodDate) < 0 ){
+                            .compareTo(calcPeriodBeginDate) < 0 ){
                         //если она меньше, то добавляем еще один период получения дохода к дате начала расчета дохода
                         beforeCalcPeriodCount++;
                     }
-                    beginCalcPeriodDate = new DateTime(incomeBeginDate).plusWeeks(incomeItem.getPeriod_value() * beforeCalcPeriodCount).toDate();
+                    //дата первого получения дохода, после начала расчетного периода
+                    //она может быть больше конечной даты расчетного периода, тогда доход не учитывается. Эта проверка выполняется позже
+                    incomeCalcPeriodBeginDate = new DateTime(incomeBeginDate).plusWeeks(incomeItem.getPeriod_value()*beforeCalcPeriodCount).toDate();
                 }else if (incomeItem.getPeriod_type() == Income.PERIOD_MONTH){
-                    beforeCalcPeriodCount = (Months.monthsBetween(new DateTime(incomeBeginDate), new DateTime(calcPeriodBeginDate))
-                            .getMonths())
+                    beforeCalcPeriodCount = (Months.monthsBetween(new DateTime(incomeBeginDate), new DateTime(calcPeriodBeginDate)).getMonths())
                             /incomeItem.getPeriod_value();
                     //проверяем, что полученная дата не меньше начальной даты расчетного периода
                     if ((new DateTime(incomeBeginDate).plusMonths(incomeItem.getPeriod_value() * beforeCalcPeriodCount).toDate())
-                            .compareTo(beginCalcPeriodDate) < 0 ){
+                            .compareTo(calcPeriodBeginDate) < 0 ){
                         //если она меньше, то добавляем еще один период получения дохода к дате начала расчета дохода
                         beforeCalcPeriodCount++;
                     }
-                    beginCalcPeriodDate = new DateTime(incomeBeginDate).plusMonths(incomeItem.getPeriod_value() * beforeCalcPeriodCount).toDate();
+                    //дата первого получения дохода, после начала расчетного периода
+                    //она может быть больше конечной даты расчетного периода, тогда доход не учитывается. Эта проверка выполняется позже
+                    incomeCalcPeriodBeginDate = new DateTime(incomeBeginDate).plusMonths(incomeItem.getPeriod_value()*beforeCalcPeriodCount).toDate();
                 }else if (incomeItem.getPeriod_type() == Income.PERIOD_YEAR){
-                    beforeCalcPeriodCount = (Years.yearsBetween(new DateTime(incomeBeginDate), new DateTime(calcPeriodBeginDate))
-                            .getYears())
+                    beforeCalcPeriodCount = (Years.yearsBetween(new DateTime(incomeBeginDate), new DateTime(calcPeriodBeginDate)).getYears())
                             /incomeItem.getPeriod_value();
                     //проверяем, что полученная дата не меньше начальной даты расчетного периода
                     if ((new DateTime(incomeBeginDate).plusYears(incomeItem.getPeriod_value() * beforeCalcPeriodCount).toDate())
-                            .compareTo(beginCalcPeriodDate) < 0 ){
+                            .compareTo(calcPeriodBeginDate) < 0 ){
                         //если она меньше, то добавляем еще один период получения дохода к дате начала расчета дохода
                         beforeCalcPeriodCount++;
                     }
-                    beginCalcPeriodDate = new DateTime(incomeBeginDate).plusYears(incomeItem.getPeriod_value()*beforeCalcPeriodCount).toDate();
+                    //дата первого получения дохода, после начала расчетного периода
+                    //она может быть больше конечной даты расчетного периода, тогда доход не учитывается. Эта проверка выполняется позже
+                    incomeCalcPeriodBeginDate = new DateTime(incomeBeginDate).plusYears(incomeItem.getPeriod_value()*beforeCalcPeriodCount).toDate();
                 }
             }else {
-                beginCalcPeriodDate = incomeBeginDate;
+                incomeCalcPeriodBeginDate = incomeBeginDate;
             }
             //если дата конца получения дохода больше конечной даты расчетного периода, то
             if (incomeEndDate.compareTo(calcPeriodEndDate) > 0){
-                endCalcPeriodDate = calcPeriodEndDate;//установить в качестве расчетной даты, дату конца расчетного периода
+                incomeCalcPeriodEndDate = calcPeriodEndDate;//установить в качестве расчетной даты, дату конца расчетного периода
             }else {//если получение дохода прекращается раньше даты конца расчетного периода , то
-                endCalcPeriodDate = incomeEndDate;//установить в качестве расчетной даты, дату конца получения дохода
+                incomeCalcPeriodEndDate = incomeEndDate;//установить в качестве расчетной даты, дату конца получения дохода
             }
 
             //если в течении расчетного периода не было получения дохода, конда начальная дата получения дохода больше конечной даты расчетного периода (например, период дохода больше расчетного)
-            if (beginCalcPeriodDate.compareTo(calcPeriodEndDate) > 0){
+            if (incomeCalcPeriodBeginDate.compareTo(calcPeriodEndDate) > 0){
                 addIncomesAmount(0 * incomeItem.getValue());
                 continue;
             }
 
             if (incomeItem.getPeriod_type() == Income.PERIOD_DAY){
-                periodCount = Days.daysBetween(new DateTime(beginCalcPeriodDate), new DateTime(endCalcPeriodDate)).getDays()/incomeItem.getPeriod_value();
+                periodCount = Days.daysBetween(new DateTime(incomeCalcPeriodBeginDate), new DateTime(incomeCalcPeriodEndDate)).getDays()/incomeItem.getPeriod_value();
             }else if (incomeItem.getPeriod_type() == Income.PERIOD_WEEK){
-                periodCount = Weeks.weeksBetween(new DateTime(beginCalcPeriodDate), new DateTime(endCalcPeriodDate)).getWeeks()/incomeItem.getPeriod_value();
+                periodCount = Weeks.weeksBetween(new DateTime(incomeCalcPeriodBeginDate), new DateTime(incomeCalcPeriodEndDate)).getWeeks()/incomeItem.getPeriod_value();
             }else if (incomeItem.getPeriod_type() == Income.PERIOD_MONTH){
-                periodCount = Months.monthsBetween(new DateTime(beginCalcPeriodDate), new DateTime(endCalcPeriodDate)).getMonths()/incomeItem.getPeriod_value();
+                periodCount = Months.monthsBetween(new DateTime(incomeCalcPeriodBeginDate), new DateTime(incomeCalcPeriodEndDate)).getMonths()/incomeItem.getPeriod_value();
             }else if (incomeItem.getPeriod_type() == Income.PERIOD_YEAR){
-                periodCount = Years.yearsBetween(new DateTime(beginCalcPeriodDate), new DateTime(endCalcPeriodDate)).getYears()/incomeItem.getPeriod_value();
+                periodCount = Years.yearsBetween(new DateTime(incomeCalcPeriodBeginDate), new DateTime(incomeCalcPeriodEndDate)).getYears()/incomeItem.getPeriod_value();
             }
             periodCount++;
             Log.d(LOG_TAG, "periodCounts: " + periodCount);
@@ -156,81 +158,85 @@ public class TotalsCalculator {
         for (Outcome outcomeItem : periodicalOutcomes){
             Date outcomeBeginDate = new DateTime(outcomeItem.getBegin_date()).withTimeAtStartOfDay().toDate();
             Date outcomeEndDate = new DateTime(outcomeItem.getEnd_date()).withTimeAtStartOfDay().toDate();
-            Date beginCalcPeriodDate = outcomeBeginDate;
-            Date endCalcPeriodDate;
+            Date outcomeCalcPeriodBeginDate = outcomeBeginDate;
+            Date outcomeCalcPeriodEndDate;
 
             int periodCount = 0;
             int beforeCalcPeriodCount = 0;//число периодов  расхода до начальной даты расчета
             if (outcomeItem.getBegin_date().before(total.getBegin_date())){//если начальная дата  расхода меньше начальной даты расчета
                 if (outcomeItem.getPeriod_type() == Outcome.PERIOD_DAY){
-                    beforeCalcPeriodCount = (Days.daysBetween(new DateTime(outcomeBeginDate), new DateTime(calcPeriodBeginDate))
-                            .getDays())
+                    beforeCalcPeriodCount = (Days.daysBetween(new DateTime(outcomeBeginDate), new DateTime(calcPeriodBeginDate)).getDays())
                             /outcomeItem.getPeriod_value();
                     //проверяем, что полученная дата не меньше начальной даты расчетного периода
                     if ((new DateTime(outcomeBeginDate).plusDays(outcomeItem.getPeriod_value() * beforeCalcPeriodCount).toDate())
-                            .compareTo(beginCalcPeriodDate) < 0 ){
-                        //если она меньше, то добавляем еще один период  расхода к дате начала расчета расхода
+                            .compareTo(calcPeriodBeginDate) < 0 ){
+                        //если она меньше, то добавляем еще один период получения расхода к дате начала расчета расхода
                         beforeCalcPeriodCount++;
                     }
-                    beginCalcPeriodDate = new DateTime(outcomeBeginDate).plusDays(outcomeItem.getPeriod_value()*beforeCalcPeriodCount).toDate();
+                    //дата первого получения расхода, после начала расчетного периода
+                    //она может быть больше конечной даты расчетного периода, тогда расход не учитывается. Эта проверка выполняется позже
+                    outcomeCalcPeriodBeginDate = new DateTime(outcomeBeginDate).plusDays(outcomeItem.getPeriod_value()*beforeCalcPeriodCount).toDate();
                 }else if (outcomeItem.getPeriod_type() == Outcome.PERIOD_WEEK){
-                    beforeCalcPeriodCount = (Weeks.weeksBetween(new DateTime(outcomeBeginDate), new DateTime(calcPeriodBeginDate))
-                            .getWeeks())
+                    beforeCalcPeriodCount = (Weeks.weeksBetween(new DateTime(outcomeBeginDate), new DateTime(calcPeriodBeginDate)).getWeeks())
                             /outcomeItem.getPeriod_value();
                     //проверяем, что полученная дата не меньше начальной даты расчетного периода
                     if ((new DateTime(outcomeBeginDate).plusWeeks(outcomeItem.getPeriod_value() * beforeCalcPeriodCount).toDate())
-                            .compareTo(beginCalcPeriodDate) < 0 ){
-                        //если она меньше, то добавляем еще один период  расхода к дате начала расчета расхода
+                            .compareTo(calcPeriodBeginDate) < 0 ){
+                        //если она меньше, то добавляем еще один период получения расхода к дате начала расчета расхода
                         beforeCalcPeriodCount++;
                     }
-                    beginCalcPeriodDate = new DateTime(outcomeBeginDate).plusWeeks(outcomeItem.getPeriod_value() * beforeCalcPeriodCount).toDate();
+                    //дата первого получения расхода, после начала расчетного периода
+                    //она может быть больше конечной даты расчетного периода, тогда расход не учитывается. Эта проверка выполняется позже
+                    outcomeCalcPeriodBeginDate = new DateTime(outcomeBeginDate).plusWeeks(outcomeItem.getPeriod_value()*beforeCalcPeriodCount).toDate();
                 }else if (outcomeItem.getPeriod_type() == Outcome.PERIOD_MONTH){
-                    beforeCalcPeriodCount = (Months.monthsBetween(new DateTime(outcomeBeginDate), new DateTime(calcPeriodBeginDate))
-                            .getMonths())
+                    beforeCalcPeriodCount = (Months.monthsBetween(new DateTime(outcomeBeginDate), new DateTime(calcPeriodBeginDate)).getMonths())
                             /outcomeItem.getPeriod_value();
                     //проверяем, что полученная дата не меньше начальной даты расчетного периода
                     if ((new DateTime(outcomeBeginDate).plusMonths(outcomeItem.getPeriod_value() * beforeCalcPeriodCount).toDate())
-                            .compareTo(beginCalcPeriodDate) < 0 ){
-                        //если она меньше, то добавляем еще один период  расхода к дате начала расчета расхода
+                            .compareTo(calcPeriodBeginDate) < 0 ){
+                        //если она меньше, то добавляем еще один период получения расхода к дате начала расчета расхода
                         beforeCalcPeriodCount++;
                     }
-                    beginCalcPeriodDate = new DateTime(outcomeBeginDate).plusMonths(outcomeItem.getPeriod_value() * beforeCalcPeriodCount).toDate();
+                    //дата первого получения расхода, после начала расчетного периода
+                    //она может быть больше конечной даты расчетного периода, тогда расход не учитывается. Эта проверка выполняется позже
+                    outcomeCalcPeriodBeginDate = new DateTime(outcomeBeginDate).plusMonths(outcomeItem.getPeriod_value()*beforeCalcPeriodCount).toDate();
                 }else if (outcomeItem.getPeriod_type() == Outcome.PERIOD_YEAR){
-                    beforeCalcPeriodCount = (Years.yearsBetween(new DateTime(outcomeBeginDate), new DateTime(calcPeriodBeginDate))
-                            .getYears())
+                    beforeCalcPeriodCount = (Years.yearsBetween(new DateTime(outcomeBeginDate), new DateTime(calcPeriodBeginDate)).getYears())
                             /outcomeItem.getPeriod_value();
                     //проверяем, что полученная дата не меньше начальной даты расчетного периода
                     if ((new DateTime(outcomeBeginDate).plusYears(outcomeItem.getPeriod_value() * beforeCalcPeriodCount).toDate())
-                            .compareTo(beginCalcPeriodDate) < 0 ){
-                        //если она меньше, то добавляем еще один период  расхода к дате начала расчета расхода
+                            .compareTo(calcPeriodBeginDate) < 0 ){
+                        //если она меньше, то добавляем еще один период получения расхода к дате начала расчета расхода
                         beforeCalcPeriodCount++;
                     }
-                    beginCalcPeriodDate = new DateTime(outcomeBeginDate).plusYears(outcomeItem.getPeriod_value()*beforeCalcPeriodCount).toDate();
+                    //дата первого получения расхода, после начала расчетного периода
+                    //она может быть больше конечной даты расчетного периода, тогда расход не учитывается. Эта проверка выполняется позже
+                    outcomeCalcPeriodBeginDate = new DateTime(outcomeBeginDate).plusYears(outcomeItem.getPeriod_value()*beforeCalcPeriodCount).toDate();
                 }
             }else {
-                beginCalcPeriodDate = outcomeBeginDate;
+                outcomeCalcPeriodBeginDate = outcomeBeginDate;
             }
             //если дата конца  расхода больше конечной даты расчетного периода, то
             if (outcomeEndDate.compareTo(calcPeriodEndDate) > 0){
-                endCalcPeriodDate = calcPeriodEndDate;//установить в качестве расчетной даты, дату конца расчетного периода
+                outcomeCalcPeriodEndDate = calcPeriodEndDate;//установить в качестве расчетной даты, дату конца расчетного периода
             }else {//если получение расхода прекращается раньше даты конца расчетного периода , то
-                endCalcPeriodDate = outcomeEndDate;//установить в качестве расчетной даты, дату конца  расхода
+                outcomeCalcPeriodEndDate = outcomeEndDate;//установить в качестве расчетной даты, дату конца  расхода
             }
 
             //если в течении расчетного периода не было  расхода, конда начальная дата  расхода больше конечной даты расчетного периода (например, период расхода больше расчетного)
-            if (beginCalcPeriodDate.compareTo(calcPeriodEndDate) > 0){
+            if (outcomeCalcPeriodBeginDate.compareTo(calcPeriodEndDate) > 0){
                 addOutcomesAmount(0 * outcomeItem.getValue());
                 continue;
             }
 
             if (outcomeItem.getPeriod_type() == Outcome.PERIOD_DAY){
-                periodCount = Days.daysBetween(new DateTime(beginCalcPeriodDate), new DateTime(endCalcPeriodDate)).getDays()/outcomeItem.getPeriod_value();
+                periodCount = Days.daysBetween(new DateTime(outcomeCalcPeriodBeginDate), new DateTime(outcomeCalcPeriodEndDate)).getDays()/outcomeItem.getPeriod_value();
             }else if (outcomeItem.getPeriod_type() == Outcome.PERIOD_WEEK){
-                periodCount = Weeks.weeksBetween(new DateTime(beginCalcPeriodDate), new DateTime(endCalcPeriodDate)).getWeeks()/outcomeItem.getPeriod_value();
+                periodCount = Weeks.weeksBetween(new DateTime(outcomeCalcPeriodBeginDate), new DateTime(outcomeCalcPeriodEndDate)).getWeeks()/outcomeItem.getPeriod_value();
             }else if (outcomeItem.getPeriod_type() == Outcome.PERIOD_MONTH){
-                periodCount = Months.monthsBetween(new DateTime(beginCalcPeriodDate), new DateTime(endCalcPeriodDate)).getMonths()/outcomeItem.getPeriod_value();
+                periodCount = Months.monthsBetween(new DateTime(outcomeCalcPeriodBeginDate), new DateTime(outcomeCalcPeriodEndDate)).getMonths()/outcomeItem.getPeriod_value();
             }else if (outcomeItem.getPeriod_type() == Outcome.PERIOD_YEAR){
-                periodCount = Years.yearsBetween(new DateTime(beginCalcPeriodDate), new DateTime(endCalcPeriodDate)).getYears()/outcomeItem.getPeriod_value();
+                periodCount = Years.yearsBetween(new DateTime(outcomeCalcPeriodBeginDate), new DateTime(outcomeCalcPeriodEndDate)).getYears()/outcomeItem.getPeriod_value();
             }
             periodCount++;
             Log.d(LOG_TAG, "periodCounts: " + periodCount);

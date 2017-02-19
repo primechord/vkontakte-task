@@ -73,6 +73,7 @@
     <string name="msg_budget_item_empty_amount">The amount is not specified!</string>
     <string name="msg_budget_item_wrong_dates">The begin date is greater than the end date</string>
     <string name="msg_budget_item_success">Done</string>
+    <string name="msg_no_data_found">No data for this period</string>
 
     <!--How to fragment-->
     <string name="about_description">
