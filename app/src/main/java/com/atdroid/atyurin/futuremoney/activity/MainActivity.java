@@ -1,4 +1,4 @@
-package com.atdroid.atyurin.futuremoney;
+package com.atdroid.atyurin.futuremoney.activity;
 
 
 import android.content.Context;
@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.atdroid.atyurin.futuremoney.R;
 import com.atdroid.atyurin.futuremoney.fragments.AboutFragment;
 import com.atdroid.atyurin.futuremoney.fragments.AccountItemFragment;
 import com.atdroid.atyurin.futuremoney.fragments.AccountsFragment;

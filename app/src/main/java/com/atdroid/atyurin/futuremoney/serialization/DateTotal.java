@@ -8,6 +8,11 @@ import java.util.Date;
  * Created by atdroid on 24.08.2016.
  */
 public class DateTotal implements Serializable{
+
+    public DateTotal(Date date) {
+        this.date = date;
+    }
+
     Date date;
     ArrayList<Income> incomes = new ArrayList<Income>();
     ArrayList<Outcome> outcomes = new ArrayList<Outcome>();
@@ -36,8 +41,8 @@ public class DateTotal implements Serializable{
         this.outcomes = outcomes;
     }
 
-    public int getDateTotalValue(){
-        int total = 0;
+    public double getDateTotalValue(){
+        double total = 0;
         for (Income income : incomes){
             total += income.getValue();
         }
@@ -45,5 +50,14 @@ public class DateTotal implements Serializable{
             total -= outcome.getValue();
         }
         return total;
+    }
+
+    @Override
+    public String toString() {
+        return "DateTotal{" +
+                "date=" + date +
+                ", incomes=" + incomes +
+                ", outcomes=" + outcomes +
+                '}';
     }
 }

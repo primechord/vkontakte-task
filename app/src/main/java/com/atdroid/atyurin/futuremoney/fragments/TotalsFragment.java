@@ -27,6 +27,7 @@ import com.atdroid.atyurin.futuremoney.R;
 import com.atdroid.atyurin.futuremoney.dao.AccountsDAO;
 import com.atdroid.atyurin.futuremoney.dao.IncomesDAO;
 import com.atdroid.atyurin.futuremoney.dao.OutcomesDAO;
+import com.atdroid.atyurin.futuremoney.listeners.MyDataPointTapListener;
 import com.atdroid.atyurin.futuremoney.serialization.Account;
 import com.atdroid.atyurin.futuremoney.serialization.DateTotal;
 import com.atdroid.atyurin.futuremoney.serialization.Income;
@@ -130,7 +131,7 @@ public class TotalsFragment extends Fragment {
 
         //graph view totals
         graph = (GraphView) rootView.findViewById(R.id.graph_view_totals);
-        graph.getGridLabelRenderer().setNumHorizontalLabels(3); // only 4 because of the space
+        graph.getGridLabelRenderer().setNumHorizontalLabels(2); // only 4 because of the space
 
         /*Button btnCalculate = (Button) rootView.findViewById(R.id.btn_calc_totals);
         btnCalculate.setOnClickListener(new View.OnClickListener() {
@@ -185,7 +186,7 @@ public class TotalsFragment extends Fragment {
 
         }
     };
-    private View.OnClickListener beginDateListener = new View.OnClickListener() {
+    public View.OnClickListener beginDateListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             DatePickerFragment datePicker = new DatePickerFragment() {
@@ -202,7 +203,7 @@ public class TotalsFragment extends Fragment {
             datePicker.show(getFragmentManager(), "datePicker");
         }
     };
-    private View.OnClickListener endDateListener = new View.OnClickListener() {
+    public View.OnClickListener endDateListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             DatePickerFragment datePicker = new DatePickerFragment() {
@@ -225,7 +226,7 @@ public class TotalsFragment extends Fragment {
         new CalculateTotalsTask(getActivity()).execute();
     }
 
-    public class CalculateTotalsTask extends AsyncTask<Void,Void,Void> {
+    public class CalculateTotalsTask extends AsyncTask<Void,Void, TotalsCalculator> {
         ProgressDialog progressDialog;
 
         public CalculateTotalsTask(Activity activity) {
@@ -239,8 +240,9 @@ public class TotalsFragment extends Fragment {
             progressDialog.setMessage("Start");
             progressDialog.show();
         }
+
         @Override
-        protected Void doInBackground(Void... params) {
+        protected TotalsCalculator doInBackground(Void... params) {
             Calendar begin = total.getBegin_date();
             Calendar end= total.getEnd_date();
             //incomes
@@ -285,12 +287,12 @@ public class TotalsFragment extends Fragment {
             dataSeries = new LineGraphSeries<DataPoint>(dataPoints);
 
 
-            return null;
+            return totalsCalc;
         }
 
         @Override
-        protected void onPostExecute(Void result) {
-            super.onPostExecute(result);
+        protected void onPostExecute(TotalsCalculator totalsCalc) {
+            super.onPostExecute(totalsCalc);
             llTotalsLayout = (LinearLayout) rootView.findViewById(R.id.ll_totals_values);
             tvAccountsTotalValue = (TextView) rootView.findViewById(R.id.tv_accounts_total_value);
             tvAccountsTotalValue.setText(StringUtil.formatDouble(total.getAccountsAmount()));
@@ -307,12 +309,8 @@ public class TotalsFragment extends Fragment {
             tvTotalValue.setText(StringUtil.formatDouble(total.getTotalAmount()));
 
 
-            dataSeries.setOnDataPointTapListener(new OnDataPointTapListener() {
-                @Override
-                public void onTap(Series series, DataPointInterface dataPoint) {
-                    Toast.makeText(getActivity(), "Series1: On Data Point clicked: "+dataPoint, Toast.LENGTH_SHORT).show();
-                }
-            });
+            dataSeries.setOnDataPointTapListener(new MyDataPointTapListener(getActivity(), totalsCalc));
+            dataSeries.setDrawDataPoints(true);
             Log.w(LOG_TAG, dataSeries.toString());
             Log.w(LOG_TAG, graph.toString());
             graph.removeAllSeries();
@@ -320,7 +318,10 @@ public class TotalsFragment extends Fragment {
             graph.addSeries(dataSeries);
             // set date label formatter
             graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
-
+            // as we use dates as labels, the human rounding to nice readable numbers
+            // is not necessary
+            graph.getGridLabelRenderer().setHumanRounding(false);
+            //graph.getGridLabelRenderer(). нужно ограничить число линиий по оси x = 3
             if (dataPoints.length > 0) {
                 double minY = dataPoints[0].getY();
                 double maxY = dataPoints[0].getY();
