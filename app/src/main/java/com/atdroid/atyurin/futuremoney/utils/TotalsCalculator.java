@@ -136,9 +136,10 @@ public class TotalsCalculator {
             periodCount++;
             Log.d(LOG_TAG, "periodCounts: " + periodCount);
             addIncomesAmount(periodCount * incomeItem.getValue());
-            for (int periodNumber = 1; periodNumber <= periodCount; periodNumber++){
-                Date incomeDate = incomeBeginDate;
-                DateTime beginDateTime = new DateTime(incomeBeginDate);
+            Date incomeDate = incomeCalcPeriodBeginDate;
+            DateTime beginDateTime = new DateTime(incomeCalcPeriodBeginDate);
+            dateTotalsMap.addIncome(incomeItem, incomeDate);
+            for (int periodNumber = 1; periodNumber < periodCount; periodNumber++){
                 if (incomeItem.getPeriod_type() == Income.PERIOD_DAY){
                     incomeDate = beginDateTime.plusDays(periodNumber*incomeItem.getPeriod_value()).withTimeAtStartOfDay().toDate();
                 }else if (incomeItem.getPeriod_type() == Income.PERIOD_WEEK){
@@ -241,9 +242,10 @@ public class TotalsCalculator {
             periodCount++;
             Log.d(LOG_TAG, "periodCounts: " + periodCount);
             addOutcomesAmount(periodCount * outcomeItem.getValue());
-            for (int periodNumber = 1; periodNumber <= periodCount; periodNumber++){
-                Date outcomeDate = outcomeBeginDate;
-                DateTime beginDateTime = new DateTime(outcomeBeginDate);
+            Date outcomeDate = outcomeCalcPeriodBeginDate;
+            DateTime beginDateTime = new DateTime(outcomeCalcPeriodBeginDate);
+            dateTotalsMap.addOutcome(outcomeItem, outcomeDate);
+            for (int periodNumber = 1; periodNumber < periodCount; periodNumber++){
                 if (outcomeItem.getPeriod_type() == Income.PERIOD_DAY){
                     outcomeDate = beginDateTime.plusDays(periodNumber*outcomeItem.getPeriod_value()).withTimeAtStartOfDay().toDate();
                 }else if (outcomeItem.getPeriod_type() == Income.PERIOD_WEEK){
