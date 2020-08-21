@@ -2,9 +2,10 @@ package com.atdroid.atyurin.futuremoney.utils;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
+import androidx.fragment.app.Fragment;
 
 /**
  * Created by atdroid on 14-Nov-15.

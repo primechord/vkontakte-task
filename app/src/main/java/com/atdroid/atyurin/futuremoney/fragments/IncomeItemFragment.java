@@ -2,8 +2,6 @@ package com.atdroid.atyurin.futuremoney.fragments;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -23,6 +21,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+
 import com.atdroid.atyurin.futuremoney.R;
 import com.atdroid.atyurin.futuremoney.dao.IncomesDAO;
 import com.atdroid.atyurin.futuremoney.serialization.Income;
@@ -36,7 +36,7 @@ import java.util.Calendar;
 
 /**
  * Created by atdroid on 14.09.2015.
- *
+ * <p>
  * elements description
  * 0 - name (EditText)
  * 1 - amount (EditText)
@@ -45,7 +45,6 @@ import java.util.Calendar;
  * 4 - begin date (Date Picker)
  * 5 - end date (Date Picker)
  * 6 - period (LinearLayout{Text, Spinner, EditText(optional - depende on spinner)})
- *
  */
 
 public class IncomeItemFragment extends Fragment {
@@ -54,13 +53,14 @@ public class IncomeItemFragment extends Fragment {
     final static String LOG_TAG = "IncomeItemFragment";
     Income income;
     boolean isNewItem = true;
-    EditText etName,etAmount, etPeriodValue;
-    TextView tvNameTitle, tvAmountTitle, tvTypeTitle, tvSingleDateTitle, tvSingleDateValue, tvBeginDateTitle, tvBeginDateValue,tvEndDateTitle, tvEndDateValue, tvPeriodTitle;
+    EditText etName, etAmount, etPeriodValue;
+    TextView tvNameTitle, tvAmountTitle, tvTypeTitle, tvSingleDateTitle, tvSingleDateValue, tvBeginDateTitle, tvBeginDateValue, tvEndDateTitle, tvEndDateValue, tvPeriodTitle;
     Spinner spType, spPeriodType;
     RelativeLayout llSingleDate, llBeginDate, llEndDate;
     LinearLayout llPeriod;
     ArrayAdapter<String> adapterType, adapterPeriodType;
     NumberTextWatcher ntw;
+
     public static IncomeItemFragment newInstance() {
         Log.d("Incomer fragment", "newInstance");
 
@@ -93,11 +93,11 @@ public class IncomeItemFragment extends Fragment {
         this.income = (Income) this.getArguments().getSerializable(KEY_INCOME);
         this.isNewItem = this.getArguments().getBoolean(KEY_NEW_ITEM);
         FragmentContainer.setCurentFragment(this.getClass().toString());
-        View rootView =  inflater.inflate(R.layout.fragment_budget_item, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_budget_item, container, false);
         //name
         tvNameTitle = (TextView) rootView.findViewById(R.id.tv_item_name_title);
         etName = (EditText) rootView.findViewById(R.id.et_item_name_value);
-        if (income.getName().length() > 0){
+        if (income.getName().length() > 0) {
             etName.setText(income.getName());
             tvNameTitle.setVisibility(View.VISIBLE);
         }
@@ -107,7 +107,7 @@ public class IncomeItemFragment extends Fragment {
         etAmount = (EditText) rootView.findViewById(R.id.et_item_amount_value);
         ntw = new NumberTextWatcher(etAmount, tvAmountTitle);
         etAmount.setRawInputType(Configuration.KEYBOARD_QWERTY);
-        if (income.getValue() > 0){
+        if (income.getValue() > 0) {
             ntw.setValue(income.getValue());
             ntw.formatText();
             tvAmountTitle.setVisibility(View.VISIBLE);
@@ -172,31 +172,33 @@ public class IncomeItemFragment extends Fragment {
     public void onPrepareOptionsMenu(Menu menu) {
 //        Log.d("IncomeItemFragment", "onPrepareOptionsMenu");
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d("IncomeItemFragment", "onOptionsItemSelected");
         if (item.getItemId() == R.id.action_btn_add_budget_item_confirm) {
-            if (income.getName().length() < 1){
+            if (income.getName().length() < 1) {
                 Toast.makeText(getActivity().getBaseContext(), R.string.msg_budget_item_empty_name, Toast.LENGTH_LONG).show();
                 return false;
             }
             income.setValue(ntw.getValue());
-            if (income.getValue() <= 0){
+            if (income.getValue() <= 0) {
                 Toast.makeText(getActivity().getBaseContext(), R.string.msg_budget_item_empty_amount, Toast.LENGTH_LONG).show();
                 return false;
             }
-            if (income.getBegin_date().after(income.getEnd_date())){
+            if (income.getBegin_date().after(income.getEnd_date())) {
                 Toast.makeText(getActivity().getBaseContext(), R.string.msg_budget_item_wrong_dates, Toast.LENGTH_LONG).show();
                 return false;
             }
             IncomesDAO dao = new IncomesDAO(getActivity().getBaseContext());
             dao.openWritable();
-            if (isNewItem){
-                if (dao.addIncome(income)){
-                 Toast.makeText(getActivity().getBaseContext(), getResources().getString(R.string.msg_budget_item_success), Toast.LENGTH_LONG).show();
-                };
-            }else{
-                if (dao.updateIncome(income)){
+            if (isNewItem) {
+                if (dao.addIncome(income)) {
+                    Toast.makeText(getActivity().getBaseContext(), getResources().getString(R.string.msg_budget_item_success), Toast.LENGTH_LONG).show();
+                }
+                ;
+            } else {
+                if (dao.updateIncome(income)) {
                     Toast.makeText(getActivity().getBaseContext(), getResources().getString(R.string.msg_budget_item_success), Toast.LENGTH_LONG).show();
                 }
             }
@@ -217,13 +219,14 @@ public class IncomeItemFragment extends Fragment {
         }
 
         @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
 
         @Override
         public void afterTextChanged(Editable editable) {
-            if (editable.length() > 0){
+            if (editable.length() > 0) {
                 tvNameTitle.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 tvNameTitle.setVisibility(View.GONE);
             }
         }
@@ -234,13 +237,13 @@ public class IncomeItemFragment extends Fragment {
         public void onItemSelected(AdapterView<?> parent, View view,
                                    int position, long id) {
             Log.d("typeSelectedListener", "" + position);
-            if (position == Income.TYPE_PERIODICAL){
+            if (position == Income.TYPE_PERIODICAL) {
                 income.setType(Income.TYPE_PERIODICAL);//1
                 llSingleDate.setVisibility(View.GONE);
                 llBeginDate.setVisibility(View.VISIBLE);
                 llEndDate.setVisibility(View.VISIBLE);
                 llPeriod.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 income.setType(Income.TYPE_SINGLE);//0
                 llSingleDate.setVisibility(View.VISIBLE);
                 llBeginDate.setVisibility(View.GONE);
@@ -258,36 +261,30 @@ public class IncomeItemFragment extends Fragment {
     private View.OnClickListener singleDateListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            DatePickerFragment datePicker = new DatePickerFragment() {
-                @Override
-                public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                    SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.set(year, month, day);
-                    tvSingleDateValue.setText(sdf.format(calendar.getTime()));
-                    income.setSingle_date(calendar);
-                }
-            };
+            Calendar calendar = Calendar.getInstance();
+            DatePickerFragment datePicker = DatePickerFragment.newInstance(calendar, (date) -> {
+                SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
+                calendar.set(date[0], date[1], date[2]);
+                tvSingleDateValue.setText(sdf.format(calendar.getTime()));
+                income.setSingle_date(calendar);
+                return null;
+            });
             datePicker.setCalendar(income.getSingle_date());
             datePicker.show(getFragmentManager(), "datePicker");
-
-
         }
     };
 
     private View.OnClickListener beginDateListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            DatePickerFragment datePicker = new DatePickerFragment() {
-                @Override
-                public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                    SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.set(year, month, day);
-                    tvBeginDateValue.setText(sdf.format(calendar.getTime()));
-                    income.setBegin_date(calendar);
-                }
-            };
+            Calendar calendar = Calendar.getInstance();
+            DatePickerFragment datePicker = DatePickerFragment.newInstance(calendar, (date) -> {
+                SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
+                calendar.set(date[0], date[1], date[2]);
+                tvBeginDateValue.setText(sdf.format(calendar.getTime()));
+                income.setBegin_date(calendar);
+                return null;
+            });
             datePicker.setCalendar(income.getBegin_date());
             datePicker.show(getFragmentManager(), "datePicker");
         }
@@ -296,16 +293,14 @@ public class IncomeItemFragment extends Fragment {
     private View.OnClickListener endDateListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            DatePickerFragment datePicker = new DatePickerFragment() {
-                @Override
-                public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                    SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.set(year, month, day);
-                    tvEndDateValue.setText(sdf.format(calendar.getTime()));
-                    income.setEnd_date(calendar);
-                }
-            };
+            Calendar calendar = Calendar.getInstance();
+            DatePickerFragment datePicker = DatePickerFragment.newInstance(calendar, (date) -> {
+                SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
+                calendar.set(date[0], date[1], date[2]);
+                tvEndDateValue.setText(sdf.format(calendar.getTime()));
+                income.setEnd_date(calendar);
+                return null;
+            });
             datePicker.setCalendar(income.getEnd_date());
             datePicker.show(getFragmentManager(), "datePicker");
         }
@@ -327,15 +322,17 @@ public class IncomeItemFragment extends Fragment {
     private TextWatcher periodValueWatcher = new TextWatcher() {
         @Override
         public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            if (charSequence.length() > 0){
+            if (charSequence.length() > 0) {
                 income.setPeriod_value(Integer.parseInt(charSequence.toString()));
             }
         }
 
         @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
 
         @Override
-        public void afterTextChanged(Editable editable) {}
+        public void afterTextChanged(Editable editable) {
+        }
     };
 }

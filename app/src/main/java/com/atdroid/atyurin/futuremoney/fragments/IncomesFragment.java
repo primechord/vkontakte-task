@@ -2,8 +2,6 @@ package com.atdroid.atyurin.futuremoney.fragments;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -14,6 +12,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.atdroid.atyurin.futuremoney.R;
 import com.atdroid.atyurin.futuremoney.adapters.IncomesAdapter;

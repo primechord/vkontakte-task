@@ -3,7 +3,6 @@ package com.atdroid.atyurin.futuremoney.fragments;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -23,9 +22,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+
 import com.atdroid.atyurin.futuremoney.R;
 import com.atdroid.atyurin.futuremoney.dao.OutcomesDAO;
-import com.atdroid.atyurin.futuremoney.serialization.Account;
 import com.atdroid.atyurin.futuremoney.serialization.Outcome;
 import com.atdroid.atyurin.futuremoney.utils.DateFormater;
 import com.atdroid.atyurin.futuremoney.utils.FragmentContainer;
@@ -257,16 +257,14 @@ public class OutcomeItemFragment extends Fragment {
     private View.OnClickListener singleDateListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            DatePickerFragment datePicker = new DatePickerFragment() {
-                @Override
-                public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                    SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.set(year, month, day);
-                    tvSingleDateValue.setText(sdf.format(calendar.getTime()));
-                    outcome.setSingle_date(calendar);
-                }
-            };
+            Calendar calendar = Calendar.getInstance();
+            DatePickerFragment datePicker = DatePickerFragment.newInstance(calendar, (date) -> {
+                SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
+                calendar.set(date[0], date[1], date[2]);
+                tvSingleDateValue.setText(sdf.format(calendar.getTime()));
+                outcome.setSingle_date(calendar);
+                return null;
+            });
             datePicker.setCalendar(outcome.getSingle_date());
             datePicker.show(getFragmentManager(), "datePicker");
         }
@@ -275,16 +273,14 @@ public class OutcomeItemFragment extends Fragment {
     private View.OnClickListener beginDateListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            DatePickerFragment datePicker = new DatePickerFragment() {
-                @Override
-                public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                    SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.set(year, month, day);
-                    tvBeginDateValue.setText(sdf.format(calendar.getTime()));
-                    outcome.setBegin_date(calendar);
-                }
-            };
+            Calendar calendar = Calendar.getInstance();
+            DatePickerFragment datePicker = DatePickerFragment.newInstance(calendar, (date) -> {
+                SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
+                calendar.set(date[0], date[1], date[2]);
+                tvBeginDateValue.setText(sdf.format(calendar.getTime()));
+                outcome.setBegin_date(calendar);
+                return null;
+            });
             datePicker.setCalendar(outcome.getBegin_date());
             datePicker.show(getFragmentManager(), "datePicker");
         }
@@ -293,16 +289,14 @@ public class OutcomeItemFragment extends Fragment {
     private View.OnClickListener endDateListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            DatePickerFragment datePicker = new DatePickerFragment() {
-                @Override
-                public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                    SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.set(year, month, day);
-                    tvEndDateValue.setText(sdf.format(calendar.getTime()));
-                    outcome.setEnd_date(calendar);
-                }
-            };
+            Calendar calendar = Calendar.getInstance();
+            DatePickerFragment datePicker = DatePickerFragment.newInstance(calendar, (date) -> {
+                SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
+                calendar.set(date[0], date[1], date[2]);
+                tvEndDateValue.setText(sdf.format(calendar.getTime()));
+                outcome.setEnd_date(calendar);
+                return null;
+            });
             datePicker.setCalendar(outcome.getEnd_date());
             datePicker.show(getFragmentManager(), "datePicker");
         }

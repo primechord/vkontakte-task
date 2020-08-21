@@ -1,14 +1,17 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 29
+    buildToolsVersion '29.0.3'
     defaultConfig {
         applicationId 'com.atdroid.atyurin.futuremoney'
-        minSdkVersion 15
-        targetSdkVersion 23
+        minSdkVersion 22
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -21,16 +24,25 @@ android {
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
     }
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.1.0'
-    compile 'com.android.support:design:23.1.0'
-    compile 'joda-time:joda-time:2.9'
-    compile 'com.google.android.gms:play-services-ads:7.8.0'
-    compile 'com.jjoe64:graphview:4.2.1'
-    //compile 'com.google.android.gms:play-services-ads:8.3.0'
-    //compile "org.apache.commons:commons-lang3:3.3.2"
+//    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "androidx.drawerlayout:drawerlayout:1.1.0"
+    implementation "androidx.appcompat:appcompat:1.2.0"
+    implementation 'com.google.android.material:material:1.2.0'
+    implementation 'joda-time:joda-time:2.10.1'
+    implementation 'com.jjoe64:graphview:4.2.1'
+    testImplementation 'junit:junit:4.12'
+
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.2.0'
+    androidTestImplementation 'androidx.test.espresso.idling:idling-concurrent:3.2.0'
+    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
 }

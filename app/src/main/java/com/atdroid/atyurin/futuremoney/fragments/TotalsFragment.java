@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,13 +13,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.atdroid.atyurin.futuremoney.R;
 import com.atdroid.atyurin.futuremoney.dao.AccountsDAO;
@@ -41,10 +41,7 @@ import com.atdroid.atyurin.futuremoney.utils.TotalsCalculator;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
-import com.jjoe64.graphview.series.OnDataPointTapListener;
-import com.jjoe64.graphview.series.Series;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -54,7 +51,7 @@ import java.util.Map;
 
 /**
  * Created by atdroid on 14.09.2015.
- *
+ * <p>
  * elements description
  * 0 - name (EditText)
  * 1 - amount (EditText)
@@ -63,7 +60,6 @@ import java.util.Map;
  * 4 - begin date (Date Picker)
  * 5 - end date (Date Picker)
  * 6 - period (LinearLayout{Text, Spinner, EditText(optional - depende on spinner)})
- *
  */
 
 public class TotalsFragment extends Fragment {
@@ -72,7 +68,7 @@ public class TotalsFragment extends Fragment {
     Total total;
     View rootView;
     Spinner spType;
-    TextView tvCalculateDateValue,tvCalculateDateTitle, tvBeginDateTitle, tvBeginDateValue, tvAccountsTotalValue, tvOutcomesTotalValue, tvIncomesTotalValue, tvTotalValue;
+    TextView tvCalculateDateValue, tvCalculateDateTitle, tvBeginDateTitle, tvBeginDateValue, tvAccountsTotalValue, tvOutcomesTotalValue, tvIncomesTotalValue, tvTotalValue;
     ArrayAdapter<String> adapterType;
     LinearLayout llTotalsLayout;
     RelativeLayout llCalculateDate, llBeginDate;
@@ -82,7 +78,7 @@ public class TotalsFragment extends Fragment {
     LineGraphSeries<DataPoint> dataSeries;
     DataPoint[] dataPoints;
 
-    public static TotalsFragment newInstance(Activity activity, FragmentManager fragmentManager) {
+    public static Fragment newInstance(Activity activity, FragmentManager fragmentManager) {
         TotalsFragment totalsFragment = new TotalsFragment();
         totalsFragment.activity = activity;
         totalsFragment.fragmentManager = fragmentManager;
@@ -100,7 +96,7 @@ public class TotalsFragment extends Fragment {
         setHasOptionsMenu(true);
         FragmentContainer.setCurentFragment(this.getClass().toString());
         new KeyboardManager(this).closeKeyboard();
-        rootView =  inflater.inflate(R.layout.fragment_totals, container, false);
+        rootView = inflater.inflate(R.layout.fragment_totals, container, false);
         //begin date type
         spType = (Spinner) rootView.findViewById(R.id.sp_begin_date_type);
         adapterType = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item,
@@ -143,15 +139,18 @@ public class TotalsFragment extends Fragment {
         return rootView;
 
     }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         //super.onCreateOptionsMenu(menu, inflater);
         Log.d("TotalsFragme", "onCreateOptionsMenu");
         inflater.inflate(R.menu.menu_totals, menu);
     }
+
     public void onPrepareOptionsMenu(Menu menu) {
 
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d("TotalsFragme", "onOptionsItemSelected");
@@ -161,15 +160,16 @@ public class TotalsFragment extends Fragment {
 
         return super.onOptionsItemSelected(item);
     }
+
     private AdapterView.OnItemSelectedListener typeSelectedListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view,
                                    int position, long id) {
             Log.d("typeSelectedListener", "" + position);
-            if (position == Total.TYPE_ALL){
+            if (position == Total.TYPE_ALL) {
                 total.setBeginDateType(Total.TYPE_ALL);
                 llBeginDate.setVisibility(View.GONE);
-            }else if (position == Total.TYPE_SELECTED_DATE) {
+            } else if (position == Total.TYPE_SELECTED_DATE) {
                 total.setBeginDateType(Total.TYPE_SELECTED_DATE);
                 SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
                 Calendar calendar = Calendar.getInstance();
@@ -189,16 +189,15 @@ public class TotalsFragment extends Fragment {
     public View.OnClickListener beginDateListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            DatePickerFragment datePicker = new DatePickerFragment() {
-                @Override
-                public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                    SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.set(year, month, day);
-                    tvBeginDateValue.setText(sdf.format(calendar.getTime()));
-                    total.setBegin_date(calendar);
-                }
-            };
+            Calendar calendar = Calendar.getInstance();
+
+            DatePickerFragment datePicker = DatePickerFragment.newInstance(calendar, (date) -> {
+                SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
+                calendar.set(date[0], date[1], date[2]);
+                tvBeginDateValue.setText(sdf.format(calendar.getTime()));
+                total.setBegin_date(calendar);
+                return null;
+            });
             datePicker.setCalendar(total.getBegin_date());
             datePicker.show(getFragmentManager(), "datePicker");
         }
@@ -206,27 +205,24 @@ public class TotalsFragment extends Fragment {
     public View.OnClickListener endDateListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            DatePickerFragment datePicker = new DatePickerFragment() {
-                @Override
-                public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                    SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.set(year, month, day);
-                    tvCalculateDateValue.setText(sdf.format(calendar.getTime()));
-                    total.setEnd_date(calendar);
-                }
-            };
+            Calendar calendar = Calendar.getInstance();
+            DatePickerFragment datePicker = DatePickerFragment.newInstance(calendar, (date) -> {
+                SimpleDateFormat sdf = new SimpleDateFormat(DateFormater.DATE_FORMAT);
+                calendar.set(date[0], date[1], date[2]);
+                tvCalculateDateValue.setText(sdf.format(calendar.getTime()));
+                total.setEnd_date(calendar);
+                return null;
+            });
             datePicker.setCalendar(total.getEnd_date());
             datePicker.show(getFragmentManager(), "datePicker");
-//            new CloseKeyboard().execute(datePicker);
-
         }
     };
-    public void calcTotals(){
+
+    public void calcTotals() {
         new CalculateTotalsTask(getActivity()).execute();
     }
 
-    public class CalculateTotalsTask extends AsyncTask<Void,Void, TotalsCalculator> {
+    public class CalculateTotalsTask extends AsyncTask<Void, Void, TotalsCalculator> {
         ProgressDialog progressDialog;
 
         public CalculateTotalsTask(Activity activity) {
@@ -244,7 +240,7 @@ public class TotalsFragment extends Fragment {
         @Override
         protected TotalsCalculator doInBackground(Void... params) {
             Calendar begin = total.getBegin_date();
-            Calendar end= total.getEnd_date();
+            Calendar end = total.getEnd_date();
             //incomes
             IncomesDAO incomesDAO = new IncomesDAO(getActivity().getBaseContext());
             incomesDAO.openReadable();
@@ -277,15 +273,14 @@ public class TotalsFragment extends Fragment {
             dataPoints = new DataPoint[totalsCalc.getDateTotalsMap().getSize()];
             int i = 0;
             double currentAmount = totalsCalc.getAccountsAmount();
-            for (Map.Entry<Date,DateTotal> dateTotal : totalsCalc.getDateTotalsMap().getSortedDateTotalsMap().entrySet()){
+            for (Map.Entry<Date, DateTotal> dateTotal : totalsCalc.getDateTotalsMap().getSortedDateTotalsMap().entrySet()) {
                 Log.d(LOG_TAG, dateTotal.getKey().toString() + " ---- " + dateTotal.getValue().toString());
                 dataPoints[i] = new DataPoint(dateTotal.getKey(), dateTotal.getValue().getDateTotalValue() + currentAmount);
-                currentAmount +=  dateTotal.getValue().getDateTotalValue();
+                currentAmount += dateTotal.getValue().getDateTotalValue();
                 i++;
             }
             Log.w(LOG_TAG, dataPoints.toString());
             dataSeries = new LineGraphSeries<DataPoint>(dataPoints);
-
 
             return totalsCalc;
         }
@@ -301,13 +296,12 @@ public class TotalsFragment extends Fragment {
             tvOutcomesTotalValue = (TextView) rootView.findViewById(R.id.tv_outcomes_total_value);
             tvOutcomesTotalValue.setText(StringUtil.formatDouble(total.getOutcomeAmount()));
             tvTotalValue = (TextView) rootView.findViewById(R.id.tv_total_value);
-            if (total.getTotalAmount() > 0){
+            if (total.getTotalAmount() > 0) {
                 tvTotalValue.setTextColor(getResources().getColor(R.color.income_item_value));
-            }else {
+            } else {
                 tvTotalValue.setTextColor(getResources().getColor(R.color.outcome_item_value));
             }
             tvTotalValue.setText(StringUtil.formatDouble(total.getTotalAmount()));
-
 
             dataSeries.setOnDataPointTapListener(new MyDataPointTapListener(getActivity(), totalsCalc));
             dataSeries.setDrawDataPoints(true);
@@ -325,11 +319,11 @@ public class TotalsFragment extends Fragment {
             if (dataPoints.length > 0) {
                 double minY = dataPoints[0].getY();
                 double maxY = dataPoints[0].getY();
-                for (int i= 0; i < dataPoints.length; i++){
-                    if (minY > dataPoints[i].getY()){
+                for (int i = 0; i < dataPoints.length; i++) {
+                    if (minY > dataPoints[i].getY()) {
                         minY = dataPoints[i].getY();
                     }
-                    if (maxY < dataPoints[i].getY()){
+                    if (maxY < dataPoints[i].getY()) {
                         maxY = dataPoints[i].getY();
                     }
                 }
@@ -358,7 +352,7 @@ public class TotalsFragment extends Fragment {
                 graph.getViewport().setScrollableY(true);
                 graph.setVisibility(View.VISIBLE);
                 //graph.getGridLabelRenderer().setGridColor();
-            }else{
+            } else {
                 Toast.makeText(getActivity().getBaseContext(), R.string.msg_no_data_found, Toast.LENGTH_SHORT).show();
                 graph.setVisibility(View.GONE);
             }

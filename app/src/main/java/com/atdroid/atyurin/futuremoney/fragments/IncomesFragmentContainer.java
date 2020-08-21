@@ -2,27 +2,28 @@ package com.atdroid.atyurin.futuremoney.fragments;
 
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
 import com.atdroid.atyurin.futuremoney.R;
 import com.atdroid.atyurin.futuremoney.utils.FragmentContainer;
 import com.atdroid.atyurin.futuremoney.utils.KeyboardManager;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 /**
  * Created by atdroid on 10.11.2015.
  */
 public class IncomesFragmentContainer extends Fragment {
     final static String LOG_TAG = "IncomesFragmentConta";
-    public static IncomesFragmentContainer newInstance(){
+    public static Fragment newInstance(){
         return new IncomesFragmentContainer();
     }
 

@@ -2,19 +2,21 @@ package com.atdroid.atyurin.futuremoney.activity;
 
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.atdroid.atyurin.futuremoney.R;
 import com.atdroid.atyurin.futuremoney.fragments.AboutFragment;
@@ -27,8 +29,7 @@ import com.atdroid.atyurin.futuremoney.fragments.OutcomesFragmentContainer;
 import com.atdroid.atyurin.futuremoney.fragments.TotalsFragment;
 import com.atdroid.atyurin.futuremoney.utils.BackupAgent;
 import com.atdroid.atyurin.futuremoney.utils.FragmentContainer;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
+import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         BackupAgent.requestBackup(this);
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //show totals fragment then activity created
         fragmentManager = getSupportFragmentManager();
@@ -65,19 +66,11 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         };
-        drawer.setDrawerListener(toggle);
+        drawer.setDrawerListener((DrawerLayout.DrawerListener) toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        AdView mAdView = (AdView) findViewById(R.id.adView);
-        mAdView.setVisibility(View.GONE);
-        AdRequest adRequest = new AdRequest.Builder()
-                //.addTestDevice("994210F407CD60F2EB5FACDA49406A54")
-                //.addTestDevice("2EB4ADE9EE7B457CAAD2CC9EF86B4308")
-                .build();
-        //mAdView.loadAd(adRequest);
     }
 
     @Override
@@ -143,7 +136,6 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.

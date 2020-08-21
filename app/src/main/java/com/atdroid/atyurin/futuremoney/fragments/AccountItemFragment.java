@@ -3,7 +3,6 @@ package com.atdroid.atyurin.futuremoney.fragments;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -16,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
 
 import com.atdroid.atyurin.futuremoney.R;
 import com.atdroid.atyurin.futuremoney.dao.AccountsDAO;

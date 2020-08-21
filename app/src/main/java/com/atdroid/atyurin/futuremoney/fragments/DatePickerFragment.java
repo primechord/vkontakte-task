@@ -1,46 +1,46 @@
 package com.atdroid.atyurin.futuremoney.fragments;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
-import android.widget.TextView;
 
-import com.atdroid.atyurin.futuremoney.R;
-import com.atdroid.atyurin.futuremoney.utils.KeyboardManager;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 
 import java.util.Calendar;
+import java.util.Objects;
+import java.util.function.Function;
 
-/**
- * Created by atdroid on 25.09.2015.
- */
 public class DatePickerFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {
 
     final static String LOG_TAG = "DatePickerFragment";
     final static String KEY_CALENDAR = "data_picker_fragment_key_calendar";
     Calendar calendar;
-//    public static DatePickerFragment newInstance(Calendar calendar){
-//        DatePickerFragment datePickerFragment = new DatePickerFragment();
-//        Bundle arguments = new Bundle();
-//        arguments.putSerializable(KEY_CALENDAR, calendar);
-//        datePickerFragment.setArguments(arguments);
-//        return datePickerFragment;
-//    }
+    Function<Integer[], Void> dataSetChangedFun;
 
-    public DatePickerFragment() {
+    public static DatePickerFragment newInstance(Calendar calendar, Function<Integer[], Void> dataSetChanged) {
+        DatePickerFragment datePickerFragment = new DatePickerFragment(dataSetChanged);
+        Bundle arguments = new Bundle();
+        arguments.putSerializable(KEY_CALENDAR, calendar);
+        datePickerFragment.setArguments(arguments);
+        return datePickerFragment;
+    }
+
+    private DatePickerFragment(Function<Integer[], Void> dataSetChanged) {
         super();
+        this.dataSetChangedFun = dataSetChanged;
 //        this.calendar = (Calendar) getArguments().getSerializable(KEY_CALENDAR);
     }
 
-    public void setCalendar(Calendar calendar){
+    public void setCalendar(Calendar calendar) {
         this.calendar = calendar;
     }
 
@@ -52,7 +52,7 @@ public class DatePickerFragment extends DialogFragment
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         // Create a new instance of DatePickerDialog and return it
-        return new DatePickerDialog(getActivity(), this, year, month, day);
+        return new DatePickerDialog(Objects.requireNonNull(getActivity()), this, year, month, day);
     }
 
     @Override
@@ -72,14 +72,18 @@ public class DatePickerFragment extends DialogFragment
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
+            Integer[] date = new Integer[]{year, month, day};
+        dataSetChangedFun.apply(date);
         // Do something with the date chosen by the user
         // Override this method in calling class
     }
 
     @Override
-    public void show(FragmentManager fragmentManager, String str){
+    public void show(FragmentManager fragmentManager, String str) {
         super.show(fragmentManager, str);
         Log.d(LOG_TAG, "show");
 

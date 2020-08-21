@@ -2,9 +2,6 @@ package com.atdroid.atyurin.futuremoney.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -17,12 +14,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
 import com.atdroid.atyurin.futuremoney.R;
 import com.atdroid.atyurin.futuremoney.adapters.AccountsAdapter;
 import com.atdroid.atyurin.futuremoney.dao.AccountsDAO;
 import com.atdroid.atyurin.futuremoney.serialization.Account;
 import com.atdroid.atyurin.futuremoney.utils.FragmentContainer;
 import com.atdroid.atyurin.futuremoney.utils.KeyboardManager;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -38,7 +39,7 @@ public class AccountsFragment extends Fragment {
     AccountsDAO dao;
     View rootView;
     final static String LOG_TAG = "AccountsFragment";
-    public static AccountsFragment newInstance(Activity activity, FragmentManager fragmentManager) {
+    public static androidx.fragment.app.Fragment newInstance(Activity activity, FragmentManager fragmentManager) {
         AccountsFragment accountsFragment = new AccountsFragment();
         accountsFragment.activity = activity;
         accountsFragment.fragmentManager = fragmentManager;

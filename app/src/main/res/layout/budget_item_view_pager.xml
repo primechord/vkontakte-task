@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.MainActivity">
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,8 +19,8 @@
             android:background="@color/themeDark"
             android:padding="@dimen/abc_action_bar_content_inset_material">
         </com.atdroid.atyurin.futuremoney.custom_views.MyPagerTabStrip>
-    </android.support.v4.view.ViewPager>
-    <android.support.design.widget.FloatingActionButton
+    </androidx.viewpager.widget.ViewPager>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

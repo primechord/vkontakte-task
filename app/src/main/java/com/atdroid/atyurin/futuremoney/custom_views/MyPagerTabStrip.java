@@ -3,8 +3,9 @@ package com.atdroid.atyurin.futuremoney.custom_views;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.support.v4.view.PagerTabStrip;
 import android.util.AttributeSet;
+
+import androidx.viewpager.widget.PagerTabStrip;
 
 import com.atdroid.atyurin.futuremoney.R;
 
