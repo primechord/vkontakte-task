@@ -9,7 +9,7 @@ enum class Menu {
     TOTALS, ACCOUNTS, INCOMES, EXPENSES, ABOUT_APP
 }
 
-object MenuPO : BasePage() {
+object MenuPO : BasePage<MenuPO>() {
     private val totals = withId(R.id.nav_totals)
     private val accounts = withId(R.id.nav_accounts)
     private val incomes = withId(R.id.nav_incomes)

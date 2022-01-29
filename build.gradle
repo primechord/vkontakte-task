@@ -27,7 +27,7 @@ allure {
     autoconfigure = true
     aspectjweaver = false
     allureJavaVersion = '2.17.2'
-    clean = true
+    clean = true // FIXME Накладываются результаты
 }
 
 allprojects {

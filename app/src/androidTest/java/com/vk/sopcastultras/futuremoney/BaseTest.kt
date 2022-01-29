@@ -26,7 +26,13 @@ abstract class BaseTest {
     var activityTestRule = ActivityTestRule(MainActivity::class.java, true, false)
 
     @Before
-    open fun setUp() {
+    open fun setup() {
         activityTestRule.launchActivity(Intent())
     }
+
+//    @After
+//    open fun teardown() {
+//        InstrumentationRegistry.getInstrumentation().uiAutomation
+//            .executeShellCommand("pm clear com.atdroid.atyurin.futuremoney").close()
+//    }
 }
