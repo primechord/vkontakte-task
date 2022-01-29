@@ -8,3 +8,5 @@
 /captures
 *.jks
 *.iml
+/allure-results/
+/.allure/*
