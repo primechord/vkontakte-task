@@ -64,7 +64,7 @@ fun Matcher<View>.checkText(expected: String) {
     }
 }
 
-private fun Matcher<View>.getText(): String {
+fun Matcher<View>.getText(): String {
     var text = String()
     Espresso.onView(this).perform(object : ViewAction {
         override fun getConstraints() = ViewMatchers.isAssignableFrom(TextView::class.java)

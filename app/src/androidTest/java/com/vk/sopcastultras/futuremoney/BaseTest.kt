@@ -13,7 +13,7 @@ import org.junit.runner.RunWith
 @RunWith(AllureAndroidJUnit4::class)
 abstract class BaseTest {
 
-    // @get:Rule val screenshotRule = ScreenshotRule(mode = ScreenshotRule.Mode.FAILURE)
+    // @get:Rule val screenshotRule = ScreenshotRule(mode = ScreenshotRule.Mode.FAILURE) FIXME
 
     @get:Rule
     val logcatRule = LogcatRule()
@@ -30,7 +30,7 @@ abstract class BaseTest {
         activityTestRule.launchActivity(Intent())
     }
 
-//    @After
+//    @After FIXME
 //    open fun teardown() {
 //        InstrumentationRegistry.getInstrumentation().uiAutomation
 //            .executeShellCommand("pm clear com.atdroid.atyurin.futuremoney").close()
