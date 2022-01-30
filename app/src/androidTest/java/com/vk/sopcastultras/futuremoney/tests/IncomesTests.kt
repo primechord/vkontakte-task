@@ -23,13 +23,13 @@ class IncomesTests : BaseTest() {
     @Test
     @DisplayName("Позитивное создание прихода")
     fun createIncome() {
-        MenuPO {
-            goTo(Menu.INCOMES)
-        }
-
         val incomeName = "Income ${generateString(15)}"
         val incomeValue = Random.nextInt(until = 100).toString()
         val incomeDate = LocalDate.now()
+
+        MenuPO {
+            goTo(Menu.INCOMES)
+        }
 
         IncomeListPO {
             createIncome()

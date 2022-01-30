@@ -9,7 +9,7 @@ import org.hamcrest.Matchers
 
 object Calendar {
     fun selectDate(year: Int, month: Int, day: Int) {
-        myStep("Выбираем дату $day $month $year") {
+        myStep("Выбираем дату $day.$month.$year") {
             Espresso.onView(ViewMatchers.withClassName(Matchers.equalTo(DatePicker::class.java.name)))
                 .perform(PickerActions.setDate(year, month, day))
         }

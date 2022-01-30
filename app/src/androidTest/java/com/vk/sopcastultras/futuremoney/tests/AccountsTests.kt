@@ -20,12 +20,12 @@ class AccountsTests : BaseTest() {
     @Test
     @DisplayName("Позитивное создание счета")
     fun createAccount() {
+        val accountName = "Account ${generateString(15)}"
+        val accountValue = Random.nextInt(until = 100).toString()
+
         MenuPO {
             goTo(Menu.ACCOUNTS)
         }
-
-        val accountName = "Account ${generateString(15)}"
-        val accountValue = Random.nextInt(until = 100).toString()
 
         AccountListPO {
             createAccount()

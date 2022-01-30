@@ -1,6 +1,7 @@
 package com.vk.sopcastultras.futuremoney
 
 import android.content.Intent
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.atdroid.atyurin.futuremoney.activity.MainActivity
 import io.qameta.allure.android.rules.LogcatRule
@@ -27,12 +28,9 @@ abstract class BaseTest {
 
     @Before
     open fun setup() {
+        InstrumentationRegistry.getInstrumentation().targetContext.deleteDatabase("FutureMoneyDB")
+
         activityTestRule.launchActivity(Intent())
     }
 
-//    @After FIXME
-//    open fun teardown() {
-//        InstrumentationRegistry.getInstrumentation().uiAutomation
-//            .executeShellCommand("pm clear com.atdroid.atyurin.futuremoney").close()
-//    }
 }
