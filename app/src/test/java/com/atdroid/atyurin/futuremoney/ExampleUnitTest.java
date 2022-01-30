@@ -1,4 +1,4 @@
-package com.atdroid.atyurin.futuremoney;
+package futuremoney.atyurin.com.futuremoney;
 
 import org.junit.Test;
 

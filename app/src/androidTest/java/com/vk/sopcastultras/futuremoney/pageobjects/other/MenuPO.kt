@@ -1,9 +1,10 @@
-package com.vk.sopcastultras.futuremoney.pageobjects
+package com.vk.sopcastultras.futuremoney.pageobjects.other
 
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.atdroid.atyurin.futuremoney.R
 import com.vk.sopcastultras.futuremoney.BasePage
+import com.vk.sopcastultras.futuremoney.click
 
 enum class Menu {
     TOTALS, ACCOUNTS, INCOMES, EXPENSES, ABOUT_APP

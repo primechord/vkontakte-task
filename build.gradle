@@ -32,8 +32,8 @@ allure {
 
 allprojects {
     repositories {
+        mavenCentral()
         maven {
-            mavenCentral()
             url 'https://maven.google.com/'
             name 'Google'
         }

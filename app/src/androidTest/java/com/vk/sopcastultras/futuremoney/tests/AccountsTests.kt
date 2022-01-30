@@ -3,10 +3,10 @@ package com.vk.sopcastultras.futuremoney.tests
 import com.atdroid.atyurin.futuremoney.serialization.Account
 import com.vk.sopcastultras.futuremoney.BaseTest
 import com.vk.sopcastultras.futuremoney.LocalDbClient
-import com.vk.sopcastultras.futuremoney.pageobjects.AccountPO
-import com.vk.sopcastultras.futuremoney.pageobjects.AccountsPO
-import com.vk.sopcastultras.futuremoney.pageobjects.Menu
-import com.vk.sopcastultras.futuremoney.pageobjects.MenuPO
+import com.vk.sopcastultras.futuremoney.pageobjects.account.AccountListPO
+import com.vk.sopcastultras.futuremoney.pageobjects.account.AccountPO
+import com.vk.sopcastultras.futuremoney.pageobjects.other.Menu
+import com.vk.sopcastultras.futuremoney.pageobjects.other.MenuPO
 import io.qameta.allure.kotlin.junit4.DisplayName
 import org.junit.Ignore
 import org.junit.Test
@@ -25,18 +25,18 @@ class AccountsTests : BaseTest() {
         val accountName = randomUUID().toString()
         val accountValue = Random.nextInt(until = 100).toString()
 
-        AccountsPO {
+        AccountListPO {
             createAccount()
         }
 
         AccountPO {
             enterName(accountName)
             enterAmount(accountValue)
-            save()
+            saveAccount()
         }
 
-        AccountsPO {
-            checkSave(accountName)
+        AccountListPO {
+            checkText(accountName)
         }
         // TODO Проверка создания через БД
     }
@@ -56,7 +56,7 @@ class AccountsTests : BaseTest() {
             goTo(Menu.ACCOUNTS)
         }
 
-        AccountsPO {
+        AccountListPO {
             openAccount(accountName)
         }
 
@@ -66,12 +66,12 @@ class AccountsTests : BaseTest() {
         AccountPO {
             enterName(updatedAccountName)
             enterAmount(updatedAccountValue)
-            save()
+            saveAccount()
         }
 
-        AccountsPO {
-            checkSave(updatedAccountName)
-            // checkSave(updatedAccountValue)
+        AccountListPO {
+            checkText(updatedAccountName)
+            // checkSaved(updatedAccountValue)
         }
     }
 
