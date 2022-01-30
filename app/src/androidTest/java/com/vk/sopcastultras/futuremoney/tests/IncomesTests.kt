@@ -75,7 +75,7 @@ class IncomesTests : BaseTest() {
         }
 
         val updatedIncomeName = incomeName.reversed()
-        val updatedIncomeSum = incomeValue.plus(50.0).toString()
+        val updatedIncomeSum = incomeValue.plus(50.0).roundDoubleTo2()
         val updatedIncomeDate = LocalDate.now().minusDays(1)
 
         IncomePO {

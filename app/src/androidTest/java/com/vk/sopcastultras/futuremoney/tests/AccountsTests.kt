@@ -40,7 +40,6 @@ class AccountsTests : BaseTest() {
         AccountListPO {
             checkText(accountName)
         }
-        // TODO Проверка создания через БД
     }
 
     @Test
@@ -63,7 +62,7 @@ class AccountsTests : BaseTest() {
         }
 
         val updatedAccountName = accountName.reversed()
-        val updatedAccountValue = accountValue.plus(50.0).toString() // где-то здесь большие знач
+        val updatedAccountValue = accountValue.plus(50.0).roundDoubleTo2()
 
         AccountPO {
             enterName(updatedAccountName)
@@ -73,7 +72,6 @@ class AccountsTests : BaseTest() {
 
         AccountListPO {
             checkText(updatedAccountName)
-            // checkSaved(updatedAccountValue)
         }
     }
 
