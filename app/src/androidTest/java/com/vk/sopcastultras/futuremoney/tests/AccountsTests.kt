@@ -63,7 +63,7 @@ class AccountsTests : BaseTest() {
         }
 
         val updatedAccountName = accountName.reversed()
-        val updatedAccountValue = accountValue.plus(50.0).toString()
+        val updatedAccountValue = accountValue.plus(50.0).toString() // где-то здесь большие знач
 
         AccountPO {
             enterName(updatedAccountName)

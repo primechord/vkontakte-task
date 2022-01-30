@@ -43,3 +43,7 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+task cleanAllureResults(type: Delete) {
+    delete files("$buildDir/allure-results")
+}

@@ -3,8 +3,9 @@ package com.vk.sopcastultras.futuremoney.pageobjects.other
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.atdroid.atyurin.futuremoney.R
+import com.atiurin.ultron.extensions.click
 import com.vk.sopcastultras.futuremoney.BasePage
-import com.vk.sopcastultras.futuremoney.click
+import com.vk.sopcastultras.futuremoney.myStep
 
 enum class Menu {
     TOTALS, ACCOUNTS, INCOMES, EXPENSES, ABOUT_APP
@@ -19,13 +20,15 @@ object MenuPO : BasePage<MenuPO>() {
     private val toolbar = withContentDescription(R.string.navigation_drawer_open)
 
     fun goTo(menu: Menu) {
-        toolbar.click()
-        when (menu) {
-            Menu.TOTALS -> totals.click()
-            Menu.ACCOUNTS -> accounts.click()
-            Menu.INCOMES -> incomes.click()
-            Menu.EXPENSES -> outcomes.click()
-            Menu.ABOUT_APP -> about.click()
+        myStep("Перейти на страницу '$menu'") {
+            toolbar.click()
+            when (menu) {
+                Menu.TOTALS -> totals.click()
+                Menu.ACCOUNTS -> accounts.click()
+                Menu.INCOMES -> incomes.click()
+                Menu.EXPENSES -> outcomes.click()
+                Menu.ABOUT_APP -> about.click()
+            }
         }
     }
 

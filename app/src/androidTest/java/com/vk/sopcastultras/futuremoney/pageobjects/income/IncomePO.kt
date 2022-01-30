@@ -3,11 +3,13 @@ package com.vk.sopcastultras.futuremoney.pageobjects.income
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.atdroid.atyurin.futuremoney.R
+import com.atiurin.ultron.extensions.clearText
+import com.atiurin.ultron.extensions.click
+import com.atiurin.ultron.extensions.typeText
 import com.vk.sopcastultras.futuremoney.BasePage
-import com.vk.sopcastultras.futuremoney.click
+import com.vk.sopcastultras.futuremoney.myStep
 import com.vk.sopcastultras.futuremoney.pageelement.Calendar
 import com.vk.sopcastultras.futuremoney.selectInSpinner
-import com.vk.sopcastultras.futuremoney.typeText
 import org.hamcrest.CoreMatchers.allOf
 import org.joda.time.LocalDate
 
@@ -27,23 +29,39 @@ object IncomePO : BasePage<IncomePO>() {
 
     private val okInCalendar = withId(android.R.id.button1)
 
-    fun enterName(text: String) = nameField.typeText(text)
+    fun enterName(text: String) {
+        myStep("Ввести имя '$text'") {
+            nameField.clearText()
+            nameField.typeText(text)
+        }
+    }
 
-    fun enterAmount(text: String) = amountField.typeText(text)
+    fun enterAmount(text: String) {
+        myStep("Ввести сумму '$text'") {
+            amountField.clearText()
+            amountField.typeText(text)
+        }
+    }
 
     // Можно было поддержать не только RU
-    fun selectType(budgetType: BudgetType) = when (budgetType) {
-        BudgetType.PERIODIC -> typeSpinner.selectInSpinner("Постоянный")
-        BudgetType.SINGLE -> typeSpinner.selectInSpinner("Разовый")
+    fun selectType(budgetType: BudgetType) {
+        myStep("Выбрать тип Дохода '$budgetType'") {
+            when (budgetType) {
+                BudgetType.PERIODIC -> typeSpinner.selectInSpinner("Постоянный")
+                BudgetType.SINGLE -> typeSpinner.selectInSpinner("Разовый")
+            }
+        }
     }
 
     // Можно было поддержать выбор периода дат
     fun selectSingleDate(localDate: LocalDate) {
-        singleDate.click()
-        Calendar.selectDate(localDate.year, localDate.monthOfYear, localDate.dayOfMonth)
-        okInCalendar.click()
+        myStep("Выбираем дату $localDate") {
+            singleDate.click()
+            Calendar.selectDate(localDate.year, localDate.monthOfYear, localDate.dayOfMonth)
+            okInCalendar.click()
+        }
     }
 
-    fun saveIncome() = saveButton.click()
+    fun saveIncome() = myStep("Нажать на Сохранить") { saveButton.click() }
 
 }

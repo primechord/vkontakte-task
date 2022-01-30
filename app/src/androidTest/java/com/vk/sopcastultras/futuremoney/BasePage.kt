@@ -1,6 +1,7 @@
 package com.vk.sopcastultras.futuremoney
 
 import androidx.test.espresso.matcher.ViewMatchers.withText
+import com.atiurin.ultron.extensions.isDisplayed
 
 abstract class BasePage<T> {
 
@@ -12,6 +13,8 @@ abstract class BasePage<T> {
     }
 
     fun checkText(accountName: String) {
-        withIndex(withText(accountName), 0).checkIsDisplayed() // FIXME временное решение
+        myStep("Проверяем видимость текста '$accountName'") {
+            withIndex(withText(accountName), 0).isDisplayed() // FIXME временное решение
+        }
     }
 }
