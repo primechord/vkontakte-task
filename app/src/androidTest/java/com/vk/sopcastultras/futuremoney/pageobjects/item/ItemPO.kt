@@ -1,4 +1,4 @@
-package com.vk.sopcastultras.futuremoney.pageobjects.income
+package com.vk.sopcastultras.futuremoney.pageobjects.item
 
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -21,10 +21,10 @@ enum class PeriodType {
     DAY, WEEK, MONTH, YEAR
 }
 
-object IncomePO : BasePage<IncomePO>() {
+object ItemPO : BasePage<ItemPO>() {
     private val nameField = withId(R.id.et_item_name_value)
     private val amountField = withId(R.id.et_item_amount_value)
-    private val incomeTypeSpinner = withId(R.id.sp_item_type)
+    private val itemTypeSpinner = withId(R.id.sp_item_type)
     private val saveButton = withId(R.id.action_btn_add_budget_item_confirm)
 
     private val singleDateElement = allOf(withId(R.id.ll_item_single_date), isDisplayed())
@@ -49,10 +49,10 @@ object IncomePO : BasePage<IncomePO>() {
 
     // Можно было поддержать не только RU
     fun selectBudgetType(budgetType: BudgetType) {
-        myStep("Выбрать тип Дохода '$budgetType'") {
+        myStep("Выбрать тип движения '$budgetType'") {
             when (budgetType) {
-                BudgetType.PERIODIC -> incomeTypeSpinner.selectInSpinner("Постоянный")
-                BudgetType.SINGLE -> incomeTypeSpinner.selectInSpinner("Разовый")
+                BudgetType.PERIODIC -> itemTypeSpinner.selectInSpinner("Постоянный")
+                BudgetType.SINGLE -> itemTypeSpinner.selectInSpinner("Разовый")
             }
         }
     }
@@ -88,6 +88,6 @@ object IncomePO : BasePage<IncomePO>() {
         }
     }
 
-    fun saveIncome() = myStep("Нажать на Сохранить") { saveButton.click() }
+    fun saveItem() = myStep("Нажать на Сохранить") { saveButton.click() }
 
 }

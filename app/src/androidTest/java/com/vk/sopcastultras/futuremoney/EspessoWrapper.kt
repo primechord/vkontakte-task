@@ -1,11 +1,7 @@
 package com.vk.sopcastultras.futuremoney
 
 import android.view.View
-import androidx.test.espresso.Espresso.onData
-import androidx.test.espresso.action.ViewActions
-import com.atiurin.ultron.extensions.click
 import io.qameta.allure.kotlin.Allure
-import org.hamcrest.CoreMatchers.*
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher

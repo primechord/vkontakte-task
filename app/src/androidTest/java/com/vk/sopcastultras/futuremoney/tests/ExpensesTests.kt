@@ -1,11 +1,11 @@
 package com.vk.sopcastultras.futuremoney.tests
 
-import com.atdroid.atyurin.futuremoney.serialization.Income
+import com.atdroid.atyurin.futuremoney.serialization.Outcome
 import com.atdroid.atyurin.futuremoney.utils.DateFormater
 import com.vk.sopcastultras.futuremoney.*
 import com.vk.sopcastultras.futuremoney.pageobjects.item.BudgetType
-import com.vk.sopcastultras.futuremoney.pageobjects.item.IncomeListPO
 import com.vk.sopcastultras.futuremoney.pageobjects.item.ItemPO
+import com.vk.sopcastultras.futuremoney.pageobjects.item.OutcomeListPO
 import com.vk.sopcastultras.futuremoney.pageobjects.item.PeriodType
 import com.vk.sopcastultras.futuremoney.pageobjects.other.Menu
 import com.vk.sopcastultras.futuremoney.pageobjects.other.MenuPO
@@ -13,26 +13,25 @@ import io.qameta.allure.kotlin.Epic
 import io.qameta.allure.kotlin.Feature
 import io.qameta.allure.kotlin.junit4.DisplayName
 import org.joda.time.LocalDate
-import org.junit.Ignore
 import org.junit.Test
 import kotlin.random.Random
 
 @Epic(SMOKE)
-@Feature(INCOMES)
-class IncomesTests : BaseTest() {
+@Feature(EXPENSES)
+class ExpensesTests : BaseTest() {
 
     @Test
-    @DisplayName("Создание разового прихода")
-    fun createIncomeSingle() {
-        val expectedItemName = "Income ${generateString(15)}"
+    @DisplayName("Создание разового расхода")
+    fun createExpenseSingle() {
+        val expectedItemName = "Outcome ${generateString(15)}"
         val expectedItemValue = Random.nextInt(until = 100).toString()
         val expectedItemDate = LocalDate.now()
 
         MenuPO {
-            goTo(Menu.INCOMES)
+            goTo(Menu.EXPENSES)
         }
 
-        IncomeListPO {
+        OutcomeListPO {
             create()
         }
 
@@ -44,25 +43,25 @@ class IncomesTests : BaseTest() {
             saveItem()
         }
 
-        IncomeListPO {
+        OutcomeListPO {
             checkText(expectedItemName)
         }
     }
 
     @Test
-    @DisplayName("Создание постоянного прихода")
-    fun createIncomePeriodic() {
-        val expectedItemName = "Income ${generateString(15)}"
+    @DisplayName("Создание постоянного расхода")
+    fun createExpensePeriodic() {
+        val expectedItemName = "Outcome ${generateString(15)}"
         val expectedItemValue = Random.nextInt(until = 100).toString()
         val expectedItemBeginDate = LocalDate.now().minusDays(2)
         val expectedItemEndDate = LocalDate.now().minusDays(1)
-        val expectedItemPeriodValue = "7"
+        val expectedPeriodValue = "7"
 
         MenuPO {
-            goTo(Menu.INCOMES)
+            goTo(Menu.EXPENSES)
         }
 
-        IncomeListPO {
+        OutcomeListPO {
             create()
         }
 
@@ -72,25 +71,25 @@ class IncomesTests : BaseTest() {
 
             selectBudgetType(BudgetType.PERIODIC)
             selectDatePeriod(expectedItemBeginDate, expectedItemEndDate)
-            enterPeriod(expectedItemPeriodValue)
+            enterPeriod(expectedPeriodValue)
             selectPeriodType(PeriodType.MONTH)
 
             saveItem()
         }
 
-        IncomeListPO {
+        OutcomeListPO {
             checkText(expectedItemName)
         }
     }
 
     @Test
-    @DisplayName("Редактирование уже созданного прихода")
-    fun updateIncome() {
-        val expectedItemName = "Income ${generateString(15)}"
+    @DisplayName("Редактирование уже созданного расхода")
+    fun updateExpense() {
+        val expectedItemName = "Outcome ${generateString(15)}"
         val expectedItemValue = Random.nextDouble(until = 100.0)
         val expectedItemDate = DateFormater.formatLongToCalendar(System.currentTimeMillis())
 
-        ItemFactory.insertIncome(Income().apply {
+        ItemFactory.insertOutcome(Outcome().apply {
             name = expectedItemName
             value = expectedItemValue
             single_date = expectedItemDate
@@ -102,10 +101,10 @@ class IncomesTests : BaseTest() {
         })
 
         MenuPO {
-            goTo(Menu.INCOMES)
+            goTo(Menu.EXPENSES)
         }
 
-        IncomeListPO {
+        OutcomeListPO {
             openExisting(expectedItemName)
         }
 
@@ -121,7 +120,7 @@ class IncomesTests : BaseTest() {
             saveItem()
         }
 
-        IncomeListPO {
+        OutcomeListPO {
             checkText(updatedItemName)
         }
     }
