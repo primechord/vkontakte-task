@@ -9,7 +9,7 @@ import com.atiurin.ultron.extensions.typeText
 import com.vk.sopcastultras.futuremoney.BasePage
 import com.vk.sopcastultras.futuremoney.myStep
 import com.vk.sopcastultras.futuremoney.pageelement.Calendar
-import com.vk.sopcastultras.futuremoney.selectInSpinner
+import com.vk.sopcastultras.futuremoney.pageelement.Spinner.selectInSpinner
 import org.hamcrest.CoreMatchers.allOf
 import org.joda.time.LocalDate
 

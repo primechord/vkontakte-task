@@ -12,11 +12,6 @@ import org.hamcrest.TypeSafeMatcher
 
 fun myStep(name: String, action: () -> Unit) = Allure.step(name) { action.invoke() }
 
-fun Matcher<View>.selectInSpinner(value: String) {
-    this.click()
-    onData(allOf(`is`(instanceOf(String::class.java)), `is`(value))).perform(ViewActions.click())
-}
-
 fun withIndex(matcher: Matcher<View>, index: Int): Matcher<View> {
     return object : TypeSafeMatcher<View>() {
         var currentIndex = 0
