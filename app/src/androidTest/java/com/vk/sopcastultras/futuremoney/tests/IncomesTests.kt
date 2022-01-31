@@ -6,6 +6,7 @@ import com.vk.sopcastultras.futuremoney.*
 import com.vk.sopcastultras.futuremoney.pageobjects.income.BudgetType
 import com.vk.sopcastultras.futuremoney.pageobjects.income.IncomeListPO
 import com.vk.sopcastultras.futuremoney.pageobjects.income.IncomePO
+import com.vk.sopcastultras.futuremoney.pageobjects.income.PeriodType
 import com.vk.sopcastultras.futuremoney.pageobjects.other.Menu
 import com.vk.sopcastultras.futuremoney.pageobjects.other.MenuPO
 import io.qameta.allure.kotlin.Epic
@@ -21,8 +22,8 @@ import kotlin.random.Random
 class IncomesTests : BaseTest() {
 
     @Test
-    @DisplayName("Позитивное создание прихода")
-    fun createIncome() {
+    @DisplayName("Создание разового прихода")
+    fun createIncomeSingle() {
         val incomeName = "Income ${generateString(15)}"
         val incomeValue = Random.nextInt(until = 100).toString()
         val incomeDate = LocalDate.now()
@@ -38,8 +39,42 @@ class IncomesTests : BaseTest() {
         IncomePO {
             enterName(incomeName)
             enterAmount(incomeValue)
-            selectType(BudgetType.SINGLE)
+            selectBudgetType(BudgetType.SINGLE)
             selectSingleDate(incomeDate)
+            saveIncome()
+        }
+
+        IncomeListPO {
+            checkText(incomeName)
+        }
+    }
+
+    @Test
+    @DisplayName("Создание постоянного прихода")
+    fun createIncomePeriodic() {
+        val incomeName = "Income ${generateString(15)}"
+        val incomeValue = Random.nextInt(until = 100).toString()
+        val beginDate = LocalDate.now().minusDays(2)
+        val endDate = LocalDate.now().minusDays(1)
+        val periodValue = "7"
+
+        MenuPO {
+            goTo(Menu.INCOMES)
+        }
+
+        IncomeListPO {
+            createIncome()
+        }
+
+        IncomePO {
+            enterName(incomeName)
+            enterAmount(incomeValue)
+
+            selectBudgetType(BudgetType.PERIODIC)
+            selectDatePeriod(beginDate, endDate)
+            enterPeriod(periodValue)
+            selectPeriodType(PeriodType.MONTH)
+
             saveIncome()
         }
 
@@ -81,7 +116,7 @@ class IncomesTests : BaseTest() {
         IncomePO {
             enterName(updatedIncomeName)
             enterAmount(updatedIncomeSum)
-            selectType(BudgetType.SINGLE)
+            selectBudgetType(BudgetType.SINGLE)
             selectSingleDate(updatedIncomeDate)
             saveIncome()
         }
