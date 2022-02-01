@@ -1,6 +1,5 @@
 package com.vk.sopcastultras.futuremoney.tests
 
-import com.atdroid.atyurin.futuremoney.serialization.Account
 import com.vk.sopcastultras.futuremoney.*
 import com.vk.sopcastultras.futuremoney.pageobjects.account.AccountListPO
 import com.vk.sopcastultras.futuremoney.pageobjects.account.AccountPO
@@ -48,10 +47,10 @@ class AccountsTests : BaseTest() {
         val accountName = "Account ${generateString(15)}"
         val accountValue = Random.nextDouble(until = 100.0)
 
-        ItemFactory.addAccount(Account().apply {
+        ItemFactory.addAccount {
             name = accountName
             value = accountValue
-        })
+        }
 
         MenuPO {
             goTo(Menu.ACCOUNTS)

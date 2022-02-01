@@ -89,7 +89,7 @@ class ExpensesTests : BaseTest() {
         val expectedItemValue = Random.nextDouble(until = 100.0)
         val expectedItemDate = DateFormater.formatLongToCalendar(System.currentTimeMillis())
 
-        ItemFactory.insertOutcome(Outcome().apply {
+        ItemFactory.insertOutcome {
             name = expectedItemName
             value = expectedItemValue
             single_date = expectedItemDate
@@ -98,7 +98,7 @@ class ExpensesTests : BaseTest() {
             type = 0
             period_type = 0
             period_value = 1
-        })
+        }
 
         MenuPO {
             goTo(Menu.EXPENSES)

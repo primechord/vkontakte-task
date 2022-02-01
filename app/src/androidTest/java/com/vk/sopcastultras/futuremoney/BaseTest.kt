@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.atdroid.atyurin.futuremoney.activity.MainActivity
+import com.atdroid.atyurin.futuremoney.utils.DBHelper.DATABASE_NAME
 import io.qameta.allure.android.rules.LogcatRule
 import io.qameta.allure.android.rules.ScreenshotRule
 import io.qameta.allure.android.rules.WindowHierarchyRule
@@ -30,7 +31,7 @@ abstract class BaseTest {
 
     @Before
     open fun setup() {
-        InstrumentationRegistry.getInstrumentation().targetContext.deleteDatabase("FutureMoneyDB")
+        InstrumentationRegistry.getInstrumentation().targetContext.deleteDatabase(DATABASE_NAME)
 
         activityTestRule.launchActivity(Intent())
     }

@@ -13,7 +13,6 @@ import io.qameta.allure.kotlin.Epic
 import io.qameta.allure.kotlin.Feature
 import io.qameta.allure.kotlin.junit4.DisplayName
 import org.joda.time.LocalDate
-import org.junit.Ignore
 import org.junit.Test
 import kotlin.random.Random
 
@@ -90,7 +89,7 @@ class IncomesTests : BaseTest() {
         val expectedItemValue = Random.nextDouble(until = 100.0)
         val expectedItemDate = DateFormater.formatLongToCalendar(System.currentTimeMillis())
 
-        ItemFactory.insertIncome(Income().apply {
+        ItemFactory.insertIncome {
             name = expectedItemName
             value = expectedItemValue
             single_date = expectedItemDate
@@ -99,7 +98,7 @@ class IncomesTests : BaseTest() {
             type = 0
             period_type = 0
             period_value = 1
-        })
+        }
 
         MenuPO {
             goTo(Menu.INCOMES)

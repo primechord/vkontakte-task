@@ -10,27 +10,26 @@ import com.atdroid.atyurin.futuremoney.serialization.Outcome
 
 object ItemFactory {
 
-    fun addAccount(account: Account) {
+    fun addAccount(param: Account.() -> Unit) {
         AccountsDAO(getInstrumentation().targetContext).run {
             openWritable()
-            addAccount(account)
+            addAccount(Account().apply(param))
             close()
         }
-
     }
 
-    fun insertIncome(income: Income) {
+    fun insertIncome(param: Income.() -> Unit) {
         IncomesDAO(getInstrumentation().targetContext).run {
             openWritable()
-            addIncome(income)
+            addIncome(Income().apply(param))
             close()
         }
     }
 
-    fun insertOutcome(outcome: Outcome) {
+    fun insertOutcome(param: Outcome.() -> Unit) {
         OutcomesDAO(getInstrumentation().targetContext).run {
             openWritable()
-            addOutcome(outcome)
+            addOutcome(Outcome().apply(param))
             close()
         }
     }
