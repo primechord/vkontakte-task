@@ -23,7 +23,7 @@ class IncomesTests : BaseTest() {
     @DisplayName("Создание разового прихода")
     fun createIncomeSingle() {
         val expectedItemName = "Income ${randomString(15)}"
-        val expectedItemValue = Random.nextInt(until = 100).toString()
+        val expectedItemSum = Random.nextInt(until = 100).toString()
         val expectedItemDate = LocalDate.now()
 
         MenuPO {
@@ -36,7 +36,7 @@ class IncomesTests : BaseTest() {
 
         ItemPO {
             enterName(expectedItemName)
-            enterAmount(expectedItemValue)
+            enterAmount(expectedItemSum)
             selectBudgetType(BudgetType.SINGLE)
             selectSingleDate(expectedItemDate)
             saveItem()
@@ -51,7 +51,7 @@ class IncomesTests : BaseTest() {
     @DisplayName("Создание постоянного прихода")
     fun createIncomePeriodic() {
         val expectedItemName = "Income ${randomString(15)}"
-        val expectedItemValue = Random.nextInt(until = 100).toString()
+        val expectedItemSum = Random.nextInt(until = 100).toString()
         val expectedItemBeginDate = LocalDate.now().minusDays(2)
         val expectedItemEndDate = LocalDate.now().minusDays(1)
         val expectedItemPeriodValue = "7"
@@ -66,7 +66,7 @@ class IncomesTests : BaseTest() {
 
         ItemPO {
             enterName(expectedItemName)
-            enterAmount(expectedItemValue)
+            enterAmount(expectedItemSum)
 
             selectBudgetType(BudgetType.PERIODIC)
             selectDatePeriod(expectedItemBeginDate, expectedItemEndDate)
@@ -85,12 +85,12 @@ class IncomesTests : BaseTest() {
     @DisplayName("Редактирование уже созданного прихода")
     fun updateIncome() {
         val expectedItemName = "Income ${randomString(15)}"
-        val expectedItemValue = Random.nextDouble(until = 100.0)
+        val expectedItemSum = Random.nextDouble(until = 100.0)
         val expectedItemDate = DateFormater.formatLongToCalendar(System.currentTimeMillis())
 
         ItemFactory.insertIncome {
             name = expectedItemName
-            value = expectedItemValue
+            value = expectedItemSum
             single_date = expectedItemDate
             begin_date = expectedItemDate
             end_date = expectedItemDate
@@ -108,7 +108,7 @@ class IncomesTests : BaseTest() {
         }
 
         val updatedItemName = expectedItemName.reversed()
-        val updatedItemSum = expectedItemValue.plus(50.0).roundDoubleTo2()
+        val updatedItemSum = expectedItemSum.plus(50.0).roundDoubleTo2()
         val updatedItemDate = LocalDate.now().minusDays(1)
 
         ItemPO {

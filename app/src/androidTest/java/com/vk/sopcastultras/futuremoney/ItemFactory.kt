@@ -23,7 +23,7 @@ object ItemFactory {
         IncomesDAO(getInstrumentation().targetContext).run {
             openWritable()
             val income = Income().apply(param)
-            myStep("INSERT Income ${income.name}") { addIncome(income) }
+            myStep("Insert Income ${income.name}") { addIncome(income) }
             close()
         }
     }
@@ -32,7 +32,7 @@ object ItemFactory {
         OutcomesDAO(getInstrumentation().targetContext).run {
             openWritable()
             val outcome = Outcome().apply(param)
-            myStep("INSERT Outcome ${outcome.name}") { addOutcome(outcome) }
+            myStep("Insert Outcome ${outcome.name}") { addOutcome(outcome) }
             close()
         }
     }

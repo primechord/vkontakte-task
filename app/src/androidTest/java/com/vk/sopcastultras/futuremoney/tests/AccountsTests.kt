@@ -8,7 +8,6 @@ import com.vk.sopcastultras.futuremoney.pageobjects.other.MenuPO
 import io.qameta.allure.kotlin.Epic
 import io.qameta.allure.kotlin.Feature
 import io.qameta.allure.kotlin.junit4.DisplayName
-import org.junit.Ignore
 import org.junit.Test
 import kotlin.random.Random
 
@@ -37,7 +36,8 @@ class AccountsTests : BaseTest() {
         }
 
         AccountListPO {
-            checkText(accountName)
+            checkName(accountName)
+            checkSum(accountValue)
         }
     }
 
@@ -70,7 +70,8 @@ class AccountsTests : BaseTest() {
         }
 
         AccountListPO {
-            checkText(updatedAccountName)
+            checkName(updatedAccountName)
+            checkSum(updatedAccountValue)
         }
     }
 
