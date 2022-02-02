@@ -12,7 +12,7 @@ import com.vk.sopcastultras.futuremoney.withIndex
 object AccountListPO : BasePage<AccountListPO>() {
     private val createButton = withId(R.id.fab)
     private val accountName = withId(R.id.tv_budget_item_name)
-    private val accountValue = withId(R.id.tv_budget_item_value)
+    private val accountSum = withId(R.id.tv_budget_item_value)
 
     fun createAccount() = myStep("Нажать на фаб Создания аккаунта") { createButton.click() }
 
@@ -28,7 +28,7 @@ object AccountListPO : BasePage<AccountListPO>() {
 
     fun checkSum(expected: String, position: Int = 0) {
         myStep("Ожидаем сумму '$expected' позиции №$position") {
-            withIndex(accountValue, position).hasText(expected)
+            withIndex(accountSum, position).hasText(expected)
         }
     }
 }

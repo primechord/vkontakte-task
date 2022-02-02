@@ -2,10 +2,7 @@ package com.vk.sopcastultras.futuremoney.tests
 
 import com.atdroid.atyurin.futuremoney.utils.DateFormater
 import com.vk.sopcastultras.futuremoney.*
-import com.vk.sopcastultras.futuremoney.pageobjects.item.BudgetType
-import com.vk.sopcastultras.futuremoney.pageobjects.item.IncomeListPO
-import com.vk.sopcastultras.futuremoney.pageobjects.item.ItemPO
-import com.vk.sopcastultras.futuremoney.pageobjects.item.PeriodType
+import com.vk.sopcastultras.futuremoney.pageobjects.item.*
 import com.vk.sopcastultras.futuremoney.pageobjects.other.Menu
 import com.vk.sopcastultras.futuremoney.pageobjects.other.MenuPO
 import io.qameta.allure.kotlin.Epic
@@ -43,7 +40,11 @@ class IncomesTests : BaseTest() {
         }
 
         IncomeListPO {
-            checkText(expectedItemName)
+            AssertItem {
+                checkName(expectedItemName)
+                checkSum(expectedItemSum)
+                checkDate(expectedItemDate)
+            }
         }
     }
 
@@ -77,7 +78,11 @@ class IncomesTests : BaseTest() {
         }
 
         IncomeListPO {
-            checkText(expectedItemName)
+            AssertItem {
+                checkName(expectedItemName)
+                checkSum(expectedItemSum)
+                checkDatePeriodic(expectedItemBeginDate, expectedItemEndDate)
+            }
         }
     }
 
@@ -120,7 +125,11 @@ class IncomesTests : BaseTest() {
         }
 
         IncomeListPO {
-            checkText(updatedItemName)
+            AssertItem {
+                checkName(updatedItemName)
+                checkSum(updatedItemSum)
+                checkDate(updatedItemDate)
+            }
         }
     }
 

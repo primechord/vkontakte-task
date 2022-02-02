@@ -8,7 +8,7 @@ import com.vk.sopcastultras.futuremoney.BasePage
 import com.vk.sopcastultras.futuremoney.myStep
 
 enum class Menu {
-    TOTALS, ACCOUNTS, INCOMES, EXPENSES, ABOUT_APP
+    TOTALS, ACCOUNTS, INCOMES, OUTCOMES, ABOUT_APP
 }
 
 object MenuPO : BasePage<MenuPO>() {
@@ -26,7 +26,7 @@ object MenuPO : BasePage<MenuPO>() {
                 Menu.TOTALS -> totals.click()
                 Menu.ACCOUNTS -> accounts.click()
                 Menu.INCOMES -> incomes.click()
-                Menu.EXPENSES -> outcomes.click()
+                Menu.OUTCOMES -> outcomes.click()
                 Menu.ABOUT_APP -> about.click()
             }
         }

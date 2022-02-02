@@ -17,10 +17,10 @@ enum class TotalBeginTypes {
 }
 
 object TotalsPO : BasePage<TotalsPO>() {
-    private val accountsTotalValue = withId(R.id.tv_accounts_total_value)
-    private val incomesTotalValue = withId(R.id.tv_incomes_total_value)
-    private val outcomesTotalValue = withId(R.id.tv_outcomes_total_value)
-    private val generalTotalValue = withId(R.id.tv_total_value)
+    private val accountsSum = withId(R.id.tv_accounts_total_value)
+    private val incomesSum = withId(R.id.tv_incomes_total_value)
+    private val outcomesSum = withId(R.id.tv_outcomes_total_value)
+    private val totalSum = withId(R.id.tv_total_value)
 
     private val calculateTotalsButton = withId(R.id.action_btn_calc_totals)
 
@@ -51,25 +51,25 @@ object TotalsPO : BasePage<TotalsPO>() {
 
     fun checkAccountsTotal(expected: String) {
         myStep("Ожидаем итоги для счетов '$expected'") {
-            accountsTotalValue.textContains(expected)
+            accountsSum.textContains(expected)
         }
     }
 
     fun checkIncomesTotal(expected: String) {
         myStep("Ожидаем итоги для доходов '$expected'") {
-            incomesTotalValue.textContains(expected)
+            incomesSum.textContains(expected)
         }
     }
 
     fun checkOutcomesTotal(expected: String) {
         myStep("Ожидаем итоги для расходов '$expected'") {
-            outcomesTotalValue.textContains(expected)
+            outcomesSum.textContains(expected)
         }
     }
 
     fun checkGeneralTotal(expected: String) {
         myStep("Ожидаем общие итоги '$expected'") {
-            generalTotalValue.textContains(expected)
+            totalSum.textContains(expected)
         }
     }
 
