@@ -1,6 +1,5 @@
 package com.vk.sopcastultras.futuremoney.tests
 
-import com.atdroid.atyurin.futuremoney.serialization.Income
 import com.atdroid.atyurin.futuremoney.utils.DateFormater
 import com.vk.sopcastultras.futuremoney.*
 import com.vk.sopcastultras.futuremoney.pageobjects.item.BudgetType
@@ -23,7 +22,7 @@ class IncomesTests : BaseTest() {
     @Test
     @DisplayName("Создание разового прихода")
     fun createIncomeSingle() {
-        val expectedItemName = "Income ${generateString(15)}"
+        val expectedItemName = "Income ${randomString(15)}"
         val expectedItemValue = Random.nextInt(until = 100).toString()
         val expectedItemDate = LocalDate.now()
 
@@ -51,7 +50,7 @@ class IncomesTests : BaseTest() {
     @Test
     @DisplayName("Создание постоянного прихода")
     fun createIncomePeriodic() {
-        val expectedItemName = "Income ${generateString(15)}"
+        val expectedItemName = "Income ${randomString(15)}"
         val expectedItemValue = Random.nextInt(until = 100).toString()
         val expectedItemBeginDate = LocalDate.now().minusDays(2)
         val expectedItemEndDate = LocalDate.now().minusDays(1)
@@ -85,7 +84,7 @@ class IncomesTests : BaseTest() {
     @Test
     @DisplayName("Редактирование уже созданного прихода")
     fun updateIncome() {
-        val expectedItemName = "Income ${generateString(15)}"
+        val expectedItemName = "Income ${randomString(15)}"
         val expectedItemValue = Random.nextDouble(until = 100.0)
         val expectedItemDate = DateFormater.formatLongToCalendar(System.currentTimeMillis())
 

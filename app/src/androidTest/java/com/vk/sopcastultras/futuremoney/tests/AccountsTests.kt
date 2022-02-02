@@ -19,7 +19,7 @@ class AccountsTests : BaseTest() {
     @Test
     @DisplayName("Позитивное создание счета")
     fun createAccount() {
-        val accountName = "Account ${generateString(15)}"
+        val accountName = "Account ${randomString(15)}"
         val accountValue = Random.nextInt(until = 100).toString()
 
         MenuPO {
@@ -44,7 +44,7 @@ class AccountsTests : BaseTest() {
     @Test
     @DisplayName("Редактирование уже созданного")
     fun updateAccount() {
-        val accountName = "Account ${generateString(15)}"
+        val accountName = "Account ${randomString(15)}"
         val accountValue = Random.nextDouble(until = 100.0)
 
         ItemFactory.addAccount {

@@ -2,7 +2,7 @@ package com.vk.sopcastultras.futuremoney
 
 import java.util.*
 
-fun generateString(length: Int): String {
+fun randomString(length: Int = 10): String {
     require(length <= 36)
     return UUID.randomUUID().toString().take(length)
 }
