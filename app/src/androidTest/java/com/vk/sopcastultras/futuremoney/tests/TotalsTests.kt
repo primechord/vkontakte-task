@@ -1,15 +1,17 @@
 package com.vk.sopcastultras.futuremoney.tests
 
 import com.atdroid.atyurin.futuremoney.utils.DateFormater
-import com.vk.sopcastultras.futuremoney.BaseTest
-import com.vk.sopcastultras.futuremoney.ItemFactory
+import com.vk.sopcastultras.futuremoney.*
 import com.vk.sopcastultras.futuremoney.pageobjects.totals.TotalBeginTypes
 import com.vk.sopcastultras.futuremoney.pageobjects.totals.TotalsPO
-import com.vk.sopcastultras.futuremoney.randomString
+import io.qameta.allure.kotlin.Epic
+import io.qameta.allure.kotlin.Feature
 import io.qameta.allure.kotlin.junit4.DisplayName
 import org.joda.time.LocalDate
 import org.junit.Test
 
+@Epic(SMOKE)
+@Feature(TOTALS)
 class TotalsTests : BaseTest() {
 
     @Test

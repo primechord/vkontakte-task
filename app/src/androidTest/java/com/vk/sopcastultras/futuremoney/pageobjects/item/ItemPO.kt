@@ -30,11 +30,11 @@ object ItemPO : BasePage<ItemPO>() {
     private val singleDateElement = allOf(withId(R.id.ll_item_single_date), isDisplayed())
     private val beginDateElement = withId(R.id.ll_item_begin_date)
     private val endDateElement = withId(R.id.ll_item_end_date)
-    private val periodValue = withId(R.id.et_period_value)
+    private val periodField = withId(R.id.et_period_value)
     private val periodTypeSpinner = withId(R.id.sp_period_type_spinner)
 
     fun enterName(text: String) {
-        myStep("Ввести имя '$text'") {
+        myStep("Ввести название '$text'") {
             nameField.clearText()
             nameField.typeText(text)
         }
@@ -64,7 +64,7 @@ object ItemPO : BasePage<ItemPO>() {
     }
 
     fun selectDatePeriod(beginDateInput: LocalDate, endDateInput: LocalDate) {
-        myStep("Выбираем период дат с $beginDateInput по $endDateInput") {
+        myStep("Выбираем период дат с '$beginDateInput' по '$endDateInput'") {
             Calendar.selectDate(beginDateElement, beginDateInput)
             Calendar.selectDate(endDateElement, endDateInput)
         }
@@ -72,8 +72,8 @@ object ItemPO : BasePage<ItemPO>() {
 
     fun enterPeriod(text: String) {
         myStep("Ввести период '$text'") {
-            periodValue.clearText()
-            periodValue.typeText(text)
+            periodField.clearText()
+            periodField.typeText(text)
         }
     }
 

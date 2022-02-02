@@ -74,18 +74,4 @@ class AccountsTests : BaseTest() {
         }
     }
 
-    @Ignore
-    @Test
-    @DisplayName("Подтверждение без заполнения всего")
-    fun emptyFields() {
-
-    }
-
-    @Ignore
-    @Test
-    @DisplayName("Отображение списочной формы и прокрутка")
-    fun listOfAccounts() {
-
-    }
-
 }

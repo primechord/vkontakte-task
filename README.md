@@ -1,6 +1,7 @@
 > Отсутствие Kaspresso одно из требований тестового задания  
 
+Запустить тесты из пакета  
 Удалить локальные allure-results ```gradle deleteAllureResults```  
-Забрать результаты ```adb pull /sdcard/allure-results build/allure-results```  
+Забрать с устройства allure-results ```adb pull /sdcard/allure-results build/allure-results```  
 Собрать отчет ```gradle allureReport```  
-И посмотреть отчет ```build/reports/allure-report/index.html```  
+Посмотреть отчет ```build/reports/allure-report/index.html```  

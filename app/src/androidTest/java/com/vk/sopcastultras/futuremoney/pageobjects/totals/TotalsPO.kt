@@ -43,7 +43,7 @@ object TotalsPO : BasePage<TotalsPO>() {
 
     // Не кликается
     fun selectDate(selectedDate: LocalDate, datePickerNumber: Int) {
-        myStep("Выбираем расчетную дату '$selectedDate'") {
+        myStep("Выбираем расчетную дату '$selectedDate' для календаря №$datePickerNumber") {
             val matcher = withIndex(withSubstring(selectedDate.year.toString()), datePickerNumber)
             Calendar.selectDate(matcher, selectedDate)
         }

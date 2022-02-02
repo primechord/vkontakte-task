@@ -13,7 +13,8 @@ object ItemFactory {
     fun addAccount(param: Account.() -> Unit) {
         AccountsDAO(getInstrumentation().targetContext).run {
             openWritable()
-            addAccount(Account().apply(param))
+            val account = Account().apply(param)
+            myStep("Insert Account ${account.name}") { addAccount(account) }
             close()
         }
     }
@@ -21,7 +22,8 @@ object ItemFactory {
     fun insertIncome(param: Income.() -> Unit) {
         IncomesDAO(getInstrumentation().targetContext).run {
             openWritable()
-            addIncome(Income().apply(param))
+            val income = Income().apply(param)
+            myStep("INSERT Income ${income.name}") { addIncome(income) }
             close()
         }
     }
@@ -29,7 +31,8 @@ object ItemFactory {
     fun insertOutcome(param: Outcome.() -> Unit) {
         OutcomesDAO(getInstrumentation().targetContext).run {
             openWritable()
-            addOutcome(Outcome().apply(param))
+            val outcome = Outcome().apply(param)
+            myStep("INSERT Outcome ${outcome.name}") { addOutcome(outcome) }
             close()
         }
     }
