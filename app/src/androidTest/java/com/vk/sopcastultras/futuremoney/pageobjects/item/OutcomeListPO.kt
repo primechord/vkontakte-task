@@ -11,7 +11,7 @@ import com.vk.sopcastultras.futuremoney.withIndex
 object OutcomeListPO : BasePage<OutcomeListPO>() {
     private val createButton = withId(R.id.fab)
 
-    fun create() = myStep("Нажать на фаб Создания расхода") { createButton.click() }
+    fun createOutcome() = myStep("Нажать на фаб Создания расхода") { createButton.click() }
 
     fun openExisting(outcomeName: String) {
         myStep("Открыть уже Созданный расход '$outcomeName'") {

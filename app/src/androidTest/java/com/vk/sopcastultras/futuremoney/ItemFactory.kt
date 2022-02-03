@@ -7,6 +7,8 @@ import com.atdroid.atyurin.futuremoney.dao.OutcomesDAO
 import com.atdroid.atyurin.futuremoney.serialization.Account
 import com.atdroid.atyurin.futuremoney.serialization.Income
 import com.atdroid.atyurin.futuremoney.serialization.Outcome
+import com.atdroid.atyurin.futuremoney.utils.DateFormater
+import java.util.*
 
 object ItemFactory {
 
@@ -37,4 +39,5 @@ object ItemFactory {
         }
     }
 
+    fun currentDate(): Calendar = DateFormater.formatLongToCalendar(System.currentTimeMillis())
 }

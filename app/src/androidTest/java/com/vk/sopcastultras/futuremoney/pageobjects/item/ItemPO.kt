@@ -40,7 +40,7 @@ object ItemPO : BasePage<ItemPO>() {
         }
     }
 
-    fun enterAmount(text: String) {
+    fun enterSum(text: String) {
         myStep("Ввести сумму '$text'") {
             amountField.clearText()
             amountField.typeText(text)
@@ -70,10 +70,10 @@ object ItemPO : BasePage<ItemPO>() {
         }
     }
 
-    fun enterPeriod(text: String) {
+    fun enterPeriod(text: Int) {
         myStep("Ввести период '$text'") {
             periodField.clearText()
-            periodField.typeText(text)
+            periodField.typeText(text.toString())
         }
     }
 

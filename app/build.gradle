@@ -36,6 +36,8 @@ android {
     }
 }
 
+def allureKotlinVersion = "2.2.5"
+
 dependencies {
 //    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -55,8 +57,8 @@ dependencies {
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
     androidTestImplementation 'com.atiurin:ultron:1.0.13'
 
-    androidTestImplementation "io.qameta.allure:allure-kotlin-model:2.2.5"
-    androidTestImplementation "io.qameta.allure:allure-kotlin-commons:2.2.5"
-    androidTestImplementation "io.qameta.allure:allure-kotlin-junit4:2.2.5"
-    androidTestImplementation "io.qameta.allure:allure-kotlin-android:2.2.5"
+    androidTestImplementation "io.qameta.allure:allure-kotlin-model:$allureKotlinVersion"
+    androidTestImplementation "io.qameta.allure:allure-kotlin-commons:$allureKotlinVersion"
+    androidTestImplementation "io.qameta.allure:allure-kotlin-junit4:$allureKotlinVersion"
+    androidTestImplementation "io.qameta.allure:allure-kotlin-android:$allureKotlinVersion"
 }

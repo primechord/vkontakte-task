@@ -20,7 +20,7 @@ object AccountPO : BasePage<AccountPO>() {
         }
     }
 
-    fun enterAmount(text: String) {
+    fun enterSum(text: String) {
         myStep("Ввести сумму '$text'") {
             amountField.clearText()
             amountField.typeText(text)

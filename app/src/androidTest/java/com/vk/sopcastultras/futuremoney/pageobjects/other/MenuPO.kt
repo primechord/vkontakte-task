@@ -20,7 +20,7 @@ object MenuPO : BasePage<MenuPO>() {
     private val toolbar = withContentDescription(R.string.navigation_drawer_open)
 
     fun goTo(menu: Menu) {
-        myStep("Перейти на страницу '$menu'") {
+        myStep("Перейти на экран '$menu'") {
             toolbar.click()
             when (menu) {
                 Menu.TOTALS -> totals.click()

@@ -1,6 +1,5 @@
 package com.vk.sopcastultras.futuremoney.tests
 
-import com.atdroid.atyurin.futuremoney.utils.DateFormater
 import com.vk.sopcastultras.futuremoney.*
 import com.vk.sopcastultras.futuremoney.pageobjects.totals.TotalBeginTypes
 import com.vk.sopcastultras.futuremoney.pageobjects.totals.TotalsPO
@@ -21,7 +20,7 @@ class TotalsTests : BaseTest() {
         val expectedIncomeTotal = "150"
         val expectedOutcomeTotal = "100"
         val expectedGeneralTotal = "100"
-        val currentDate = DateFormater.formatLongToCalendar(System.currentTimeMillis())
+        val currentDate = ItemFactory.currentDate()
 
         repeat(5) {
             ItemFactory.addAccount {
@@ -72,7 +71,7 @@ class TotalsTests : BaseTest() {
         val expectedIncomeTotal = "150"
         val expectedOutcomeTotal = "100"
         val expectedGeneralTotal = "100"
-        val currentDate = DateFormater.formatLongToCalendar(System.currentTimeMillis())
+        val currentDate = ItemFactory.currentDate()
 
         repeat(5) {
             ItemFactory.addAccount {

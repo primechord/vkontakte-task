@@ -16,10 +16,10 @@ import kotlin.random.Random
 class AccountsTests : BaseTest() {
 
     @Test
-    @DisplayName("Позитивное создание счета")
+    @DisplayName("Создание счета")
     fun createAccount() {
-        val accountName = "Account ${randomString(15)}"
-        val accountValue = Random.nextInt(until = 100).toString()
+        val expectedAccountName = "Account ${randomString(15)}"
+        val expectedAccountSum = Random.nextInt(until = 100).toString()
 
         MenuPO {
             goTo(Menu.ACCOUNTS)
@@ -30,26 +30,26 @@ class AccountsTests : BaseTest() {
         }
 
         AccountPO {
-            enterName(accountName)
-            enterAmount(accountValue)
+            enterName(expectedAccountName)
+            enterSum(expectedAccountSum)
             saveAccount()
         }
 
         AccountListPO {
-            checkName(accountName)
-            checkSum(accountValue)
+            checkName(expectedAccountName)
+            checkSum(expectedAccountSum)
         }
     }
 
     @Test
-    @DisplayName("Редактирование уже созданного")
+    @DisplayName("Редактирование уже созданного счета")
     fun updateAccount() {
         val accountName = "Account ${randomString(15)}"
-        val accountValue = Random.nextDouble(until = 100.0)
+        val accountSum = Random.nextDouble(until = 100.0)
 
         ItemFactory.addAccount {
             name = accountName
-            value = accountValue
+            value = accountSum
         }
 
         MenuPO {
@@ -61,17 +61,17 @@ class AccountsTests : BaseTest() {
         }
 
         val updatedAccountName = accountName.reversed()
-        val updatedAccountValue = accountValue.plus(50.0).roundDoubleTo2()
+        val updatedAccountSum = accountSum.plus(50.0).roundDoubleTo2()
 
         AccountPO {
             enterName(updatedAccountName)
-            enterAmount(updatedAccountValue)
+            enterSum(updatedAccountSum)
             saveAccount()
         }
 
         AccountListPO {
             checkName(updatedAccountName)
-            checkSum(updatedAccountValue)
+            checkSum(updatedAccountSum)
         }
     }
 
