@@ -28,7 +28,15 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
         sourceCompatibility JavaVersion.VERSION_1_8
     }
+    lintOptions {
+        abortOnError true
+    }
+    testOptions {
+        animationsDisabled = true
+    }
 }
+
+def allureKotlinVersion = "2.2.5"
 
 dependencies {
 //    implementation fileTree(include: ['*.jar'], dir: 'libs')
@@ -38,11 +46,19 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.0'
     implementation 'joda-time:joda-time:2.10.1'
     implementation 'com.jjoe64:graphview:4.2.1'
+
     testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
 
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.2.0'
     androidTestImplementation 'androidx.test.espresso.idling:idling-concurrent:3.2.0'
     androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.2.0'
+    androidTestImplementation 'com.atiurin:ultron:1.0.13'
+
+    androidTestImplementation "io.qameta.allure:allure-kotlin-model:$allureKotlinVersion"
+    androidTestImplementation "io.qameta.allure:allure-kotlin-commons:$allureKotlinVersion"
+    androidTestImplementation "io.qameta.allure:allure-kotlin-junit4:$allureKotlinVersion"
+    androidTestImplementation "io.qameta.allure:allure-kotlin-android:$allureKotlinVersion"
 }
